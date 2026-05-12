@@ -1,0 +1,250 @@
+# Reglas Prometheus — Prima Donna WA (producción)
+# Montar en Prometheus: rule_files: [ ".../alerts.yaml" ]
+#
+# Plantillas: Prometheus expande {{ $labels.* }} y {{ $value }} al evaluar la alerta.
+# summary: [severity] + category para lectura rápida en Slack/email.
+# description: bloque fijo + Impact estándar (ingeniería ↔ negocio); detalle en runbooks.
+# category en MAYÚSCULAS. NoTraffic: tenant_id=_global.
+# Sustituir base de runbooks: https://tu-docs/runbooks/ → tu URL real.
+#
+# --- Cardinalidad (tenant_id) ---
+# Cada alerta por tenant genera O(n_tenants) series de alerta en vuelo. Si crece mucho el número
+# de tenants, mitigaciones posibles (elegir según operación):
+#   - Limitar tenants activos en producto / allowlist de métricas por tenant crítico.
+#   - Recording rules: pre-agregar con topk(20, ...) sobre la señal de interés y alertar solo esos.
+#   - Relabel/drop de tenant_id en métricas no críticas (no en estas reglas sin revisar impacto).
+# No urgente con pocos tenants; revisar antes de escalar a cientos+.
+
+groups:
+  - name: prima_donna_queue
+    interval: 30s
+    rules:
+      - alert: QueueLagHigh
+        expr: histogram_quantile(0.95, sum(rate(queue_lag_seconds_bucket[5m])) by (le, tenant_id)) > 5
+        for: 2m
+        labels:
+          severity: warning
+          category: QUEUE
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/queue-lag-high"
+
+      - alert: QueueLagCritical
+        expr: histogram_quantile(0.95, sum(rate(queue_lag_seconds_bucket[5m])) by (le, tenant_id)) > 15
+        for: 2m
+        labels:
+          severity: critical
+          category: QUEUE
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/queue-lag-critical"
+
+      - alert: QueueWorkerSaturation
+        expr: histogram_quantile(0.95, sum(rate(queue_lag_seconds_bucket[5m])) by (le, tenant_id)) > 10
+        for: 5m
+        labels:
+          severity: warning
+          category: QUEUE
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/queue-worker-saturation"
+
+      - alert: QueueFailures
+        expr: sum by (tenant_id) (rate(queue_failures_total[5m])) > 0
+        for: 2m
+        labels:
+          severity: critical
+          category: QUEUE
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/queue-failures"
+
+      - alert: QueueRetryHigh
+        expr: sum by (tenant_id) (rate(queue_jobs_total{status="retry"}[5m])) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+          category: QUEUE
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/queue-retry-high"
+
+  - name: prima_donna_llm
+    interval: 30s
+    rules:
+      - alert: LLMFailuresHigh
+        expr: sum by (tenant_id) (rate(llm_failures_total[5m])) > 0.2
+        for: 5m
+        labels:
+          severity: critical
+          category: LLM
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/llm-failures-high"
+
+      - alert: LLMFallbackHigh
+        expr: >-
+          (
+            sum by (tenant_id) (rate(llm_fallback_success_total[5m]))
+            /
+            sum by (tenant_id) (rate(llm_requests_total[5m]))
+          ) > 0.3
+          and sum by (tenant_id) (rate(llm_requests_total[5m])) > 0.05
+        for: 10m
+        labels:
+          severity: warning
+          category: LLM
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/llm-fallback-high"
+
+  - name: prima_donna_rag
+    interval: 30s
+    rules:
+      - alert: RAGNoDocumentsHigh
+        expr: >-
+          (
+            sum by (tenant_id) (rate(rag_no_documents_total[5m]))
+            /
+            sum by (tenant_id) (rate(rag_queries_total[5m]))
+          ) > 0.7
+          and sum by (tenant_id) (rate(rag_queries_total[5m])) > 0.05
+        for: 10m
+        labels:
+          severity: warning
+          category: RAG
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/rag-no-documents-high"
+
+      - alert: RAGRetrievalFailed
+        expr: sum by (tenant_id) (rate(rag_retrieval_failed_total[5m])) > 0
+        for: 2m
+        labels:
+          severity: critical
+          category: RAG
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/rag-retrieval-failed"
+
+      - alert: RAGUselessContent
+        expr: >-
+          sum by (tenant_id) (rate(rag_queries_with_documents_total[10m])) == 0
+          and sum by (tenant_id) (rate(rag_queries_total[10m])) > 0.05
+        for: 10m
+        labels:
+          severity: warning
+          category: RAG
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/rag-useless-content"
+
+  - name: prima_donna_http
+    interval: 30s
+    rules:
+      - alert: HTTPWebhookHighLatency
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, tenant_id)) > 2
+        for: 5m
+        labels:
+          severity: warning
+          category: HTTP
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/http-webhook-high-latency"
+
+      - alert: NoTraffic
+        expr: >-
+          sum(rate(http_request_duration_seconds_count[10m])) == 0
+          and max(up) == 1
+        for: 10m
+        labels:
+          severity: warning
+          category: HTTP
+          tenant_id: _global
+        annotations:
+          alertname: "{{ $labels.alertname }}"
+          summary: "[{{ $labels.severity }}] {{ $labels.category }} issue detected"
+          description: >-
+            Tenant: {{ $labels.tenant_id }}
+            Alert: {{ $labels.alertname }}
+            Value: {{ $value }}
+
+            Impact: Degraded system performance or user experience.
+          runbook: "https://tu-docs/runbooks/no-traffic"

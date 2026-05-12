@@ -35,6 +35,9 @@ Thumbs.db
 .claude/
 .npm/
 
+# Python cache
+__pycache__/
+
 # Tests artifacts
 jest-html-reporters-*
 playwright-report/

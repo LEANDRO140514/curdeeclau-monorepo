@@ -1,0 +1,88 @@
+# Cursor Rules — Algorithmus Prime / Phase 1
+
+These rules enforce the core architecture defined in ADR-001 (Core Validation Layer), ADR-002 (HardGate Invariant), ADR-003 (SafetyPort), ADR-004 (Grounding v1) and ADR-005 (System Invariants Enforcement via Destructive Tests). They are binding for any change to the AI Validation Layer, the Orchestrator and related tests.
+
+### 1. System Invariants
+
+The following invariants are non-negotiable. Each one MUST be preserved by every change to the system:
+
+- INV-1: No AI output when `validation.flags.isSafe === false`.
+- INV-2: No AI output when `validation.flags.isWithinFSM === false`.
+- INV-3: No AI output when `fsmTransition.allowed === false`.
+- INV-4: No AI output when `HardGate.allowed === false`.
+- INV-5: AI output is emitted ONLY when `gate.allowed === true AND decision.action === "accept"`. Any other combination MUST produce the safe fallback message.
+
+### 2. Validation Layer Rules
+
+- AI output MUST pass through the AI Validation Layer (Validator → DecisionMatrix → FSMTransitionChecker → HardGate). No bypass is allowed.
+- The Validator evaluates evidence and produces flags, scores and reason codes. The Validator MUST NOT decide actions.
+- The DecisionMatrix is deterministic. Given the same `ValidationResult`, it MUST always produce the same action.
+- The FSM governs flow transitions. The Validator MUST NOT mutate FSM state.
+- The HardGate is the final authority. Its decision MUST NOT be overridden by any other component.
+
+### 3. FSM Rules
+
+- The FSMEngine is the single source of truth for state transitions.
+- A proposed transition MUST be evaluated by the FSMTransitionChecker before reaching the HardGate.
+- If `fsmTransition.allowed === false`, the system MUST NOT emit AI output and MUST NOT advance FSM state.
+- FSM state MUST NOT change as a side effect of a blocked output.
+
+### 4. HardGate Rules
+
+- The HardGate evaluates safety, FSM membership, decision validity and FSM transition.
+- A HardGate block MUST result in: NO AI output AND NO database persistence AND NO FSM transition.
+- The HardGate has no bypass. No component is allowed to emit AI text when `gate.allowed === false`.
+- The HardGate MUST NOT be modified to weaken any of its blocking conditions.
+
+### 5. Persistence Rules
+
+- Persistence of FSM state is conditional on `shouldPersist = gate.allowed && decision.action === "accept"`.
+- When `shouldPersist === false`, the Orchestrator MUST NOT issue any database `UPDATE` for FSM state.
+- A blocked or non-accepted flow MUST leave `final.nextState` equal to `context.currentState`.
+- No side effects are allowed on blocked flows.
+
+### 6. SafetyPort Rules
+
+- The SafetyPort returns evaluation only (`isSafe` plus reason codes). It MUST NOT decide actions.
+- The SafetyPort is fail-closed: error, timeout or unavailable adapter MUST be treated as unsafe.
+- The Core MUST NOT import OpenAI, Pinecone or any provider SDK. Provider details live exclusively under `src/infra/providers/`.
+- New safety providers are added behind the SafetyPort interface, never by leaking provider types into the Core.
+
+### 7. Grounding Rules
+
+- The GroundingPort evaluates whether AI output is supported by retrieved references. It MUST NOT decide actions.
+- The GroundingPort is fail-closed: error, timeout or unavailable adapter MUST be treated as ungrounded with reason `port_unavailable`.
+- `empty_input` (empty AI text) MUST produce `isGrounded=false`, `confidence=0` and reason `ungrounded_output`. It MUST NOT be reported as `port_unavailable`.
+- Grounding evaluation applies only to RAG tasks (`rag_answer`). Other tasks MUST preserve the base `isGrounded` value.
+- Lexical Grounding v1 is documented and treated as a coverage heuristic, not as full semantic grounding.
+
+### 8. Test Enforcement Rules
+
+- System invariants MUST be enforced by destructive tests located in `src/tests/system/ai-validation-destructive.spec.ts`.
+- Destructive tests MUST use the real Orchestrator. Mocks are restricted to inputs (LLM response, validator stubs, decision stubs, transition checker stubs, RAG documents).
+- Each invariant test MUST verify both: (a) absence of AI output (i.e. the safe fallback message is emitted) and (b) absence of database persistence on blocked flows.
+- Tests MUST extend, never replace. Existing tests and helpers MUST NOT be modified or deleted to make a new test pass.
+- New invariants or derived cases MUST be added as new `it` entries with explicit naming (`[INV-N]`, `[CASE-N]`, `[GLOBAL]`) that maps directly to architecture, not to test order.
+
+### 9. Forbidden Changes
+
+The following changes are forbidden without an explicit superseding ADR:
+
+- Adding any bypass around the HardGate.
+- Importing provider SDKs (OpenAI, Pinecone, YCloud, GHL, etc.) from anywhere under `src/core/`.
+- Letting SafetyPort or GroundingPort return or imply an action (`accept`, `retry`, `fallback`, `handover`).
+- Letting the Validator mutate FSM state or trigger persistence.
+- Persisting FSM state when `gate.allowed === false` or `decision.action !== "accept"`.
+- Modifying or deleting existing tests under `src/tests/system/` and `src/tests/unit/` to accommodate a new behavior.
+- Weakening fail-closed semantics in any port (Safety, Grounding) to keep a flow alive.
+
+### 10. Required Behavior
+
+For every change touching the Validation Layer, the Orchestrator or related ports, the following MUST hold:
+
+- AI output MUST pass through the Validation Layer end to end.
+- AI output MUST be emitted ONLY when `gate.allowed === true AND decision.action === "accept"`.
+- Any blocked or non-accepted path MUST emit the safe fallback message and MUST NOT persist state.
+- Errors and timeouts in SafetyPort and GroundingPort MUST be treated as fail-closed.
+- New behavior MUST be covered by destructive tests that explicitly map to the invariants in §1.
+- ADR-001 through ADR-005 are the source of truth. Any deviation requires a new ADR that supersedes the relevant prior ADR.

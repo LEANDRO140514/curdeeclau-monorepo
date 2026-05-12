@@ -1,0 +1,31 @@
+{
+  "name": "@curdeeclau/algorithmus-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Algorithmus Platform",
+  "main": "dist/algorithmus-platform/src/app/server.js",
+  "scripts": {
+    "dev": "ts-node-dev -r tsconfig-paths/register src/app/server.ts",
+    "build": "tsc",
+    "start": "node dist/algorithmus-platform/src/app/server.js",
+    "typecheck:test-core": "tsc -p tsconfig.test-core.json",
+    "test:core": "ts-node-dev -r tsconfig-paths/register --project tsconfig.test-core.json src/test-core.ts",
+    "typecheck:attention": "tsc --noEmit",
+    "test:core-adapter": "ts-node-dev -r tsconfig-paths/register src/attention/core-adapter/test.ts",
+    "test:output-dispatcher": "ts-node-dev -r tsconfig-paths/register src/attention/output/output-dispatcher.test.ts",
+    "test:whatsapp-webhook": "ts-node-dev -r tsconfig-paths/register src/routes/whatsapp.webhook.test.ts"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.6.0",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@curdeeclau/algorithmus-core-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic sports mathematical engine — reductions, matrices, probabilities, validators, scoring, contest logic, optimization",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app/server.js",
+    "worker:whatsapp": "node dist/workers/whatsappWorker.js",
+    "test": "jest",
+    "db:migrate": "tsx scripts/run-postgres-migrations.ts",
+    "smoke:postgres": "tsx scripts/smoke-core-postgres.ts",
+    "prepush:core": "npm test && npm run db:migrate && npm run smoke:postgres"
+  },
+  "dependencies": {
+    "@pinecone-database/pinecone": "^7.1.0",
+    "@sentry/node": "^8.55.1",
+    "@supabase/supabase-js": "^2.101.1",
+    "bullmq": "^5.73.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.22.1",
+    "pg": "^8.20.0",
+    "pino": "^10.3.1",
+    "prom-client": "^15.1.3",
+    "redis": "^5.11.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.3.0",
+    "@types/express": "^4.17.25",
+    "@types/node": "^25.5.2",
+    "@types/pg": "^8.20.0",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.9",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}

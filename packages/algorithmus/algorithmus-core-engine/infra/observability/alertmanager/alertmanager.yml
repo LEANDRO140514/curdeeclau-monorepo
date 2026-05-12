@@ -1,0 +1,98 @@
+# Alertmanager — Prima Donna WA
+# Generar config con secretos: envsubst < alertmanager.yml > alertmanager.resolved.yml
+# (cargar variables desde .env — ver .env.example y README).
+# Arranque: alertmanager --config.file=alertmanager.resolved.yml
+#
+# Orden de rutas: primero la más específica (tenant_id=_global), luego severity.
+
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: "${ALERTMANAGER_SMARTHOST}"
+  smtp_from: "${ALERTMANAGER_EMAIL_FROM}"
+  smtp_auth_username: "${ALERTMANAGER_EMAIL_AUTH_USERNAME}"
+  smtp_auth_password: "${ALERTMANAGER_EMAIL_AUTH_PASSWORD}"
+  smtp_require_tls: true
+
+templates:
+  - "templates/*.tmpl"
+
+route:
+  receiver: slack-warning
+  group_by: ["alertname", "severity", "category", "tenant_id"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 3h
+  routes:
+    # NoTraffic y otras alertas agregadas (sin dimensión tenant real)
+    - matchers:
+        - tenant_id="_global"
+      receiver: slack-platform
+      continue: false
+    - matchers:
+        - severity="critical"
+      receiver: slack-critical
+      continue: true
+    - matchers:
+        - severity="critical"
+      receiver: email-critical
+
+receivers:
+  # Pruebas / dry-run: apunta una ruta temporal a este receiver (ver README).
+  - name: "null"
+    webhook_configs:
+      - url: "http://127.0.0.1:9/"
+        send_resolved: false
+
+  - name: slack-platform
+    slack_configs:
+      - api_url: "${ALERTMANAGER_SLACK_PLATFORM_WEBHOOK}"
+        channel: "#alerts-platform"
+        send_resolved: true
+        title: '{{ template "slack.title" . }}'
+        text: '{{ template "slack.text" . }}'
+        actions:
+          - type: button
+            text: "Runbook"
+            url: "{{ (index .Alerts 0).Annotations.runbook }}"
+
+  - name: slack-warning
+    slack_configs:
+      - api_url: "${ALERTMANAGER_SLACK_WARNING_WEBHOOK}"
+        channel: "#alerts-warning"
+        send_resolved: true
+        title: '{{ template "slack.title" . }}'
+        text: '{{ template "slack.text" . }}'
+        actions:
+          - type: button
+            text: "Runbook"
+            url: "{{ (index .Alerts 0).Annotations.runbook }}"
+
+  - name: slack-critical
+    slack_configs:
+      - api_url: "${ALERTMANAGER_SLACK_CRITICAL_WEBHOOK}"
+        channel: "#alerts-critical"
+        send_resolved: true
+        title: '{{ template "slack.title" . }}'
+        text: '{{ template "slack.text" . }}'
+        actions:
+          - type: button
+            text: "Runbook"
+            url: "{{ (index .Alerts 0).Annotations.runbook }}"
+
+  - name: email-critical
+    email_configs:
+      - to: "${ALERTMANAGER_EMAIL_TO}"
+        send_resolved: true
+        headers:
+          Subject: '{{ template "email.subject" . }}'
+        html: '{{ template "email.html" . }}'
+
+inhibit_rules:
+  - source_matchers:
+      - severity="critical"
+    target_matchers:
+      - severity="warning"
+    equal:
+      - alertname
+      - tenant_id
+      - category

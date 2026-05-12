@@ -1,0 +1,55 @@
+{{/* Emoji + etiqueta [SEVERITY] para lectura rápida en Slack */}}
+{{ define "slack.severityBadge" -}}
+{{- if eq . "critical" -}}🔴 [CRITICAL]{{- else if eq . "warning" -}}🟡 [WARNING]{{- else -}}⚪ [{{ . }}]{{- end -}}
+{{- end }}
+
+{{/* Misma lógica cuando el contexto . es solo el string severity */}}
+{{ define "slack.severityEmojiLine" -}}
+{{- if eq . "critical" -}}🔴 `critical`{{- else if eq . "warning" -}}🟡 `warning`{{- else -}}⚪ `{{ . }}`{{- end -}}
+{{- end }}
+
+{{ define "slack.title" -}}
+{{ template "slack.severityBadge" .CommonLabels.severity }} {{ .CommonLabels.category }} — {{ .CommonLabels.alertname }} ({{ .Alerts | len }} alert{{ if gt (len .Alerts) 1 }}s{{ end }})
+{{- end }}
+
+{{ define "slack.text" -}}
+{{ range .Alerts }}
+*Severity:* {{ template "slack.severityEmojiLine" .Labels.severity }}
+*Category:* `{{ .Labels.category }}`
+*Alert:* `{{ .Labels.alertname }}`
+*Tenant:* `{{ .Labels.tenant_id }}`
+*Summary:* {{ .Annotations.summary }}
+*Description:*
+{{ .Annotations.description }}
+*Runbook:* {{ if .Annotations.runbook }}<{{ .Annotations.runbook }}|Open>{{ else }}(none){{ end }}
+*Starts:* {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+{{ if .EndsAt.IsZero }}{{ else }}*Ends:* {{ .EndsAt.Format "2006-01-02 15:04:05 MST" }}{{ end }}
+---
+{{ end }}
+{{- end }}
+
+{{ define "email.subject" -}}
+[{{ .CommonLabels.severity }}] {{ .CommonLabels.category }} — {{ .CommonLabels.alertname }}
+{{- end }}
+
+{{ define "email.html" -}}
+<!DOCTYPE html>
+<html>
+<body style="font-family: sans-serif;">
+  <p><strong>Group labels:</strong> severity={{ .CommonLabels.severity }}, category={{ .CommonLabels.category }}, alertname={{ .CommonLabels.alertname }}, tenant_id={{ .CommonLabels.tenant_id }}</p>
+  <hr/>
+  {{ range .Alerts }}
+  <div style="margin-bottom: 1.5em;">
+    <p><strong>Alert:</strong> {{ .Labels.alertname }}<br/>
+    <strong>Severity:</strong> {{ .Labels.severity }}<br/>
+    <strong>Category:</strong> {{ .Labels.category }}<br/>
+    <strong>Tenant:</strong> {{ .Labels.tenant_id }}</p>
+    <p><strong>Summary:</strong> {{ .Annotations.summary }}</p>
+    <p><strong>Description:</strong><br/><pre style="white-space: pre-wrap;">{{ .Annotations.description }}</pre></p>
+    <p><strong>Runbook:</strong> {{ if .Annotations.runbook }}<a href="{{ .Annotations.runbook }}">{{ .Annotations.runbook }}</a>{{ else }}(none){{ end }}</p>
+    <p><small>Starts: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}</small></p>
+  </div>
+  {{ end }}
+</body>
+</html>
+{{- end }}
