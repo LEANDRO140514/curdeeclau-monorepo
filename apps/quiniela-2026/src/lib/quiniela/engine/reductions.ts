@@ -1,34 +1,21 @@
 /**
  * REDUCCIONES OFICIALES (MODELO 13, 12, 11)
  *
- * ESTADO ACTUAL: Arquitectura preparada. Matrices NO integradas.
- *
- * Las reducciones oficiales de Progol/Loterías usan MATRICES predefinidas:
+ * Las reducciones oficiales usan MATRICES predefinidas:
  * conjuntos mínimos de columnas que garantizan N aciertos dados T triples y D dobles.
  *
- * Estas matrices no son generables algorítmicamente — se obtienen de:
- * - Tablas oficiales de Loterías y Apuestas del Estado
- * - Progol (México)
- * - Literatura especializada en covering designs
- *
- * Lo que SÍ funciona:
- * - El modelo 14 DIRECTO (genera TODAS las combinaciones)
- * - La validación de configuraciones
- * - El conteo de signos
- * - El cálculo de presupuesto
- *
- * Lo que NO funciona aún:
- * - Generar las columnas específicas de una reducción al 13/12/11
- * - Garantizar matemáticamente la cobertura
+ * Matrices integradas: 1-6 (códigos perfectos + tablas LAE).
+ * Matrices 7-12: generadas vía greedy o pendientes de backend Python.
  */
 
-import type { ConfigUsuario, ReduccionMeta, EstadoMotor } from '../types'
+import type { ConfigUsuario, ReduccionMeta, EstadoMotor, Columna } from '../types'
 import { contarSignos } from './validate'
+import { PATRONES_MATRICES } from '../matrices/data'
+import type { MatrizPatron } from '../matrices/data'
 
 /**
  * Catálogo de reducciones oficiales reconocidas.
- * Datos verificados: número de boletos y precio son correctos.
- * Datos pendientes: las COLUMNAS específicas de cada reducción.
+ * Datos verificados contra tablas de Loterías y Apuestas del Estado.
  */
 export const CATALOGO_REDUCCIONES: ReduccionMeta[] = [
   { id: 1,  nombre: 'Reducción 1  — 4 Triples',             triples: 4,  dobles: 0,  columnasRequeridas: 9,    nivel: 13 },
@@ -63,43 +50,101 @@ export function reduccionesCompatibles(config: ConfigUsuario): ReduccionMeta[] {
 
 /**
  * Estado actual del motor.
- * Siempre será 'matrices_pendientes' hasta integrar las matrices reales.
  */
 export function estadoMotor(): EstadoMotor {
-  return 'matrices_pendientes'
+  const total = Object.keys(PATRONES_MATRICES).length
+  const conDatos = Object.values(PATRONES_MATRICES).filter((m) => m.origen !== 'pendiente').length
+  if (conDatos === 0) return 'matrices_pendientes'
+  if (conDatos < total) return 'matrices_parciales'
+  return 'completo'
 }
 
 /**
- * Obtener columnas de una reducción oficial.
+ * Obtener columnas de una reducción usando la matriz integrada.
  *
- * TODO: Integrar matrices reales desde:
- * - Archivos de datos (src/lib/quiniela/matrices/)
- * - API externa
- * - Tablas oficiales de Progol / Loterías y Apuestas del Estado
- *
- * Cuando las matrices estén integradas, esta función:
- * 1. Recibe la configuración del usuario
- * 2. Busca la matriz correspondiente a la reducción
- * 3. Aplica los signos del usuario a la matriz (sustituye los placeholders)
- * 4. Retorna las columnas reales
+ * Toma los primeros T triples y D dobles de la configuración del usuario,
+ * aplica la matriz patrón, y reduce los triples/dobles sobrantes a su
+ * primera opción.
  */
 export function obtenerColumnasReduccion(
-  _config: ConfigUsuario,
-  _reduccionId: number,
-): { disponible: false; columnas: null; razon: string } {
+  config: ConfigUsuario,
+  reduccionId: number,
+): { disponible: boolean; columnas: Columna[] | null; razon: string | null; origen: string | null } {
+  const matriz: MatrizPatron | undefined = PATRONES_MATRICES[reduccionId]
+
+  if (!matriz || matriz.origen === 'pendiente' || matriz.columnas.length === 0) {
+    return {
+      disponible: false,
+      columnas: null,
+      origen: null,
+      razon:
+        'Matriz de reducción no disponible. ' +
+        'Usa el modelo 14 directo (generarDirecta) para obtener columnas reales. ' +
+        'Las matrices grandes requieren backend Python (OR-Tools).',
+    }
+  }
+
+  const { triples: tMatriz, dobles: dMatriz } = matriz
+
+  // Encontrar posiciones de triples y dobles en la config
+  const idxTriples: number[] = []
+  const idxDobles: number[] = []
+  const opcionesDobles: [string, string][] = []
+
+  for (let i = 0; i < config.length; i++) {
+    const s = config[i]
+    if (s === '1X2' && idxTriples.length < tMatriz) {
+      idxTriples.push(i)
+    } else if (s.length === 2 && idxDobles.length < dMatriz) {
+      idxDobles.push(i)
+      opcionesDobles.push([s[0], s[1]])
+    }
+  }
+
+  if (idxTriples.length < tMatriz || idxDobles.length < dMatriz) {
+    return {
+      disponible: false,
+      columnas: null,
+      origen: null,
+      razon: `Configuración insuficiente: necesita ${tMatriz} triples y ${dMatriz} dobles.`,
+    }
+  }
+
+  // Construir columnas a partir de los patrones
+  const columnas: Columna[] = []
+
+  for (const patron of matriz.columnas) {
+    // Empezar con fijos + reducir triples/dobles sobrantes a primera opción
+    const col = config.map((s) => {
+      if (s.length === 1) return s
+      return s[0] // primera opción de doble/triple sobrante
+    }) as Columna
+
+    // Aplicar valores de triples desde el patrón
+    for (let t = 0; t < tMatriz; t++) {
+      const v = patron[t]
+      col[idxTriples[t]] = (v === 0 ? '1' : v === 1 ? 'X' : '2') as Columna[number]
+    }
+
+    // Aplicar valores de dobles desde el patrón
+    for (let d = 0; d < dMatriz; d++) {
+      const v = patron[tMatriz + d]
+      col[idxDobles[d]] = opcionesDobles[d][v] as Columna[number]
+    }
+
+    columnas.push(col)
+  }
+
   return {
-    disponible: false,
-    columnas: null,
-    razon:
-      'Matrices de reducción oficial no integradas. ' +
-      'Usa el modelo 14 directo (generarDirecta) para obtener columnas reales. ' +
-      'Ver src/lib/quiniela/matrices/README.md para instrucciones de integración.',
+    disponible: true,
+    columnas,
+    origen: matriz.origen,
+    razon: null,
   }
 }
 
 /**
  * Calcula el AHORRO de una reducción vs el directo.
- * Fórmula exacta (sin heurísticas):
  *   ahorro = 1 - (columnas_reducida / columnas_directo)
  */
 export function calcularAhorroReduccion(config: ConfigUsuario, columnasReducida: number): number {

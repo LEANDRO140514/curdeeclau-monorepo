@@ -1,0 +1,19 @@
+[project]
+name = "math-engine"
+version = "0.1.0"
+description = "Motor matemático para covering designs de quiniela (OR-Tools CP-SAT)"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "ortools>=9.11.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.28.0",
+]
+
+[tool.uv]
+dev-dependencies = []

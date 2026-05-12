@@ -32,6 +32,7 @@ import {
   reduccionesCompatibles,
   calcularAhorroReduccion,
   estadoMotor,
+  obtenerColumnasReduccion,
 } from '../engine/reductions'
 
 import {
@@ -325,8 +326,8 @@ describe('calcularAhorroReduccion', () => {
 })
 
 describe('estadoMotor', () => {
-  it('reporta matrices_pendientes', () => {
-    expect(estadoMotor()).toBe('matrices_pendientes')
+  it('reporta matrices_parciales (6 integradas de 12)', () => {
+    expect(estadoMotor()).toBe('matrices_parciales')
   })
 })
 
@@ -335,9 +336,115 @@ describe('estadoMotor', () => {
    ══════════════════════════════════════════════ */
 
 describe('matrices', () => {
-  it('12 matrices pendientes, 0 integradas', () => {
-    expect(matricesPendientes()).toBe(12)
-    expect(matricesIntegradas()).toBe(0)
+  it('6 matrices integradas, 6 pendientes', () => {
+    expect(matricesIntegradas()).toBe(6)
+    expect(matricesPendientes()).toBe(6)
+  })
+})
+
+/* ══════════════════════════════════════════════
+   REDUCCIONES CON MATRICES REALES
+   ══════════════════════════════════════════════ */
+
+describe('obtenerColumnasReduccion', () => {
+  it('Reducción 1 (4T al 13): 4 triples generan 9 columnas', () => {
+    const config: ConfigUsuario = ['1X2', '1X2', '1X2', '1X2', ...Array(10).fill('1')]
+    const result = obtenerColumnasReduccion(config, 1)
+    expect(result.disponible).toBe(true)
+    expect(result.columnas).not.toBeNull()
+    expect(result.columnas!.length).toBe(9)
+    expect(result.origen).toBe('codigo_perfecto')
+    for (const col of result.columnas!) {
+      expect(col.length).toBe(14)
+      for (const s of col) {
+        expect(['1', 'X', '2']).toContain(s)
+      }
+    }
+  })
+
+  it('Reducción 1: las 9 columnas son únicas', () => {
+    const config: ConfigUsuario = ['1X2', '1X2', '1X2', '1X2', ...Array(10).fill('1')]
+    const result = obtenerColumnasReduccion(config, 1)
+    const serializadas = result.columnas!.map((c) => c.join(''))
+    expect(new Set(serializadas).size).toBe(9)
+  })
+
+  it('Reducción 2 (7D al 13): 7 dobles generan 16 columnas', () => {
+    const config: ConfigUsuario = ['1X', '12', 'X2', '1X', '12', 'X2', '1X', ...Array(7).fill('1')]
+    const result = obtenerColumnasReduccion(config, 2)
+    expect(result.disponible).toBe(true)
+    expect(result.columnas!.length).toBe(16)
+  })
+
+  it('Reducción 1 con más triples de los necesarios: usa solo los primeros 4', () => {
+    const config: ConfigUsuario = ['1X2', '1X2', '1X2', '1X2', '1X2', ...Array(9).fill('1')]
+    const result = obtenerColumnasReduccion(config, 1)
+    expect(result.disponible).toBe(true)
+    expect(result.columnas!.length).toBe(9)
+    expect(result.columnas![0][4]).toBe('1')
+  })
+
+  it('Matriz pendiente (id 7) retorna no disponible', () => {
+    const config: ConfigUsuario = [...Array(5).fill('1X2'), ...Array(4).fill('1X'), ...Array(5).fill('1')]
+    const result = obtenerColumnasReduccion(config, 7)
+    expect(result.disponible).toBe(false)
+    expect(result.columnas).toBeNull()
+    expect(result.razon).toBeTruthy()
+  })
+
+  it('Coverage: Reducción 1 cumple garantía 13 para todos los resultados posibles', () => {
+    const config: ConfigUsuario = ['1X2', '1X2', '1X2', '1X2', ...Array(10).fill('1')]
+    const result = obtenerColumnasReduccion(config, 1)
+    const columnas = result.columnas!
+
+    const signos = ['1', 'X', '2'] as const
+    let todasCumplen = true
+    for (let n = 0; n < 81; n++) {
+      const resultado: ResultadoReal = [
+        signos[Math.floor(n / 27) % 3],
+        signos[Math.floor(n / 9) % 3],
+        signos[Math.floor(n / 3) % 3],
+        signos[n % 3],
+        ...Array(10).fill('1'),
+      ] as ResultadoReal
+
+      if (!cumpleGarantia(columnas, resultado, 13)) {
+        todasCumplen = false
+        break
+      }
+    }
+    expect(todasCumplen).toBe(true)
+  })
+
+  it('Coverage: Reducción 2 cumple garantía 13 para los 128 resultados de 7 dobles', () => {
+    // Dobles definidos: opción 0 | opción 1
+    const doblesDef: [string, string][] = [
+      ['1', 'X'], ['1', '2'], ['X', '2'], ['1', 'X'], ['1', '2'], ['X', '2'], ['1', 'X'],
+    ]
+    const config: ConfigUsuario = [...doblesDef.map((d) => d.join('') as ConfigUsuario[number]), ...Array(7).fill('1')]
+    const result = obtenerColumnasReduccion(config, 2)
+    const columnas = result.columnas!
+
+    let todasCumplen = true
+    // Enumerar las 128 combinaciones de opciones (0=A, 1=B) para cada doble
+    for (let n = 0; n < 128; n++) {
+      const resultado: ResultadoReal = [
+        doblesDef[0][(n >> 6) & 1],
+        doblesDef[1][(n >> 5) & 1],
+        doblesDef[2][(n >> 4) & 1],
+        doblesDef[3][(n >> 3) & 1],
+        doblesDef[4][(n >> 2) & 1],
+        doblesDef[5][(n >> 1) & 1],
+        doblesDef[6][n & 1],
+        ...Array(7).fill('1'),
+      ] as ResultadoReal
+
+      if (!cumpleGarantia(columnas, resultado, 13)) {
+        todasCumplen = false
+        break
+      }
+    }
+    expect(todasCumplen).toBe(true)
   })
 })
 
