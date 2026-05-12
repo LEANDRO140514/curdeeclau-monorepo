@@ -308,3 +308,166 @@ export {
   createOddsLoader,
   REFERENCE_FREQUENCIES,
 } from './probabilities/datasets'
+
+// ─── CAPA DE PRODUCTO (MVP) ───
+
+// Contest — Formats
+export {
+  PROGOL_14,
+  REVANCHA_7,
+  MEDIA_SEMANA_9,
+  PRIVATE_11,
+  CONTEST_FORMATS,
+  PRIMARY_FORMATS,
+  WEEKEND_FORMATS,
+  getFormat,
+  isAddon,
+  getParentFormats,
+  formatSupportsLevel,
+} from './contest/formats'
+export type {
+  ContestFormatId,
+  ContestCategory,
+  FormatTier,
+  ContestFormat,
+  ReductionSize,
+} from './contest/formats'
+
+// Contest — Products
+export {
+  createProduct,
+  createProgolProduct,
+  createPrivate11Product,
+  createMediaSemanaProduct,
+  isValidProduct,
+  validateProduct,
+} from './contest/products'
+export type {
+  ContestAddon,
+  ContestProduct,
+  ProductConfig,
+} from './contest/products'
+
+// Contest — Addons
+export {
+  REVANCHA_ADDON,
+  ADDONS,
+  isAddonAvailable,
+  canPurchaseAddon,
+  getAddonReductions,
+  isValidAddonReduction,
+  addonPrice,
+} from './contest/addons'
+export type { AddonType, AddonDefinition } from './contest/addons'
+
+// Contest — Pricing
+export {
+  calculatePrice,
+  calculateSavings,
+  createProgolPrivate11Bundle,
+  DEFAULT_PROMOTIONS,
+} from './contest/pricing'
+export type {
+  DiscountType,
+  Discount,
+  PricingConfig,
+  Bundle,
+  Promotion,
+} from './contest/pricing'
+
+// Contest — Rules
+export {
+  FORMAT_RULES,
+  validatePurchase,
+  legalDisclaimer,
+  probabilityDisclaimer,
+  PRODUCT_LOOP_STEPS,
+  getNextStep,
+} from './contest/rules'
+export type {
+  FormatRules,
+  PurchaseValidation,
+  ProductLoopStep,
+} from './contest/rules'
+
+// Reductions — Compatibility
+export {
+  COMPATIBILITY_MATRIX,
+  getCompatibleReductions,
+  isReductionCompatible,
+  getAvailableSizes,
+  findEntry,
+  allReductionSizes,
+} from './reductions/compatibility'
+export type { CompatibilityEntry, CompatibilityMatrix } from './reductions/compatibility'
+
+// Reductions — Catalog
+export {
+  REDUCTION_CATALOG,
+  getProduct,
+  getProductsForFormat,
+  getProductsByIntensity,
+  getProductPrice,
+  getIntensity,
+  getBenefits,
+} from './reductions/catalog'
+export type {
+  ReductionIntensity,
+  ReductionBenefits,
+  ReductionProduct,
+} from './reductions/catalog'
+
+// Entitlements
+export {
+  createEntitlements,
+  processPurchase,
+  addPrivate11Entries,
+  totalPrivate11Entries,
+  canAccess,
+  hasPurchased,
+  totalSpent,
+  maxIntensity,
+} from './entitlements'
+export type { UserEntitlements, PurchaseRecord } from './entitlements'
+
+// Oráculo — Probabilities
+export {
+  analyzeMatch,
+  analyzeQuiniela,
+  quickAnalysis,
+  recommendReductions,
+  suggestConfig,
+} from './oraculo/probabilities'
+export type {
+  MatchAnalysis,
+  QuinielaAnalysis,
+  ReductionRecommendation,
+} from './oraculo/probabilities'
+
+// Oráculo — Public Analysis
+export {
+  generatePublicAnalysis,
+  compareReductions,
+} from './oraculo/analysis'
+export type {
+  PublicMatchCard,
+  PublicJornadaAnalysis,
+  PublicReductionCard,
+} from './oraculo/analysis'
+
+// Communication — Telegram
+export {
+  SYSTEM_EVENTS,
+  TELEGRAM_TEMPLATES,
+  defaultSubscription,
+  createTelegramDispatcher,
+} from './communication/telegram'
+export type {
+  EventCategory,
+  EventPriority,
+  TelegramEvent,
+  TelegramTemplate,
+  SubscriptionTopic,
+  UserSubscription,
+  TelegramDispatcher,
+} from './communication/telegram'
