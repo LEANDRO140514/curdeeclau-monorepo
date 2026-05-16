@@ -20,6 +20,8 @@ export interface PartidoData {
   formaVisitante: ('V' | 'E' | 'D')[]
   momio: { uno: number; equis: number; dos: number }
   dificultad: 'verde' | 'amarillo' | 'rojo'
+  /** Código Lotería Nacional para el boleto oficial. null = S/P (Sin Pronóstico). */
+  codigoLN?: string | null
 }
 
 export interface ReduccionInfo {
