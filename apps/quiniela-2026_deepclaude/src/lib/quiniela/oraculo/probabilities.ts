@@ -13,6 +13,7 @@
 
 import type { MatchProbabilities, CalibratedMatch } from '../probabilities/schema'
 import type { ContestFormatId, ReductionSize } from '../contest/formats'
+import { PRECIO_POR_COLUMNA } from '../engine/validate'
 import type { Columna, ConfigUsuario, Signo } from '../types'
 import { BASE_PROBABILITIES } from '../probabilities/schema'
 import { baseRateAll } from '../probabilities/models'
@@ -242,7 +243,7 @@ export function recommendReductions(
       reason,
       estimatedTriples,
       estimatedDoubles,
-      price: entry.size * 0.75,
+      price: entry.size * PRECIO_POR_COLUMNA,
       estimatedSavings: Math.round((1 - entry.size / (3 ** estimatedTriples * 2 ** estimatedDoubles)) * 100),
     }
   }).sort((a, b) => b.score - a.score)

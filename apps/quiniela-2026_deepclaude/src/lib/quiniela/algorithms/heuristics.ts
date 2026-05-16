@@ -15,6 +15,7 @@
  */
 
 import type { Columna, ConfigUsuario } from '../types'
+import { PRECIO_POR_COLUMNA } from '../engine/validate'
 
 /**
  * Filtra columnas por frecuencia de signos.
@@ -22,7 +23,7 @@ import type { Columna, ConfigUsuario } from '../types'
  * Heurística: eliminar columnas con distribuciones "extremas"
  * (ej: 14 signos '1') que son estadísticamente improbables.
  *
- * Los resultados reales de La Quiniela muestran que:
+ * Los resultados reales de Progol muestran que:
  * - ~48% de los partidos terminan en '1' (local)
  * - ~28% terminan en 'X' (empate)
  * - ~24% terminan en '2' (visitante)
@@ -115,7 +116,7 @@ export function estadisticasConfig(config: ConfigUsuario): {
   }
 
   const combinaciones = 3 ** triples * 2 ** dobles
-  const costo = combinaciones * 0.75
+  const costo = combinaciones * PRECIO_POR_COLUMNA
 
   let nivelRiesgo: 'bajo' | 'medio' | 'alto' | 'extremo'
   let recomendacion: string

@@ -354,7 +354,7 @@ export default function Momento3Estadio() {
                 </div>
 
                 <div className="text-xs text-white/30 text-center">
-                  Bote estimado: {(boteEstimado / 1_000_000).toFixed(1)}M €
+                  Bote estimado: {(boteEstimado / 1_000_000).toFixed(1)}M MXN
                 </div>
               </div>
             ) : (

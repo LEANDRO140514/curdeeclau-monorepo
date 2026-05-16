@@ -210,7 +210,7 @@ function confirmPurchase(
   events.push({
     type: 'TELEGRAM_DISPATCH',
     templateKey: 'private11_unlocked',
-    data: { entries: p11Entries, prize_pool: '500€', participants: '—' },
+    data: { entries: p11Entries, prize_pool: '7,500 MXN', participants: '—' },
   })
 
   return [next, events]

@@ -8,6 +8,7 @@
 import type { ReductionSize } from './formats'
 import type { ContestProduct } from './products'
 import { getProductPrice } from '../reductions/catalog'
+import { PRECIO_POR_COLUMNA } from '../engine/validate'
 
 // ═══════════════════════════════════════════════════
 // TIPOS
@@ -101,8 +102,8 @@ export function calculateSavings(
   savingsEuros: number
 } {
   const reductionColumns = reductionSize
-  const reductionCost = reductionColumns * 0.75
-  const directCost = directColumns * 0.75
+  const reductionCost = reductionColumns * PRECIO_POR_COLUMNA
+  const directCost = directColumns * PRECIO_POR_COLUMNA
 
   return {
     reductionColumns,

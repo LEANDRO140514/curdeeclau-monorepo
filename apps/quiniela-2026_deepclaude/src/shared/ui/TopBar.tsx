@@ -51,7 +51,7 @@ export default function TopBar() {
             </button>
             <span className="text-white/20 text-lg hidden sm:inline">|</span>
             <span className="text-white/30 text-[10px] hidden sm:inline">
-              Quiniela · Progol · La Quiniela
+              Progol · Lotería Nacional MX
             </span>
           </div>
         </div>
@@ -71,8 +71,8 @@ export default function TopBar() {
             <div className="flex flex-col gap-3">
               {[
                 { tokens: 50, precio: 'Gratis', color: 'from-emerald-400 to-emerald-600' },
-                { tokens: 200, precio: '2.99 €', color: 'from-primary to-accent' },
-                { tokens: 500, precio: '5.99 €', color: 'from-accent to-primary' },
+                { tokens: 200, precio: '29 MXN', color: 'from-primary to-accent' },
+                { tokens: 500, precio: '59 MXN', color: 'from-accent to-primary' },
               ].map((pkg) => (
                 <button
                   key={pkg.tokens}

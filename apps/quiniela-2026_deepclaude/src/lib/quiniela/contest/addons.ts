@@ -13,6 +13,7 @@
 import type { ReductionSize, ContestFormatId } from './formats'
 import { isReductionCompatible, getCompatibleReductions } from '../reductions/compatibility'
 import type { CompatibilityEntry } from '../reductions/compatibility'
+import { PRECIO_POR_COLUMNA } from '../engine/validate'
 
 // ═══════════════════════════════════════════════════
 // TIPOS
@@ -92,5 +93,5 @@ export function isValidAddonReduction(
 export function addonPrice(addonType: AddonType, reductionSize: ReductionSize): number {
   const addon = ADDONS[addonType]
   if (!addon) return 0
-  return reductionSize * 0.75
+  return reductionSize * PRECIO_POR_COLUMNA
 }

@@ -215,7 +215,7 @@ function toReductionCard(r: ReductionRecommendation): PublicReductionCard {
     size: r.size,
     label: r.label,
     intensity: intensityLabels[product?.intensity ?? 'medium'] ?? 'Media',
-    price: `${r.price.toFixed(2)}€`,
+    price: `${r.price.toFixed(2)}MXN`,
     savingsExample: `Ahorras ${savings.savingsPercent}% vs directo`,
     coverageLevel: r.score > 0.7 ? 'Excelente' : r.score > 0.4 ? 'Buena' : 'Básica',
     bestFor: bestForLabels[product?.intensity ?? 'medium'] ?? 'Uso general',

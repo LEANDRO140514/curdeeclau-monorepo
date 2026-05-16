@@ -98,7 +98,7 @@ export function validatePurchase(
     .reduce((sum, p) => sum + p.price, 0)
 
   if (todaySpend + product.totalPrice > rules.maxDailySpend) {
-    reasons.push(`Excede límite de gasto diario (${rules.maxDailySpend}€)`)
+    reasons.push(`Excede límite de gasto diario (${rules.maxDailySpend} MXN)`)
   }
 
   // Verificar compatibilidad

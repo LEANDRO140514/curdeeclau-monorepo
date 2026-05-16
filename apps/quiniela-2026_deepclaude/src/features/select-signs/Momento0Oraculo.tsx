@@ -8,7 +8,7 @@ const LEANDRO_RESPUESTAS: Record<string, string> = {
   default: '¡Buenas, quinielero! 🧠 Soy Leandro, tu asistente IA. Analizo la jornada y te recomiendo la mejor reducción. Pregúntame: "recomendación", "dificultad", "bote", o dime un partido concreto.',
   recomendacion: '📊 Esta semana recomiendo 4 Triples en los partidos más inciertos (Derbi Vasco, Betis-Valencia, Las Palmas-Espanyol, Boca-River) y 3 Dobles (Clásico, City-Arsenal, Girona-Villarreal). Así cubrimos las zonas rojas con solo 24 boletos usando la Reducción 3. ¡Eficiencia máxima!',
   dificultad: '🔍 La jornada tiene un índice de dificultad de 7.3/10. Hay 4 partidos "rojos" (muy inciertos), 6 "amarillos" y solo 4 "verdes". El bote podría acumularse si fallan los favoritos.',
-  bote: '💰 Bote estimado: €4.2M para el pleno al 14. Con esta dificultad, el premio al 13 podría rondar los €15,000-25,000. Vale la pena jugar reducciones al 13.',
+  bote: '💰 Bote estimado: MXN 4.2M para el pleno al 14. Con esta dificultad, el premio al 13 podría rondar los MXN 15,000-25,000. Vale la pena jugar reducciones al 13.',
   clasico: '🔥 Real Madrid vs Barcelona: El Clásico siempre es impredecible. H2H reciente favorece ligeramente al Madrid en casa, pero el Barça llega en racha. Recomiendo DOBLE (1X).',
   partido: 'Dime qué número de partido (1-14) quieres que analice en detalle.',
 }
@@ -136,7 +136,7 @@ export default function Momento0Oraculo() {
           </div>
           <div className="bg-black/30 rounded-2xl p-4">
             <div className="text-sm text-white/40 mb-1">Bote Estimado</div>
-            <div className="text-2xl font-bold text-accent">{(valueData.boteEst / 1_000_000).toFixed(1)}M €</div>
+            <div className="text-2xl font-bold text-accent">{(valueData.boteEst / 1_000_000).toFixed(1)}M MXN</div>
           </div>
           <div className="bg-black/30 rounded-2xl p-4">
             <div className="text-sm text-white/40 mb-1">Recomendación</div>

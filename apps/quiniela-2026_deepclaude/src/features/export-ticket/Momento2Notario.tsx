@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useStore } from '../../app/providers/store'
+import { PRECIO_POR_COLUMNA } from '../../lib/quiniela'
 import { exportarTexto } from '../../shared/lib/export'
 import Modal from '../../shared/ui/Modal'
 import type { Vaquita } from '../../shared/types'
@@ -83,7 +84,7 @@ export default function Momento2Notario() {
       nombre: nuevaVaquitaNombre.trim(),
       boletos: nuevaVaquitaBoletos,
       pagado: 0,
-      total: nuevaVaquitaBoletos * 0.75,
+      total: nuevaVaquitaBoletos * PRECIO_POR_COLUMNA,
       color: ['#00f0ff', '#ff00cc', '#34d399', '#fbbf24', '#a78bfa', '#f472b6'][Math.floor(Math.random() * 6)],
     }
     agregarVaquita(nueva)
@@ -92,14 +93,14 @@ export default function Momento2Notario() {
   }
 
   const generarTextoWhatsApp = (): string => {
-    let txt = '💸 *VAQUITAS QUINIELA 2026*\n\n'
+    let txt = '💸 *VAQUITAS PROGOL*\n\n'
     vaquitas.forEach((v) => {
       const pct = v.total > 0 ? ((v.pagado / v.total) * 100).toFixed(0) : '0'
-      txt += `👤 ${v.nombre}: ${v.boletos} bol. — ${v.total.toFixed(2)} € (pagado: ${v.pagado.toFixed(2)} € / ${pct}%)\n`
+      txt += `👤 ${v.nombre}: ${v.boletos} bol. — ${v.total.toFixed(2)} MXN (pagado: ${v.pagado.toFixed(2)} MXN / ${pct}%)\n`
     })
     const totalVaq = vaquitas.reduce((acc, v) => acc + v.total, 0)
     const totalPagado = vaquitas.reduce((acc, v) => acc + v.pagado, 0)
-    txt += `\n💰 Total: ${totalVaq.toFixed(2)} € | Recibido: ${totalPagado.toFixed(2)} €`
+    txt += `\n💰 Total: ${totalVaq.toFixed(2)} MXN | Recibido: ${totalPagado.toFixed(2)} MXN`
     return txt
   }
 
@@ -287,13 +288,13 @@ export default function Momento2Notario() {
                       </div>
                       <div className="flex justify-between text-xs text-white/40 mb-1">
                         <span>{v.boletos} boletos</span>
-                        <span>{v.total.toFixed(2)} €</span>
+                        <span>{v.total.toFixed(2)} MXN</span>
                       </div>
                       <div className="progress-cyber mb-2">
                         <div className="progress-cyber-fill" style={{ width: `${pct}%` }} />
                       </div>
                       <div className="flex justify-between items-center text-xs">
-                        <span className="text-emerald-400 font-bold">{v.pagado.toFixed(2)} € pagado</span>
+                        <span className="text-emerald-400 font-bold">{v.pagado.toFixed(2)} MXN pagado</span>
                         <span className="text-white/30">{pct}%</span>
                         <div className="flex gap-1">
                           {[1, 2, 5, 10].map((cant) => (
