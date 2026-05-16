@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== CYBER-NEON 2026 — SHADCN/UI THEME ===== */
+@layer base {
+  :root {
+    --background: 240 56% 5%;
+    --foreground: 0 0% 100%;
+    --card: 240 38% 12%;
+    --card-foreground: 0 0% 100%;
+    --primary: 186 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --accent: 312 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --muted: 240 20% 15%;
+    --muted-foreground: 240 5% 60%;
+    --border: 186 100% 50% / 0.2;
+    --ring: 186 100% 50%;
+    --radius: 1rem;
+    --success: 158 64% 52%;
+    --warning: 43 96% 56%;
+    --danger: 0 91% 71%;
+  }
+}
+
+* {
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(135deg, #0a0a1f 0%, #12122b 50%, #0d0d2b 100%);
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== SCROLLBAR CYBER ===== */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a1f;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00f0ff, #ff00cc);
+  border-radius: 9999px;
+}
+
+/* ===== NEON TEXT ===== */
+.neon-text {
+  text-shadow:
+    0 0 10px #00f0ff,
+    0 0 20px #00f0ff,
+    0 0 40px #ff00cc;
+}
+.neon-text-accent {
+  text-shadow:
+    0 0 10px #ff00cc,
+    0 0 20px #ff00cc,
+    0 0 30px #ff00cc;
+}
+
+/* ===== CYBER CARD ===== */
+.card-glass {
+  background: rgba(18, 18, 43, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px -10px rgba(0, 240, 255, 0.25);
+  backdrop-filter: blur(12px);
+}
+
+/* ===== CYBER INPUT ===== */
+.cyber-input {
+  background: #1f1f3f;
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 16px;
+  padding: 12px 20px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.cyber-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+.cyber-input:focus {
+  border-color: #00f0ff;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+}
+
+/* ===== CYBER SELECT ===== */
+select.cyber-select {
+  background: #1f1f3f;
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 16px;
+  padding: 12px 20px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+}
+select.cyber-select:focus {
+  border-color: #00f0ff;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+}
+select.cyber-select option {
+  background: #12122b;
+  color: #fff;
+}
+
+/* ===== TRAFFIC LIGHT ===== */
+.semaforo-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.semaforo-verde {
+  background: #34d399;
+  box-shadow: 0 0 12px #34d399;
+}
+.semaforo-amarillo {
+  background: #fbbf24;
+  box-shadow: 0 0 12px #fbbf24;
+}
+.semaforo-rojo {
+  background: #f87171;
+  box-shadow: 0 0 12px #f87171;
+}
+
+/* ===== PARTIDO PILL ===== */
+.partido-pill {
+  background: #1f1f3f;
+  border: 2px solid rgba(0, 240, 255, 0.3);
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+.partido-pill:hover {
+  transform: scale(1.06);
+  border-color: #00f0ff;
+}
+.partido-pill:active {
+  transform: scale(0.95);
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-cyber {
+  background: #1f1f3f;
+  border-radius: 9999px;
+  overflow: hidden;
+  height: 8px;
+}
+.progress-cyber-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #00f0ff, #ff00cc);
+  transition: width 0.5s ease;
+}
+
+/* ===== SCAN EFFECT ===== */
+.scan-area {
+  position: relative;
+  overflow: hidden;
+}
+.scan-area::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,240,255,0.15) 50%, transparent 100%);
+  animation: scanLine 2s linear infinite;
+  pointer-events: none;
+}
+@keyframes scanLine {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+/* ===== TOAST ===== */
+.toast-enter {
+  animation: slideInUp 0.3s ease-out forwards;
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
