@@ -105,8 +105,9 @@ export default function Momento1Arquitecto() {
         setResultado(res)
         agregarHistorial({ id: crypto.randomUUID(), fecha: new Date().toISOString(), modelo: 14, titulo: res.titulo, boletos: res.boletos, precio: res.precio, config: [...config], ahorro: res.ahorro })
         pushToast(`Reducida al directo: ${resultadoDirecto.columnasTotales.toLocaleString('es-ES')} columnas reales`, 'success')
-      } catch (err: any) {
-        pushToast(err.message ?? 'Error al generar', 'error')
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Error al generar'
+        pushToast(msg, 'error')
       }
     } else {
       const r = reduccionSel

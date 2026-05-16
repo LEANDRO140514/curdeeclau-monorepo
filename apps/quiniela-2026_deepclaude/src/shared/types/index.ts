@@ -1,8 +1,9 @@
 /* ===== TIPOS DE QUINIELA 2026 ===== */
 
-export type Signo = '1' | 'X' | '2' | '1X' | '12' | 'X2' | '1X2'
+import type { Signo, NivelGarantia } from '../../lib/quiniela'
 
-export type NivelReduccion = 13 | 12 | 11
+export type { Signo }
+export type { NivelGarantia as NivelReduccion }
 
 export type FaseApp = 0 | 1 | 2 | 3
 
@@ -28,7 +29,7 @@ export interface ReduccionInfo {
   boletos: number
   precio: number
   garantia: string
-  nivel: NivelReduccion
+  nivel: NivelGarantia
   configRequerida?: { triples: number; dobles: number }
 }
 
