@@ -10,7 +10,7 @@ import { contarSignos, PRECIO_POR_COLUMNA } from './validate'
 
 /**
  * Calcula el presupuesto necesario para la generación DIRECTA.
- * Fórmula exacta: 3^T × 2^D × 0.75€
+ * Fórmula exacta: 3^T × 2^D × 15 MXN
  * Sin heurísticas, sin factores inventados.
  */
 export function calcularPresupuestoDirecto(config: ConfigUsuario): {
@@ -25,9 +25,9 @@ export function calcularPresupuestoDirecto(config: ConfigUsuario): {
 
 /**
  * Valida si una configuración es viable económicamente.
- * El límite por defecto (500€) es orientativo.
+ * El límite por defecto (2000 MXN) cubre la reducción más cara (R132 = 1,980 MXN).
  */
-export function esViable(config: ConfigUsuario, presupuestoMaximo = 500): {
+export function esViable(config: ConfigUsuario, presupuestoMaximo = 2000): {
   viable: boolean
   columnas: number
   costo: number
@@ -40,15 +40,15 @@ export function esViable(config: ConfigUsuario, presupuestoMaximo = 500): {
     columnas,
     costo,
     mensaje: viable
-      ? `Viable: ${columnas.toLocaleString('es-ES')} columnas por ${costo.toFixed(2)} €`
-      : `Excede presupuesto: ${columnas.toLocaleString('es-ES')} columnas por ${costo.toFixed(2)} € (máx ${presupuestoMaximo} €)`,
+      ? `Viable: ${columnas.toLocaleString('es-MX')} columnas por ${costo.toFixed(2)} MXN`
+      : `Excede presupuesto: ${columnas.toLocaleString('es-MX')} columnas por ${costo.toFixed(2)} MXN (máx ${presupuestoMaximo} MXN)`,
   }
 }
 
 /**
  * Calcular premios proyectados basado en aciertos.
- * Usa distribución oficial de La Quiniela:
- * - 14 aciertos: 16% de la recaudación
+ * Progol (Lotería Nacional MX): distribución estimada del bote.
+ * - Pleno (14): 16% de la recaudación
  * - 13 aciertos: 7.5%
  * - 12 aciertos: 3%
  * - 11 aciertos: 1.5%
@@ -59,10 +59,10 @@ export function calcPremios(aciertos: number, boteEstimado: number): {
   premio: string
   color: string
 } {
-  if (aciertos >= 14) return { nivel: '14 Aciertos — PLENO', premio: (boteEstimado * 0.16).toLocaleString('es-ES') + ' €', color: '#ff00cc' }
-  if (aciertos >= 13) return { nivel: '13 Aciertos', premio: (boteEstimado * 0.075).toLocaleString('es-ES') + ' €', color: '#00f0ff' }
-  if (aciertos >= 12) return { nivel: '12 Aciertos', premio: (boteEstimado * 0.03).toLocaleString('es-ES') + ' €', color: '#34d399' }
-  if (aciertos >= 11) return { nivel: '11 Aciertos', premio: (boteEstimado * 0.015).toLocaleString('es-ES') + ' €', color: '#fbbf24' }
-  if (aciertos >= 10) return { nivel: '10 Aciertos', premio: 'Reintegro (~15 €)', color: '#9ca3af' }
-  return { nivel: 'Sin premio', premio: '0 €', color: '#6b7280' }
+  if (aciertos >= 14) return { nivel: '14 Aciertos — PLENO', premio: (boteEstimado * 0.16).toLocaleString('es-MX') + ' MXN', color: '#ff00cc' }
+  if (aciertos >= 13) return { nivel: '13 Aciertos', premio: (boteEstimado * 0.075).toLocaleString('es-MX') + ' MXN', color: '#00f0ff' }
+  if (aciertos >= 12) return { nivel: '12 Aciertos', premio: (boteEstimado * 0.03).toLocaleString('es-MX') + ' MXN', color: '#34d399' }
+  if (aciertos >= 11) return { nivel: '11 Aciertos', premio: (boteEstimado * 0.015).toLocaleString('es-MX') + ' MXN', color: '#fbbf24' }
+  if (aciertos >= 10) return { nivel: '10 Aciertos', premio: 'Reintegro (~15 MXN)', color: '#9ca3af' }
+  return { nivel: 'Sin premio', premio: '0 MXN', color: '#6b7280' }
 }

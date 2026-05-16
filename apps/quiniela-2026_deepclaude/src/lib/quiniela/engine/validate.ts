@@ -7,7 +7,8 @@ import type { ConfigUsuario, ConteoSignos } from '../types'
 
 /** Constantes del sistema */
 export const TOTAL_PARTIDOS = 14
-export const PRECIO_POR_COLUMNA = 0.75 // euros
+/** Precio por columna en MXN (Progol — Lotería Nacional de México). */
+export const PRECIO_POR_COLUMNA = 15
 export const TOTAL_COLUMNAS_UNIVERSO = 3 ** 14 // 4,782,969
 
 /** Verifica que la configuración tenga exactamente 14 elementos */
