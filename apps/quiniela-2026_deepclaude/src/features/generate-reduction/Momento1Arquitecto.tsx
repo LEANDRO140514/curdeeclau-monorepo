@@ -11,6 +11,7 @@ import {
   reduccionesCompatibles,
   obtenerColumnasReduccion,
   calcularAhorroReduccion,
+  PATRONES_MATRICES,
   PRECIO_POR_COLUMNA,
   TOTAL_COLUMNAS_UNIVERSO,
 } from '../../lib/quiniela'
@@ -348,11 +349,14 @@ export default function Momento1Arquitecto() {
                   onChange={(e) => setReduccionId(Number(e.target.value))}
                   className="cyber-select mb-4 text-sm"
                 >
-                  {reduccionesNivel.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.nombre} — {r.columnasRequeridas} bol. ({(r.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2)} €)
-                    </option>
-                  ))}
+                  {reduccionesNivel.map((r) => {
+                    const pendiente = PATRONES_MATRICES[r.id]?.origen === 'pendiente'
+                    return (
+                      <option key={r.id} value={r.id} disabled={pendiente}>
+                        {r.nombre} — {r.columnasRequeridas} bol. ({(r.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2)} €){pendiente ? ' — Próximamente' : ''}
+                      </option>
+                    )
+                  })}
                 </select>
 
                 {/* Info reducción */}
@@ -378,12 +382,20 @@ export default function Momento1Arquitecto() {
               </div>
             )}
 
+            {/* Alerta reducción pendiente */}
+            {modoModelo === '13' && PATRONES_MATRICES[reduccionSel.id]?.origen === 'pendiente' && (
+              <div className="bg-amber-400/10 border border-amber-400/25 rounded-2xl p-3 mb-4 text-xs text-amber-400 flex items-start gap-2">
+                <i className="fa-solid fa-clock mt-0.5" />
+                <span>Esta reducción aún no está integrada. Requiere backend Python (OR-Tools CP-SAT).</span>
+              </div>
+            )}
+
             {/* Botón generar */}
             <button
               onClick={handleGenerar}
-              disabled={triples + dobles === 0}
+              disabled={triples + dobles === 0 || (modoModelo === '13' && PATRONES_MATRICES[reduccionSel.id]?.origen === 'pendiente')}
               className={`w-full py-4 rounded-3xl font-bold text-base transition-all duration-300
-                ${triples + dobles > 0
+                ${triples + dobles > 0 && !(modoModelo === '13' && PATRONES_MATRICES[reduccionSel.id]?.origen === 'pendiente')
                   ? 'bg-gradient-to-r from-primary to-accent text-black shadow-neon hover:shadow-neon-lg hover:-translate-y-0.5 active:scale-95'
                   : 'bg-white/5 text-white/15 cursor-not-allowed'
                 }`}
