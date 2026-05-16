@@ -18,8 +18,8 @@ export function exportarCSV(data: BoletosGenerados): void {
 
 /** Exportar a texto plano (para WhatsApp) */
 export function exportarTexto(data: BoletosGenerados): string {
-  let txt = `🎯 QUINIELA 2026 — ${data.titulo}\n`
-  txt += `📋 ${data.boletos.toLocaleString('es-ES')} boletos | 💰 ${data.precio}\n`
+  let txt = `🎯 Progol — ${data.titulo}\n`
+  txt += `📋 ${data.boletos.toLocaleString('es-MX')} boletos | 💰 ${data.precio}\n`
   txt += `📉 Ahorro: ${data.ahorro} | 🛡️ ${data.garantia}\n\n`
   txt += `🏟️ CONFIGURACIÓN:\n`
   data.config.forEach((s, i) => {

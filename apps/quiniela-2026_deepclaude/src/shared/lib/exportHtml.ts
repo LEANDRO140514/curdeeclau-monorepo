@@ -60,7 +60,7 @@ function signoClass(s: string): string {
 }
 
 export function exportarHTML(resultado: BoletosGenerados): { ok: boolean; reason?: string } {
-  const fecha = new Date().toLocaleDateString('es-ES', {
+  const fecha = new Date().toLocaleDateString('es-MX', {
     day: '2-digit', month: 'long', year: 'numeric',
   })
   const tieneColumnas = resultado.columnas && resultado.columnas.length > 0
@@ -80,7 +80,7 @@ export function exportarHTML(resultado: BoletosGenerados): { ok: boolean; reason
     cuerpoHTML = `<table><thead>${thead}</thead><tbody>${filas.join('\n')}</tbody></table>`
   } else {
     cuerpoHTML = `<div class="info-box">
-      Esta reducción tiene <strong>${resultado.boletos.toLocaleString('es-ES')} boletos</strong>
+      Esta reducción tiene <strong>${resultado.boletos.toLocaleString('es-MX')} boletos</strong>
       garantizados al nivel especificado, pero las columnas aún no están integradas en el motor.
     </div>`
   }
@@ -104,7 +104,7 @@ export function exportarHTML(resultado: BoletosGenerados): { ok: boolean; reason
     <h1>${resultado.titulo}</h1>
     <h2>${fecha}</h2>
     <div class="header-meta">
-      <span>${resultado.boletos.toLocaleString('es-ES')} boletos</span>
+      <span>${resultado.boletos.toLocaleString('es-MX')} boletos</span>
       ${resultado.precio ? `<span>${resultado.precio}</span>` : ''}
       ${resultado.ahorro ? `<span>Ahorro: ${resultado.ahorro}</span>` : ''}
       <span>${resultado.garantia}</span>

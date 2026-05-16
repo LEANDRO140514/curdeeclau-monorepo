@@ -98,7 +98,7 @@ export default function Momento1Arquitecto() {
           titulo: 'MODELO 14 — DIRECTO',
           boletos: resultadoDirecto.columnasTotales,
           ahorro: ahorro + '%',
-          precio: resultadoDirecto.costoTotal.toFixed(2) + ' €',
+          precio: resultadoDirecto.costoTotal.toFixed(2) + ' MXN',
           garantia: 'Máxima probabilidad al 14',
           config: [...config],
           columnas: resultadoDirecto.columnas.map((c) => [...c] as Signo[]),
@@ -106,7 +106,7 @@ export default function Momento1Arquitecto() {
         }
         setResultado(res)
         agregarHistorial({ id: crypto.randomUUID(), fecha: new Date().toISOString(), modelo: 14, titulo: res.titulo, boletos: res.boletos, precio: res.precio, config: [...config], ahorro: res.ahorro })
-        pushToast(`Reducida al directo: ${resultadoDirecto.columnasTotales.toLocaleString('es-ES')} columnas reales`, 'success')
+        pushToast(`Reducida al directo: ${resultadoDirecto.columnasTotales.toLocaleString('es-MX')} columnas reales`, 'success')
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'Error al generar'
         pushToast(msg, 'error')
@@ -128,7 +128,7 @@ export default function Momento1Arquitecto() {
           titulo: r.nombre,
           boletos: r.columnasRequeridas,
           ahorro: ahorro + '%',
-          precio: (r.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2) + ' €',
+          precio: (r.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2) + ' MXN',
           garantia: `Garantía 100% al ${r.nivel} (pendiente de integrar)`,
           config: [...config],
           columnas: [],
@@ -144,7 +144,7 @@ export default function Momento1Arquitecto() {
           titulo: r.nombre,
           boletos: columnasReales.length,
           ahorro: ahorro + '%',
-          precio: (columnasReales.length * PRECIO_POR_COLUMNA).toFixed(2) + ' €',
+          precio: (columnasReales.length * PRECIO_POR_COLUMNA).toFixed(2) + ' MXN',
           garantia: `Garantía 100% al ${r.nivel}`,
           config: [...config],
           columnas: columnasReales as unknown as Signo[][],
@@ -267,7 +267,7 @@ export default function Momento1Arquitecto() {
               <StatBox label="Triples" value={triples} color="text-accent" />
               <StatBox label="Dobles" value={dobles} color="text-primary" />
               <StatBox label="Fijos" value={fijos} />
-              <StatBox label="Combinaciones (dir.)" value={presupuesto.columnas.toLocaleString('es-ES')} color={presupuesto.columnas > 10000 ? 'text-warning' : 'text-white'} />
+              <StatBox label="Combinaciones (dir.)" value={presupuesto.columnas.toLocaleString('es-MX')} color={presupuesto.columnas > 10000 ? 'text-warning' : 'text-white'} />
             </div>
           </div>
 
@@ -285,7 +285,7 @@ export default function Momento1Arquitecto() {
                 <div className="flex flex-col items-center gap-2">
                   <span className="text-xs text-white/40">Sin Reducción</span>
                   <div className="w-16 sm:w-20 bg-danger/20 border border-danger/30 rounded-t-2xl flex items-start justify-center pt-3" style={{ height: '130px' }}>
-                    <span className="text-sm font-bold text-danger">{ahorroData.sinReduccion.toFixed(0)} €</span>
+                    <span className="text-sm font-bold text-danger">{ahorroData.sinReduccion.toFixed(0)} MXN</span>
                   </div>
                   <span className="text-[10px] text-white/20">14 Triples</span>
                 </div>
@@ -303,7 +303,7 @@ export default function Momento1Arquitecto() {
                     className="w-16 sm:w-20 bg-success/20 border border-success/30 rounded-t-2xl flex items-end justify-center pb-3"
                     style={{ height: `${Math.max(24, (ahorroData.conReduccion / Math.max(ahorroData.sinReduccion, 1)) * 130)}px` }}
                   >
-                    <span className="text-sm font-bold text-success">{ahorroData.conReduccion.toFixed(0)} €</span>
+                    <span className="text-sm font-bold text-success">{ahorroData.conReduccion.toFixed(0)} MXN</span>
                   </div>
                   <span className="text-[10px] text-success/60">Modelo {modoModelo}</span>
                 </div>
@@ -354,7 +354,7 @@ export default function Momento1Arquitecto() {
                     const pendiente = PATRONES_MATRICES[r.id]?.origen === 'pendiente'
                     return (
                       <option key={r.id} value={r.id} disabled={pendiente}>
-                        {r.nombre} — {r.columnasRequeridas} bol. ({(r.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2)} €){pendiente ? ' — Próximamente' : ''}
+                        {r.nombre} — {r.columnasRequeridas} bol. ({(r.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2)} MXN){pendiente ? ' — Próximamente' : ''}
                       </option>
                     )
                   })}
@@ -368,7 +368,7 @@ export default function Momento1Arquitecto() {
                   </p>
                   <div className="flex gap-3 mt-3 pt-3 border-t border-white/5 text-xs">
                     <span className="text-success font-bold">{reduccionSel.columnasRequeridas} boletos</span>
-                    <span className="text-warning">{(reduccionSel.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2)} €</span>
+                    <span className="text-warning">{(reduccionSel.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2)} MXN</span>
                     <span className="text-primary">Garantía al {reduccionSel.nivel}</span>
                   </div>
                 </div>
@@ -379,7 +379,7 @@ export default function Momento1Arquitecto() {
             {!viabilidad.viable && (
               <div className="bg-danger/10 border border-danger/25 rounded-2xl p-3 mb-4 text-xs text-danger flex items-start gap-2">
                 <i className="fa-solid fa-triangle-exclamation mt-0.5" />
-                <span>Presupuesto estimado alto ({presupuesto.costo.toFixed(0)} €). Reduce triples o elige un nivel inferior.</span>
+                <span>Presupuesto estimado alto ({presupuesto.costo.toFixed(0)} MXN). Reduce triples o elige un nivel inferior.</span>
               </div>
             )}
 
@@ -416,7 +416,7 @@ export default function Momento1Arquitecto() {
                   <span className="text-[10px] font-bold bg-white/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
                     {resultado.modelo === 14 ? 'Modelo 14' : `Oficial al ${nivel}`}
                   </span>
-                  <span className="text-3xl font-bold text-success">{resultado.boletos.toLocaleString('es-ES')}</span>
+                  <span className="text-3xl font-bold text-success">{resultado.boletos.toLocaleString('es-MX')}</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs mb-4">
@@ -541,7 +541,7 @@ export default function Momento1Arquitecto() {
 
             {columnaPreview.length > 100 && (
               <p className="text-center text-white/25 text-xs mt-4">
-                Mostrando 100 de {columnaPreview.length.toLocaleString('es-ES')} columnas
+                Mostrando 100 de {columnaPreview.length.toLocaleString('es-MX')} columnas
               </p>
             )}
 
