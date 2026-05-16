@@ -62,8 +62,6 @@ export default function Momento1Arquitecto() {
   const resetConfig = useStore((s) => s.resetConfig)
   const resultado = useStore((s) => s.resultado)
   const setResultado = useStore((s) => s.setResultado)
-  const gastarTokens = useStore((s) => s.gastarTokens)
-  const tokens = useStore((s) => s.tokens)
   const pushToast = useStore((s) => s.pushToast)
   const agregarHistorial = useStore((s) => s.agregarHistorial)
 
@@ -90,10 +88,6 @@ export default function Momento1Arquitecto() {
 
   const handleGenerar = () => {
     if (modoModelo === '14') {
-      if (!gastarTokens(1)) {
-        pushToast('Necesitas al menos 1 token. Recarga en la tienda.', 'warning')
-        return
-      }
       try {
         const resultadoDirecto = generarDirecta(config)
         const ahorro = ((1 - resultadoDirecto.columnasTotales / TOTAL_COLUMNAS_UNIVERSO) * 100).toFixed(4)
@@ -115,10 +109,6 @@ export default function Momento1Arquitecto() {
         pushToast(err.message ?? 'Error al generar', 'error')
       }
     } else {
-      if (!gastarTokens(2)) {
-        pushToast('Necesitas 2 tokens para reducción oficial. Recarga en la tienda.', 'warning')
-        return
-      }
       const r = reduccionSel
       // Verificar compatibilidad
       if (!esCompatible(config, r)) {
@@ -402,7 +392,7 @@ export default function Momento1Arquitecto() {
             </button>
 
             <div className="text-center text-[11px] text-white/25 mt-3">
-              {modoModelo === '14' ? '1 token' : '2 tokens'} · Saldo: <span className="text-warning font-bold">{tokens}</span> tokens
+              Genera tantas veces como necesites
             </div>
 
             {/* ─── RESULTADO ─── */}
