@@ -69,7 +69,7 @@ export default function Momento1Arquitecto() {
 
   /* ── Estado local ── */
   const [nivel, setNivel] = useState<NivelReduccion>(13)
-  const [modoModelo, setModoModelo] = useState<'14' | '13'>('14')
+  const [modo, setModo] = useState<'tradicional' | 'asistido'>('tradicional')
   const [reduccionId, setReduccionId] = useState(1)
   const [showColumnas, setShowColumnas] = useState(false)
   const [columnaPreview, setColumnaPreview] = useState<Signo[][]>([])
@@ -89,71 +89,47 @@ export default function Momento1Arquitecto() {
   }
 
   const handleGenerar = () => {
-    if (modoModelo === '14') {
-      try {
-        const resultadoDirecto = generarDirecta(config)
-        const ahorro = ((1 - resultadoDirecto.columnasTotales / TOTAL_COLUMNAS_UNIVERSO) * 100).toFixed(4)
-        const res = {
-          modelo: 14,
-          titulo: 'MODELO 14 — DIRECTO',
-          boletos: resultadoDirecto.columnasTotales,
-          ahorro: ahorro + '%',
-          precio: resultadoDirecto.costoTotal.toFixed(2) + ' MXN',
-          garantia: 'Máxima probabilidad al 14',
-          config: [...config],
-          columnas: resultadoDirecto.columnas.map((c) => [...c] as Signo[]),
-          oficial: false,
-        }
-        setResultado(res)
-        agregarHistorial({ id: crypto.randomUUID(), fecha: new Date().toISOString(), modelo: 14, titulo: res.titulo, boletos: res.boletos, precio: res.precio, config: [...config], ahorro: res.ahorro })
-        pushToast(`Reducida al directo: ${resultadoDirecto.columnasTotales.toLocaleString('es-MX')} columnas reales`, 'success')
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Error al generar'
-        pushToast(msg, 'error')
+    if (modo !== 'tradicional') return
+
+    const r = reduccionSel
+    if (!esCompatible(config, r)) {
+      pushToast(`Esta reducción requiere ${r.triples} triples y ${r.dobles} dobles. Ajusta tu configuración.`, 'warning')
+      return
+    }
+    const resultadoRed = obtenerColumnasReduccion(config, r.id)
+    if (!resultadoRed.disponible) {
+      pushToast('Matrices de reducción pendientes de integrar. Usa modo Tradicional para obtener columnas reales.', 'warning')
+      const ahorro = (calcularAhorroReduccion(config, r.columnasRequeridas) * 100).toFixed(1)
+      const res = {
+        modelo: r.nivel,
+        titulo: r.nombre,
+        boletos: r.columnasRequeridas,
+        ahorro: ahorro + '%',
+        precio: (r.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2) + ' MXN',
+        garantia: `Garantía 100% al ${r.nivel} (pendiente de integrar)`,
+        config: [...config],
+        columnas: [],
+        oficial: false,
       }
+      setResultado(res)
+      agregarHistorial({ id: crypto.randomUUID(), fecha: new Date().toISOString(), modelo: r.nivel, titulo: r.nombre, boletos: r.columnasRequeridas, precio: res.precio, config: [...config], ahorro: res.ahorro })
     } else {
-      const r = reduccionSel
-      // Verificar compatibilidad
-      if (!esCompatible(config, r)) {
-        pushToast(`Esta reducción requiere ${r.triples} triples y ${r.dobles} dobles. Ajusta tu configuración.`, 'warning')
-        return
+      const columnasReales = resultadoRed.columnas!
+      const ahorro = (calcularAhorroReduccion(config, r.columnasRequeridas) * 100).toFixed(1)
+      const res = {
+        modelo: r.nivel,
+        titulo: r.nombre,
+        boletos: columnasReales.length,
+        ahorro: ahorro + '%',
+        precio: (columnasReales.length * PRECIO_POR_COLUMNA).toFixed(2) + ' MXN',
+        garantia: `Garantía 100% al ${r.nivel}`,
+        config: [...config],
+        columnas: columnasReales as unknown as Signo[][],
+        oficial: true,
       }
-      // Intentar obtener columnas reales
-      const resultadoRed = obtenerColumnasReduccion(config, r.id)
-      if (!resultadoRed.disponible) {
-        pushToast('Matrices de reducción pendientes de integrar. Usa Modelo 14 Directo para obtener columnas reales.', 'warning')
-        const ahorro = (calcularAhorroReduccion(config, r.columnasRequeridas) * 100).toFixed(1)
-        const res = {
-          modelo: r.nivel,
-          titulo: r.nombre,
-          boletos: r.columnasRequeridas,
-          ahorro: ahorro + '%',
-          precio: (r.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2) + ' MXN',
-          garantia: `Garantía 100% al ${r.nivel} (pendiente de integrar)`,
-          config: [...config],
-          columnas: [],
-          oficial: false,
-        }
-        setResultado(res)
-        agregarHistorial({ id: crypto.randomUUID(), fecha: new Date().toISOString(), modelo: r.nivel, titulo: r.nombre, boletos: r.columnasRequeridas, precio: res.precio, config: [...config], ahorro: res.ahorro })
-      } else {
-        const columnasReales = resultadoRed.columnas!
-        const ahorro = (calcularAhorroReduccion(config, r.columnasRequeridas) * 100).toFixed(1)
-        const res = {
-          modelo: r.nivel,
-          titulo: r.nombre,
-          boletos: columnasReales.length,
-          ahorro: ahorro + '%',
-          precio: (columnasReales.length * PRECIO_POR_COLUMNA).toFixed(2) + ' MXN',
-          garantia: `Garantía 100% al ${r.nivel}`,
-          config: [...config],
-          columnas: columnasReales as unknown as Signo[][],
-          oficial: true,
-        }
-        setResultado(res)
-        agregarHistorial({ id: crypto.randomUUID(), fecha: new Date().toISOString(), modelo: r.nivel, titulo: r.nombre, boletos: res.boletos, precio: res.precio, config: [...config], ahorro: res.ahorro })
-        pushToast(`Reducción al ${r.nivel} generada: ${columnasReales.length} columnas reales`, 'success')
-      }
+      setResultado(res)
+      agregarHistorial({ id: crypto.randomUUID(), fecha: new Date().toISOString(), modelo: r.nivel, titulo: r.nombre, boletos: res.boletos, precio: res.precio, config: [...config], ahorro: res.ahorro })
+      pushToast(`Reducción al ${r.nivel} generada: ${columnasReales.length} columnas reales`, 'success')
     }
   }
 
@@ -161,10 +137,10 @@ export default function Momento1Arquitecto() {
   const ahorroData = useMemo(() => {
     if (triples + dobles === 0) return null
     const sinReduccion = presupuesto.costo
-    const conReduccion = modoModelo === '13' ? reduccionSel.columnasRequeridas * PRECIO_POR_COLUMNA : presupuesto.costo
+    const conReduccion = modo === 'asistido' ? reduccionSel.columnasRequeridas * PRECIO_POR_COLUMNA : presupuesto.costo
     const pct = sinReduccion > 0 ? ((1 - conReduccion / sinReduccion) * 100).toFixed(1) : '0'
     return { sinReduccion, conReduccion, pct }
-  }, [presupuesto.costo, modoModelo, reduccionSel.columnasRequeridas, triples, dobles])
+  }, [presupuesto.costo, modo, reduccionSel.columnasRequeridas, triples, dobles])
 
   return (
     <section className="space-y-6 animate-fade-in">
@@ -305,7 +281,7 @@ export default function Momento1Arquitecto() {
                   >
                     <span className="text-sm font-bold text-success">{ahorroData.conReduccion.toFixed(0)} MXN</span>
                   </div>
-                  <span className="text-[10px] text-success/60">Modelo {modoModelo}</span>
+                  <span className="text-[10px] text-success/60">{modo === 'tradicional' ? 'Tradicional' : 'Asistido'}</span>
                 </div>
               </div>
             </div>
@@ -322,58 +298,35 @@ export default function Momento1Arquitecto() {
               Generar Reducida
             </h3>
 
-            {/* Toggle Modelo */}
+            {/* Toggle Tradicional / Asistido */}
             <div className="flex bg-white/5 rounded-2xl p-1 mb-5">
               <button
-                onClick={() => setModoModelo('14')}
+                onClick={() => setModo('tradicional')}
                 className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-300
-                  ${modoModelo === '14' ? 'bg-gradient-to-r from-primary to-accent text-black shadow-neon' : 'text-white/45 hover:text-white'}`}
+                  ${modo === 'tradicional' ? 'bg-gradient-to-r from-primary to-accent text-black shadow-neon' : 'text-white/45 hover:text-white'}`}
               >
-                <i className="fa-solid fa-bolt mr-1.5" />
-                Modelo 14
+                <i className="fa-solid fa-calculator mr-1.5" />
+                Tradicional
               </button>
               <button
-                onClick={() => setModoModelo('13')}
+                onClick={() => setModo('asistido')}
                 className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-300
-                  ${modoModelo === '13' ? 'bg-gradient-to-r from-primary to-accent text-black shadow-neon' : 'text-white/45 hover:text-white'}`}
+                  ${modo === 'asistido' ? 'bg-gradient-to-r from-primary to-accent text-black shadow-neon' : 'text-white/45 hover:text-white'}`}
               >
-                <i className="fa-solid fa-shield-halved mr-1.5" />
-                Modelo 13
+                <i className="fa-solid fa-wand-magic-sparkles mr-1.5" />
+                Asistido
               </button>
             </div>
 
-            {/* Select de reducción (solo modelo 13) */}
-            {modoModelo === '13' && (
-              <>
-                <select
-                  value={reduccionId}
-                  onChange={(e) => setReduccionId(Number(e.target.value))}
-                  className="cyber-select mb-4 text-sm"
-                >
-                  {reduccionesNivel.map((r) => {
-                    const pendiente = PATRONES_MATRICES[r.id]?.origen === 'pendiente'
-                    return (
-                      <option key={r.id} value={r.id} disabled={pendiente}>
-                        {r.nombre} — {r.columnasRequeridas} bol. ({(r.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2)} MXN){pendiente ? ' — Próximamente' : ''}
-                      </option>
-                    )
-                  })}
-                </select>
-
-                {/* Info reducción */}
-                <div className="bg-black/25 rounded-2xl p-4 mb-4 border border-white/5">
-                  <div className="font-bold text-primary text-sm">{reduccionSel.nombre}</div>
-                  <p className="text-white/50 text-xs mt-1 leading-relaxed">
-                    {reduccionSel.triples > 0 && `${reduccionSel.triples} triples`}{reduccionSel.triples > 0 && reduccionSel.dobles > 0 && ' + '}{reduccionSel.dobles > 0 && `${reduccionSel.dobles} dobles`}
-                  </p>
-                  <div className="flex gap-3 mt-3 pt-3 border-t border-white/5 text-xs">
-                    <span className="text-success font-bold">{reduccionSel.columnasRequeridas} boletos</span>
-                    <span className="text-warning">{(reduccionSel.columnasRequeridas * PRECIO_POR_COLUMNA).toFixed(2)} MXN</span>
-                    <span className="text-primary">Garantía al {reduccionSel.nivel}</span>
-                  </div>
-                </div>
-              </>
+            {/* Placeholder Asistido */}
+            {modo === 'asistido' && (
+              <div className="bg-purple-400/10 border border-purple-400/25 rounded-2xl p-4 mb-4 text-center">
+                <i className="fa-solid fa-wand-magic-sparkles text-2xl text-purple-400/50 mb-2 block" />
+                <p className="text-purple-300/70 text-sm font-semibold mb-1">Modo Asistido — Próximamente</p>
+                <p className="text-white/30 text-xs">IA generativa para sugerir la mejor reducción según tu presupuesto y tolerancia al riesgo.</p>
+              </div>
             )}
+
 
             {/* Alerta presupuesto */}
             {!viabilidad.viable && (
@@ -383,26 +336,18 @@ export default function Momento1Arquitecto() {
               </div>
             )}
 
-            {/* Alerta reducción pendiente */}
-            {modoModelo === '13' && PATRONES_MATRICES[reduccionSel.id]?.origen === 'pendiente' && (
-              <div className="bg-amber-400/10 border border-amber-400/25 rounded-2xl p-3 mb-4 text-xs text-amber-400 flex items-start gap-2">
-                <i className="fa-solid fa-clock mt-0.5" />
-                <span>Esta reducción aún no está integrada. Requiere backend Python (OR-Tools CP-SAT).</span>
-              </div>
-            )}
-
             {/* Botón generar */}
             <button
               onClick={handleGenerar}
-              disabled={triples + dobles === 0 || (modoModelo === '13' && PATRONES_MATRICES[reduccionSel.id]?.origen === 'pendiente')}
+              disabled={modo === 'asistido' || triples + dobles === 0}
               className={`w-full py-4 rounded-3xl font-bold text-base transition-all duration-300
-                ${triples + dobles > 0 && !(modoModelo === '13' && PATRONES_MATRICES[reduccionSel.id]?.origen === 'pendiente')
+                ${modo === 'tradicional' && triples + dobles > 0
                   ? 'bg-gradient-to-r from-primary to-accent text-black shadow-neon hover:shadow-neon-lg hover:-translate-y-0.5 active:scale-95'
                   : 'bg-white/5 text-white/15 cursor-not-allowed'
                 }`}
             >
-              <i className={`fa-solid ${modoModelo === '14' ? 'fa-bolt' : 'fa-shield-halved'} mr-2`} />
-              {modoModelo === '14' ? 'GENERAR DIRECTO' : 'USAR REDUCCIÓN OFICIAL'}
+              <i className={`fa-solid ${modo === 'tradicional' ? 'fa-calculator' : 'fa-wand-magic-sparkles'} mr-2`} />
+              {modo === 'tradicional' ? 'GENERAR DIRECTO' : 'PRÓXIMAMENTE'}
             </button>
 
             <div className="text-center text-[11px] text-white/25 mt-3">
@@ -414,7 +359,7 @@ export default function Momento1Arquitecto() {
               <div className="mt-6 bg-black/25 rounded-2xl p-4 border border-white/5 animate-slide-in">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-[10px] font-bold bg-white/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
-                    {resultado.modelo === 14 ? 'Modelo 14' : `Oficial al ${nivel}`}
+                    {resultado.modelo === 14 ? 'Tradicional' : `Oficial al ${nivel}`}
                   </span>
                   <span className="text-3xl font-bold text-success">{resultado.boletos.toLocaleString('es-MX')}</span>
                 </div>
@@ -555,4 +500,38 @@ export default function Momento1Arquitecto() {
       )}
     </section>
   )
+}
+
+/* ─── LEGACY ─── */
+
+/**
+ * Generación directa (Modelo 14 legacy).
+ * @deprecated Reservado para la futura Modalidad Asistida (B).
+ * No se invoca desde la UI todavía — el toggle solo expone 'tradicional'.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function _generarDirectoLegacy(config: Signo[]): {
+  modelo: number
+  titulo: string
+  boletos: number
+  ahorro: string
+  precio: string
+  garantia: string
+  config: Signo[]
+  columnas: Signo[][]
+  oficial: boolean
+} {
+  const resultadoDirecto = generarDirecta(config)
+  const ahorro = ((1 - resultadoDirecto.columnasTotales / TOTAL_COLUMNAS_UNIVERSO) * 100).toFixed(4)
+  return {
+    modelo: 14,
+    titulo: 'PROGOL 14 — DIRECTO',
+    boletos: resultadoDirecto.columnasTotales,
+    ahorro: ahorro + '%',
+    precio: resultadoDirecto.costoTotal.toFixed(2) + ' MXN',
+    garantia: 'Máxima probabilidad al 14',
+    config: [...config],
+    columnas: resultadoDirecto.columnas.map((c) => [...c] as Signo[]),
+    oficial: false,
+  }
 }
