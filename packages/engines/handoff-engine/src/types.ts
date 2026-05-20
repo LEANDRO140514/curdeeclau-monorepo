@@ -1,5 +1,5 @@
 // ── Canonical Contracts ─────────────────────────────────
-import type { DomainEvent } from '@curdeeclau/shared';
+import type { DomainEvent, RuntimeEventType } from '@curdeeclau/shared';
 export type { DomainEvent } from '@curdeeclau/shared';
 
 // ── Ownership ──────────────────────────────────────────
@@ -36,7 +36,7 @@ export type HandoffTrigger =
 
 // ── Event Types (handoff domain) ───────────────────────
 
-export type HandoffEventType =
+export type HandoffEventType = Extract<RuntimeEventType,
   | 'HandoffRequested'
   | 'HandoffAccepted'
   | 'HandoffRejected'
@@ -44,7 +44,8 @@ export type HandoffEventType =
   | 'SuppressionActivated'
   | 'AIRecoveryStarted'
   | 'AIRecovered'
-  | 'HandoffClosed';
+  | 'HandoffClosed'
+>;
 
 // ── Handoff Event Payload (narrowing helper, not an envelope) ─
 

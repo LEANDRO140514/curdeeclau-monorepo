@@ -19,17 +19,50 @@
 import type { DomainEvent } from '../events/DomainEvent';
 
 export type RuntimeEventType =
+  // ── Message Buffer ──────────────────────────────
   | 'MessageBuffered'
   | 'ConversationReadyToFlush'
   | 'ConversationFlushed'
   | 'ConversationCleared'
+  // ── Workflow Orchestration ──────────────────────
   | 'WorkflowStarted'
   | 'WorkflowStepExecuted'
   | 'WorkflowStepFailed'
   | 'WorkflowCompleted'
   | 'WorkflowFailed'
+  // ── State ───────────────────────────────────────
   | 'StateTransitioned'
+  // ── Handoff ─────────────────────────────────────
   | 'HandoffRequested'
+  | 'HandoffAccepted'
+  | 'HandoffRejected'
+  | 'OwnershipChanged'
+  | 'SuppressionActivated'
+  | 'AIRecoveryStarted'
+  | 'AIRecovered'
+  | 'HandoffClosed'
+  // ── CRM ─────────────────────────────────────────
+  | 'ContactCreated'
+  | 'ContactUpdated'
+  | 'OpportunityCreated'
+  | 'OpportunityMoved'
+  | 'TagAdded'
+  | 'TagRemoved'
+  | 'PipelineCreated'
+  | 'CampaignCreated'
+  | 'CampaignPaused'
+  | 'CampaignResumed'
+  // ── Calendar ────────────────────────────────────
+  | 'AvailabilityChecked'
+  | 'ReservationCreated'
+  | 'ReservationCancelled'
+  | 'ReservationRescheduled'
+  | 'TimeSlotBlocked'
+  | 'TimeSlotReleased'
+  | 'ReminderCreated'
+  | 'ReminderTriggered'
+  | 'ReminderCancelled'
+  // ── Future verticals ────────────────────────────
   | 'AppointmentBooked';
 
 export type RuntimeEventHandler = (event: DomainEvent) => void | Promise<void>;

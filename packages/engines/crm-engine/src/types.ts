@@ -4,7 +4,7 @@
 // All entity shapes come from @curdeeclau/shared.
 // This file defines engine-specific types: config, errors, inputs.
 
-import type { DomainEvent, CRMContact, CRMOpportunity, CRMPipeline, CRMCampaign, PipelineStage, ConversationOwner } from '@curdeeclau/shared';
+import type { DomainEvent, RuntimeEventType, CRMContact, CRMOpportunity, CRMPipeline, CRMCampaign, PipelineStage, ConversationOwner } from '@curdeeclau/shared';
 
 // ── Re-exports ────────────────────────────────────────────
 
@@ -12,7 +12,7 @@ export type { DomainEvent, CRMContact, CRMOpportunity, CRMPipeline, CRMCampaign,
 
 // ── CRM Event Types ───────────────────────────────────────
 
-export type CRMEventType =
+export type CRMEventType = Extract<RuntimeEventType,
   | 'ContactCreated'
   | 'ContactUpdated'
   | 'OpportunityCreated'
@@ -22,7 +22,8 @@ export type CRMEventType =
   | 'PipelineCreated'
   | 'CampaignCreated'
   | 'CampaignPaused'
-  | 'CampaignResumed';
+  | 'CampaignResumed'
+>;
 
 // ── Error Codes ───────────────────────────────────────────
 

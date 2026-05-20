@@ -5,7 +5,7 @@
 // This file defines engine-specific types: config, errors, inputs, provider interface.
 
 import type {
-  DomainEvent, Calendar, AvailabilityWindow, TimeSlot, TimeSlotStatus,
+  DomainEvent, RuntimeEventType, Calendar, AvailabilityWindow, TimeSlot, TimeSlotStatus,
   Reservation, ReservationStatus, Reminder, ReminderType, ReminderChannel, ReminderStatus,
   CalendarId, TimeSlotId, ReservationId, ReminderId, ContactId, ConversationOwner,
 } from '@curdeeclau/shared';
@@ -15,7 +15,7 @@ export type { CalendarId, TimeSlotId, ReservationId, ReminderId, ContactId };
 
 // ── Event Types ──────────────────────────────────────────
 
-export type CalendarEventType =
+export type CalendarEventType = Extract<RuntimeEventType,
   | 'AvailabilityChecked'
   | 'ReservationCreated'
   | 'ReservationCancelled'
@@ -24,7 +24,8 @@ export type CalendarEventType =
   | 'TimeSlotReleased'
   | 'ReminderCreated'
   | 'ReminderTriggered'
-  | 'ReminderCancelled';
+  | 'ReminderCancelled'
+>;
 
 // ── Error Codes ──────────────────────────────────────────
 
