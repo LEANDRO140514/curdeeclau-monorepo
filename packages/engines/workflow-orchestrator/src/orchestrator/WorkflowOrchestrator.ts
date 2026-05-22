@@ -70,8 +70,8 @@ export class WorkflowOrchestrator implements IWorkflowOrchestrator {
     const initial = this.stateResolver.getInitialState();
 
     const context: WorkflowContext = {
-      workflowId,
-      executionId,
+      workflowId: workflowId as WorkflowContext['workflowId'],
+      executionId: executionId as WorkflowContext['executionId'],
       verticalId: definition.verticalId,
       currentState: initial,
       input: input ?? {},
@@ -79,6 +79,7 @@ export class WorkflowOrchestrator implements IWorkflowOrchestrator {
       steps: [],
       startedAt: Date.now(),
       updatedAt: Date.now(),
+      metadata: {},
     };
 
     await this.eventDispatcher.dispatch(

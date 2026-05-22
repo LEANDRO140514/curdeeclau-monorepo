@@ -1,15 +1,27 @@
 // ── Canonical Execution Context ─────────────────────────
 //
-// Wraps a single workflow execution. Created by the orchestrator,
-// consumed by every engine participating in a workflow step.
+// Single authoritative execution envelope for the governed runtime.
+// Created by the workflow-orchestrator. Consumed by every engine
+// participating in a workflow step.
+//
+// This is a runtime execution primitive — it carries ONLY
+// execution metadata. It does NOT carry:
+//   - CRM semantics
+//   - calendar semantics
+//   - handoff semantics
+//   - provider instances
+//   - channel state
+//   - AI state
+//   - business entities
 
+import type { StepResult } from '../workflow/WorkflowContext';
 import type { ExecutionId, WorkflowId, ConversationId, TenantId } from '../ids/EntityId';
 
 export interface ExecutionContext {
   /** Unique execution ID (exec_ prefix) */
   executionId: ExecutionId;
 
-  /** Workflow being executed (wf_ prefix) */
+  /** Workflow being executed (wfl_ prefix) */
   workflowId: WorkflowId;
 
   /** Parent conversation */
@@ -20,6 +32,9 @@ export interface ExecutionContext {
 
   /** Vertical domain */
   verticalId?: string;
+
+  /** Correlation ID tying events of this execution together */
+  correlationId?: string;
 
   /** Current state-machine state name */
   currentState: string;
@@ -33,14 +48,17 @@ export interface ExecutionContext {
   /** Mutable state bag shared across steps */
   state: Record<string, unknown>;
 
-  /** Correlation ID tying events of this execution together */
-  correlationId?: string;
+  /** Step results in execution order */
+  steps: StepResult[];
 
   /** Unix ms when execution started */
   startedAt: number;
 
   /** Unix ms of last update */
   updatedAt: number;
+
+  /** Extension point — observability, tracing, provider traces */
+  metadata: Record<string, unknown>;
 }
 
 export function createExecutionContext(
@@ -53,8 +71,10 @@ export function createExecutionContext(
     currentState: overrides.currentState ?? 'idle',
     input: overrides.input ?? {},
     state: overrides.state ?? {},
+    steps: overrides.steps ?? [],
     startedAt: overrides.startedAt ?? now,
     updatedAt: overrides.updatedAt ?? now,
+    metadata: overrides.metadata ?? {},
     conversationId: overrides.conversationId,
     tenantId: overrides.tenantId,
     verticalId: overrides.verticalId,

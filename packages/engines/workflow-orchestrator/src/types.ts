@@ -1,5 +1,5 @@
 // ── Canonical Contracts ─────────────────────────────────
-import type { DomainEvent } from '@curdeeclau/shared';
+import type { DomainEvent, ExecutionContext, WorkflowStateDefinition } from '@curdeeclau/shared';
 export type { DomainEvent } from '@curdeeclau/shared';
 export type { StepResult, StepStatus } from '@curdeeclau/shared';
 export type { StateTransition } from '@curdeeclau/shared';
@@ -59,29 +59,16 @@ export interface WorkflowDefinition {
 }
 
 // ── Execution Context ───────────────────────────────────
-
-export interface WorkflowContext {
-  workflowId: string;
-  executionId: string;
-  verticalId: string;
-  conversationId?: string;
-  tenantId?: string;
-  correlationId?: string;
-  currentState: string;
-  input: Record<string, unknown>;
-  state: Record<string, unknown>;
-  steps: import('@curdeeclau/shared').StepResult[];
-  startedAt: number;
-  updatedAt: number;
-}
+// Canonical envelope from shared/runtime. The orchestrator
+// constructs ExecutionContext; engines receive it via execute().
+export type WorkflowContext = ExecutionContext;
 
 // ── State Machine ───────────────────────────────────────
+// StateDefinition aliases the canonical WorkflowStateDefinition.
+// StateMachine is orchestrator-internal infrastructure (blueprint,
+// not runtime record — that's CanonicalWorkflowState in shared/).
 
-export interface StateDefinition {
-  name: string;
-  description?: string;
-  transitions: import('@curdeeclau/shared').StateTransition[];
-}
+export type StateDefinition = WorkflowStateDefinition;
 
 export interface StateMachine {
   id: string;

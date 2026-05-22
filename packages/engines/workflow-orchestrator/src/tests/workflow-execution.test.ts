@@ -98,6 +98,7 @@ function makeContext(overrides: Partial<WorkflowContext> = {}): WorkflowContext 
     steps: [],
     startedAt: Date.now(),
     updatedAt: Date.now(),
+    metadata: {},
     ...overrides,
   };
 }

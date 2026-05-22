@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { createWorkflowContext } from '../workflow/WorkflowContext';
+import { createExecutionContext } from '../runtime/ExecutionContext';
 import { createWorkflowState } from '../workflow/WorkflowState';
 import type { StepResult } from '../workflow/WorkflowContext';
 
-describe('CanonicalWorkflowContext', () => {
+describe('ExecutionContext (merged — RT-2.4)', () => {
   it('debe crear contexto con defaults', () => {
-    const ctx = createWorkflowContext({
+    const ctx = createExecutionContext({
       workflowId: 'wf_test' as never,
       executionId: 'exec_test' as never,
     });
@@ -30,7 +30,7 @@ describe('CanonicalWorkflowContext', () => {
       attempts: 1,
     };
 
-    const ctx = createWorkflowContext({
+    const ctx = createExecutionContext({
       workflowId: 'wf_w1' as never,
       executionId: 'exec_e1' as never,
       steps: [step],
@@ -42,7 +42,7 @@ describe('CanonicalWorkflowContext', () => {
   });
 
   it('debe soportar tenantId y verticalId', () => {
-    const ctx = createWorkflowContext({
+    const ctx = createExecutionContext({
       workflowId: 'wf_dental' as never,
       executionId: 'exec_e1' as never,
       tenantId: 'tnt_clinica1' as never,
@@ -54,7 +54,7 @@ describe('CanonicalWorkflowContext', () => {
   });
 
   it('debe rastrear cambio de estado', () => {
-    const ctx = createWorkflowContext({
+    const ctx = createExecutionContext({
       workflowId: 'wf_w1' as never,
       executionId: 'exec_e1' as never,
       currentState: 'processing',
@@ -75,7 +75,7 @@ describe('CanonicalWorkflowContext', () => {
       attempts: 3,
     };
 
-    const ctx = createWorkflowContext({
+    const ctx = createExecutionContext({
       workflowId: 'wf_w1' as never,
       executionId: 'exec_e1' as never,
       steps: [failedStep],

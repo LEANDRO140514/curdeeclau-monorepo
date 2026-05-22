@@ -76,12 +76,14 @@ export { createCampaign } from './crm/Campaign';
 export type { CRMCampaign, CampaignStatus } from './crm/Campaign';
 
 // ── Workflow ─────────────────────────────────────────────
-export { createWorkflowContext } from './workflow/WorkflowContext';
 export type {
-  CanonicalWorkflowContext,
   StepResult,
   StepStatus,
 } from './workflow/WorkflowContext';
+
+// Backward compat — CanonicalWorkflowContext merged into ExecutionContext (RT-2.4)
+export type { ExecutionContext as CanonicalWorkflowContext } from './runtime/ExecutionContext';
+export { createExecutionContext as createWorkflowContext } from './runtime/ExecutionContext';
 
 export { createWorkflowState } from './workflow/WorkflowState';
 export type {
