@@ -45,7 +45,8 @@ export type CRMErrorCode =
   | 'CAMPAIGN_DRAFT'
   | 'OWNERSHIP_LOCKED'
   | 'OWNERSHIP_INSUFFICIENT'
-  | 'VALIDATION_ERROR';
+  | 'VALIDATION_ERROR'
+  | 'PROVIDER_UNAVAILABLE';
 
 // ── Structured Results ────────────────────────────────────
 

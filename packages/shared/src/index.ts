@@ -62,6 +62,9 @@ export type {
 
 export type { Engine } from './runtime/EngineContract';
 
+export { createProviderError, wrapProviderError } from './runtime/ProviderError';
+export type { ProviderFailureType, ProviderError } from './runtime/ProviderError';
+
 // ── CRM ──────────────────────────────────────────────────
 export { createContact } from './crm/Contact';
 export type { CRMContact } from './crm/Contact';

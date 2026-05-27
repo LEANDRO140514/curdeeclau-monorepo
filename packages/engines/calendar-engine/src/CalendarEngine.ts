@@ -13,6 +13,7 @@
 import type {
   Reservation, TimeSlot, Reminder, ConversationOwner,
 } from '@curdeeclau/shared';
+import { wrapProviderError } from '@curdeeclau/shared';
 import type {
   CalendarEngineConfig,
   CalendarEngineContext,
@@ -125,12 +126,8 @@ export class CalendarEngine {
       this.events.emit(availabilityChecked(calendarId, startAt, endAt, result.available, conflictingIds, { context: ctx }));
       return result;
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const colon = msg.indexOf(': ');
-      if (colon !== -1) {
-        return { error: msg.slice(0, colon), message: msg.slice(colon + 2) };
-      }
-      return { error: 'PROVIDER_UNAVAILABLE', message: msg };
+      const pe = wrapProviderError(this.provider.providerName, err);
+      return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message };
     }
   }
 
@@ -151,12 +148,8 @@ export class CalendarEngine {
       this.events.emit(reservationCreated(reservation, { context: ctx }));
       return { reservation };
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const colon = msg.indexOf(': ');
-      if (colon !== -1) {
-        return { error: msg.slice(0, colon), message: msg.slice(colon + 2) };
-      }
-      return { error: 'PROVIDER_UNAVAILABLE', message: msg };
+      const pe = wrapProviderError(this.provider.providerName, err);
+      return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message };
     }
   }
 
@@ -173,12 +166,8 @@ export class CalendarEngine {
       this.events.emit(reservationCancelled(reservationId, 'confirmed', typeof reason === 'string' ? reason : undefined, { context: ctx }));
       return { reservation };
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const colon = msg.indexOf(': ');
-      if (colon !== -1) {
-        return { error: msg.slice(0, colon), message: msg.slice(colon + 2) };
-      }
-      return { error: 'PROVIDER_UNAVAILABLE', message: msg };
+      const pe = wrapProviderError(this.provider.providerName, err);
+      return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message };
     }
   }
 
@@ -217,12 +206,8 @@ export class CalendarEngine {
       this.events.emit(reservationRescheduled(rescheduled, existing, { context: ctx }));
       return { reservation: rescheduled, previous: cancelled };
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const colon = msg.indexOf(': ');
-      if (colon !== -1) {
-        return { error: msg.slice(0, colon), message: msg.slice(colon + 2) };
-      }
-      return { error: 'PROVIDER_UNAVAILABLE', message: msg };
+      const pe = wrapProviderError(this.provider.providerName, err);
+      return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message };
     }
   }
 
@@ -239,12 +224,8 @@ export class CalendarEngine {
       this.events.emit(timeSlotBlocked(timeSlot, typeof reason === 'string' ? reason : undefined, { context: ctx }));
       return { timeSlot };
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const colon = msg.indexOf(': ');
-      if (colon !== -1) {
-        return { error: msg.slice(0, colon), message: msg.slice(colon + 2) };
-      }
-      return { error: 'PROVIDER_UNAVAILABLE', message: msg };
+      const pe = wrapProviderError(this.provider.providerName, err);
+      return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message };
     }
   }
 
@@ -260,12 +241,8 @@ export class CalendarEngine {
       this.events.emit(timeSlotReleased(timeSlotId, existing?.status ?? 'unknown', { context: ctx }));
       return { timeSlot };
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const colon = msg.indexOf(': ');
-      if (colon !== -1) {
-        return { error: msg.slice(0, colon), message: msg.slice(colon + 2) };
-      }
-      return { error: 'PROVIDER_UNAVAILABLE', message: msg };
+      const pe = wrapProviderError(this.provider.providerName, err);
+      return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message };
     }
   }
 
@@ -287,12 +264,8 @@ export class CalendarEngine {
       this.events.emit(reminderCreated(reminder, { context: ctx }));
       return { reminder };
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const colon = msg.indexOf(': ');
-      if (colon !== -1) {
-        return { error: msg.slice(0, colon), message: msg.slice(colon + 2) };
-      }
-      return { error: 'PROVIDER_UNAVAILABLE', message: msg };
+      const pe = wrapProviderError(this.provider.providerName, err);
+      return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message };
     }
   }
 
@@ -307,12 +280,8 @@ export class CalendarEngine {
       this.events.emit(reminderCancelled(reminderId, reminder.reservationId, 'User requested cancellation', { context: ctx }));
       return { reminder };
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const colon = msg.indexOf(': ');
-      if (colon !== -1) {
-        return { error: msg.slice(0, colon), message: msg.slice(colon + 2) };
-      }
-      return { error: 'PROVIDER_UNAVAILABLE', message: msg };
+      const pe = wrapProviderError(this.provider.providerName, err);
+      return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message };
     }
   }
 

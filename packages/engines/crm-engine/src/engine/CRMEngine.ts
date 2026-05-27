@@ -12,6 +12,7 @@
 // Events are emitted on every successful mutation (I20).
 
 import type { CRMProvider, CRMError, CRMEngineConfig, CRMEngineContext, CreateContactInput, UpdateContactInput, CreateOpportunityInput, MoveOpportunityInput, CreatePipelineInput, CreateCampaignInput } from '../types';
+import { wrapProviderError } from '@curdeeclau/shared';
 import { OwnershipGuard } from '../runtime/OwnershipGuard';
 import { CRMEventEmitter } from '../runtime/CRMEventEmitter';
 import { CRMValidation } from '../runtime/CRMValidation';
@@ -56,7 +57,8 @@ export class CRMEngine {
     if (ownershipError) return ownershipError as unknown as Record<string, unknown>;
 
     // ── Route action ──
-    switch (action) {
+    try {
+      switch (action) {
       case 'create_contact': {
         const validationError = this.validation.validateCreateContact(context);
         if (validationError) return validationError as unknown as Record<string, unknown>;
@@ -123,6 +125,10 @@ export class CRMEngine {
 
       default:
         return { error: 'VALIDATION_ERROR', message: `Unknown action: "${action}"` } as unknown as Record<string, unknown>;
+    }
+    } catch (err: unknown) {
+      const pe = wrapProviderError(this.provider.providerName, err);
+      return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message } as unknown as Record<string, unknown>;
     }
   }
 
