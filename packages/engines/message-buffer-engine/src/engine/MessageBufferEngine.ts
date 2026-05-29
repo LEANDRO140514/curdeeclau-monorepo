@@ -1,5 +1,5 @@
 import { createDomainEvent } from '@curdeeclau/shared';
-import type { DomainEvent } from '@curdeeclau/shared';
+import type { DomainEvent, LifecycleState } from '@curdeeclau/shared';
 import type {
   BufferConfig,
   BufferMessage,
@@ -23,6 +23,14 @@ export class MessageBufferEngine {
   private config: BufferConfig;
   private emitFn?: (event: DomainEvent) => void;
 
+  // ── Lifecycle State (#34: constructor is allocation-only) ──
+
+  private _lifecycleState: LifecycleState = 'UNINITIALIZED';
+
+  get lifecycleState(): LifecycleState {
+    return this._lifecycleState;
+  }
+
   constructor(
     config: Partial<BufferConfig> & { emitFn?: (event: DomainEvent) => void } = {},
   ) {
@@ -38,9 +46,26 @@ export class MessageBufferEngine {
     });
   }
 
+  // ── Lifecycle ───────────────────────────────────────────
+
+  async start(): Promise<void> {
+    if (this._lifecycleState !== 'UNINITIALIZED') return;
+    this._lifecycleState = 'READY';
+  }
+
+  async stop(): Promise<void> {
+    if (this._lifecycleState === 'STOPPED') return;
+    this._lifecycleState = 'STOPPING';
+    this.destroy();
+    this._lifecycleState = 'STOPPED';
+  }
+
   // ── Engine Contract ─────────────────────────────────────
 
   async execute(action: string, context: Record<string, unknown>): Promise<Record<string, unknown>> {
+    if (this._lifecycleState !== 'READY') {
+      return { error: 'engine_not_ready', message: `Engine is ${this._lifecycleState}. Call start() before execute().` };
+    }
     try {
       switch (action) {
         case 'buffer_message': {
@@ -212,7 +237,7 @@ export class MessageBufferEngine {
     this.emitFn(createDomainEvent(type, { payload }));
   }
 
-  // ── Lifecycle ───────────────────────────────────────────
+  // ── Accessors & Cleanup ─────────────────────────────────
 
   get activeConversations(): number {
     return this.store.getAllConversationIds().length;

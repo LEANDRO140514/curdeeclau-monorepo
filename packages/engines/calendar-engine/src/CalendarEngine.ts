@@ -9,9 +9,15 @@
 //   §6  Invariants: I1-I30 enforced
 //   §11 Ownership: gates applied before every mutation
 //   §5  Events: DomainEvent emitted for every mutation (I28-I30)
+//
+// RT-4: Lifecycle + Ownership retrofit.
+//   Lifecycle: UNINITIALIZED → READY → STOPPED (#34, #36, #39)
+//   Ownership: event-driven, local-authoritative via ownershipView (#35, #37)
+//   No ownership query paths on the execute() hot path (#37)
 
 import type {
   Reservation, TimeSlot, Reminder, ConversationOwner,
+  LifecycleState, OwnershipChangedPayload,
 } from '@curdeeclau/shared';
 import { wrapProviderError } from '@curdeeclau/shared';
 import type {
@@ -42,16 +48,45 @@ export class CalendarEngine {
   readonly engineName = 'calendar-engine';
 
   private provider: CalendarProvider;
-  private ownershipResolver: (conversationId: string) => ConversationOwner;
-  private ownershipGuard = new OwnershipGuard();
+  private ownershipGuard: OwnershipGuard;
   private temporalValidator = new TemporalValidator();
   private reservationLifecycle = new ReservationLifecycle();
   private reminderScheduler = new ReminderScheduler();
   private events = new CalendarEventEmitter();
 
+  // ── Lifecycle State (#34: constructor is allocation-only) ──
+
+  private _lifecycleState: LifecycleState = 'UNINITIALIZED';
+
+  get lifecycleState(): LifecycleState {
+    return this._lifecycleState;
+  }
+
+  // ── Ownership (#35: local-authoritative, event-driven) ─────
+
+  private ownershipView: Map<string, ConversationOwner> = new Map();
+
   constructor(config: CalendarEngineConfig) {
     this.provider = config.provider;
-    this.ownershipResolver = config.ownershipResolver ?? (() => 'HUMAN');
+    this.ownershipGuard = new OwnershipGuard(this.ownershipView);
+  }
+
+  // ── Lifecycle ───────────────────────────────────────────
+
+  async start(): Promise<void> {
+    if (this._lifecycleState !== 'UNINITIALIZED') return;
+    this._lifecycleState = 'READY';
+  }
+
+  async stop(): Promise<void> {
+    if (this._lifecycleState === 'STOPPED') return;
+    this._lifecycleState = 'STOPPED';
+  }
+
+  // ── Ownership Propagation ───────────────────────────────
+
+  handleOwnershipChanged(payload: OwnershipChangedPayload): void {
+    this.ownershipView.set(payload.conversationId, payload.owner);
   }
 
   // ── Event Access ──────────────────────────────────────────
@@ -63,47 +98,51 @@ export class CalendarEngine {
   // ── Engine Contract: execute ──────────────────────────────
 
   async execute(action: string, context: Record<string, unknown>): Promise<Record<string, unknown>> {
+    // ── Readiness gate (#36: lifecycle state reflects real operational behavior) ──
+    if (this._lifecycleState !== 'READY') {
+      return { error: 'engine_not_ready', message: `Engine is ${this._lifecycleState}. Call start() before execute().` };
+    }
+
     const ctx = context as CalendarEngineContext;
-    const owner = this.resolveOwner(ctx);
 
     switch (action) {
       case 'check_availability': {
-        const gateErr = this.ownershipGuard.check(action, owner);
+        const gateErr = this.ownershipGuard.check(action, ctx.conversationId);
         if (gateErr) return gateErr;
         return this.doCheckAvailability(ctx);
       }
       case 'create_reservation': {
-        const gateErr = this.ownershipGuard.check(action, owner, ctx.approvedBy);
+        const gateErr = this.ownershipGuard.check(action, ctx.conversationId, ctx.approvedBy);
         if (gateErr) return gateErr;
         return this.doCreateReservation(ctx);
       }
       case 'cancel_reservation': {
-        const gateErr = this.ownershipGuard.check(action, owner, ctx.approvedBy);
+        const gateErr = this.ownershipGuard.check(action, ctx.conversationId, ctx.approvedBy);
         if (gateErr) return gateErr;
         return this.doCancelReservation(ctx);
       }
       case 'reschedule_reservation': {
-        const gateErr = this.ownershipGuard.check(action, owner, ctx.approvedBy);
+        const gateErr = this.ownershipGuard.check(action, ctx.conversationId, ctx.approvedBy);
         if (gateErr) return gateErr;
         return this.doRescheduleReservation(ctx);
       }
       case 'block_time_slot': {
-        const gateErr = this.ownershipGuard.check(action, owner, ctx.approvedBy);
+        const gateErr = this.ownershipGuard.check(action, ctx.conversationId, ctx.approvedBy);
         if (gateErr) return gateErr;
         return this.doBlockTimeSlot(ctx);
       }
       case 'release_time_slot': {
-        const gateErr = this.ownershipGuard.check(action, owner, ctx.approvedBy);
+        const gateErr = this.ownershipGuard.check(action, ctx.conversationId, ctx.approvedBy);
         if (gateErr) return gateErr;
         return this.doReleaseTimeSlot(ctx);
       }
       case 'create_reminder': {
-        const gateErr = this.ownershipGuard.check(action, owner);
+        const gateErr = this.ownershipGuard.check(action, ctx.conversationId);
         if (gateErr) return gateErr;
         return this.doCreateReminder(ctx);
       }
       case 'cancel_reminder': {
-        const gateErr = this.ownershipGuard.check(action, owner);
+        const gateErr = this.ownershipGuard.check(action, ctx.conversationId);
         if (gateErr) return gateErr;
         return this.doCancelReminder(ctx);
       }
@@ -283,11 +322,5 @@ export class CalendarEngine {
       const pe = wrapProviderError(this.provider.providerName, err);
       return { error: pe.code ?? 'PROVIDER_UNAVAILABLE', message: pe.message };
     }
-  }
-
-  // ── Helpers ───────────────────────────────────────────────
-
-  private resolveOwner(ctx: CalendarEngineContext): ConversationOwner {
-    return this.ownershipResolver(ctx.conversationId ?? '');
   }
 }

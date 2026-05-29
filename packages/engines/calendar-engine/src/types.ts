@@ -166,7 +166,6 @@ export interface CalendarProvider {
 
 export interface CalendarEngineConfig {
   provider: CalendarProvider;
-  ownershipResolver?: (conversationId: string) => ConversationOwner;
 }
 
 // ── Engine Context ───────────────────────────────────────

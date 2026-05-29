@@ -3,9 +3,15 @@ import { CalendarEngine } from '../CalendarEngine';
 import { InMemoryCalendarProvider } from '../providers/InMemoryCalendarProvider';
 import { CalendarEventEmitter } from '../runtime/CalendarEventEmitter';
 
-function createEngine() {
+async function createEngine() {
   const provider = new InMemoryCalendarProvider();
   const engine = new CalendarEngine({ provider });
+  await engine.start();
+  // Seed HUMAN ownership for mutation tests
+  engine.handleOwnershipChanged({
+    conversationId: 'conv_orch', owner: 'HUMAN', previousOwner: null,
+    sequence: 1, cause: 'system_init', changedAt: Date.now(),
+  });
   return { engine, provider, events: engine.eventEmitter };
 }
 
@@ -30,25 +36,31 @@ async function setupCalendar(engine: CalendarEngine) {
 }
 
 describe('CalendarEngine — Engine contract', () => {
-  it('should expose engineName', () => {
-    const { engine } = createEngine();
+  it('should expose engineName', async () => {
+    const { engine } = await createEngine();
     expect(engine.engineName).toBe('calendar-engine');
   });
 
+  it('should expose lifecycleState', async () => {
+    const { engine } = await createEngine();
+    expect(engine.lifecycleState).toBe('READY');
+  });
+
   it('should implement execute()', async () => {
-    const { engine, provider } = createEngine();
+    const { engine, provider } = await createEngine();
     const cal = await provider.createCalendar({
       name: 'Test', timezone: 'UTC',
       availabilityWindows: [{ daysOfWeek: [0, 1, 2, 3, 4, 5, 6], startTime: '00:00', endTime: '23:59', slotDurationMs: 3600000 }],
     });
     const result = await engine.execute('check_availability', {
-      calendarId: cal.id, startAt: tomorrowAt(10), endAt: tomorrowAt(11),
+      calendarId: cal.id, conversationId: 'conv_orch',
+      startAt: tomorrowAt(10), endAt: tomorrowAt(11),
     });
     expect(result).toBeDefined();
   });
 
   it('should return error for unknown action', async () => {
-    const { engine } = createEngine();
+    const { engine } = await createEngine();
     const result = await engine.execute('do_something_crazy', {});
     expect(result.error).toBe('VALIDATION_ERROR');
   });
@@ -60,7 +72,7 @@ describe('CalendarEngine — event emission (I28-I30)', () => {
   let calId: string;
 
   beforeEach(async () => {
-    const s = createEngine();
+    const s = await createEngine();
     engine = s.engine;
     events = s.events;
     const cal = await setupCalendar(engine);
@@ -71,6 +83,7 @@ describe('CalendarEngine — event emission (I28-I30)', () => {
     events.clear();
     await engine.execute('check_availability', {
       calendarId: calId,
+      conversationId: 'conv_orch',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
     });
@@ -83,6 +96,7 @@ describe('CalendarEngine — event emission (I28-I30)', () => {
     events.clear();
     await engine.execute('create_reservation', {
       calendarId: calId,
+      conversationId: 'conv_orch',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       title: 'Event test',
@@ -93,12 +107,16 @@ describe('CalendarEngine — event emission (I28-I30)', () => {
 
   it('should emit ReservationCancelled on cancel (I28)', async () => {
     const created = await engine.execute('create_reservation', {
-      calendarId: calId, startAt: tomorrowAt(10), endAt: tomorrowAt(11), title: 'Cancel test',
+      calendarId: calId, conversationId: 'conv_orch',
+      startAt: tomorrowAt(10), endAt: tomorrowAt(11), title: 'Cancel test',
     });
     const rsvId = (created.reservation as any).id;
     events.clear();
 
-    await engine.execute('cancel_reservation', { reservationId: rsvId });
+    await engine.execute('cancel_reservation', {
+      reservationId: rsvId,
+      conversationId: 'conv_orch',
+    });
     const cancelled = events.lastOfType('ReservationCancelled');
     expect(cancelled).toBeDefined();
     if (cancelled?.payload) {
@@ -108,13 +126,15 @@ describe('CalendarEngine — event emission (I28-I30)', () => {
 
   it('should emit ReminderCreated on create_reminder (I28)', async () => {
     const created = await engine.execute('create_reservation', {
-      calendarId: calId, startAt: tomorrowAt(10), endAt: tomorrowAt(11), title: 'Reminder test',
+      calendarId: calId, conversationId: 'conv_orch',
+      startAt: tomorrowAt(10), endAt: tomorrowAt(11), title: 'Reminder test',
     });
     const rsvId = (created.reservation as any).id;
     events.clear();
 
     await engine.execute('create_reminder', {
-      reservationId: rsvId, type: 'upcoming', channel: 'whatsapp',
+      reservationId: rsvId, conversationId: 'conv_orch',
+      type: 'upcoming', channel: 'whatsapp',
       scheduledAt: tomorrowAt(10) - 1800000,
     });
     const reminderEvent = events.lastOfType('ReminderCreated');
@@ -125,6 +145,7 @@ describe('CalendarEngine — event emission (I28-I30)', () => {
     events.clear();
     await engine.execute('check_availability', {
       calendarId: calId,
+      conversationId: 'conv_orch',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       correlationId: 'corr-workflow-123',
@@ -138,6 +159,7 @@ describe('CalendarEngine — event emission (I28-I30)', () => {
     events.clear();
     await engine.execute('check_availability', {
       calendarId: calId,
+      conversationId: 'conv_orch',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       actorId: 'usr_eva',
@@ -151,10 +173,10 @@ describe('CalendarEngine — event emission (I28-I30)', () => {
     events.clear();
     await engine.execute('check_availability', {
       calendarId: calId,
+      conversationId: 'conv_orch',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       tenantId: 'tnt_001',
-      conversationId: 'conv_abc',
       workflowId: 'wf_xyz',
       correlationId: 'corr_chain',
     });

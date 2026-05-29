@@ -2,9 +2,15 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { InMemoryCalendarProvider } from '../providers/InMemoryCalendarProvider';
 import { CalendarEngine } from '../CalendarEngine';
 
-function createEngine() {
+async function createEngine() {
   const provider = new InMemoryCalendarProvider();
   const engine = new CalendarEngine({ provider });
+  await engine.start();
+  // Seed HUMAN ownership so mutations are allowed
+  engine.handleOwnershipChanged({
+    conversationId: 'conv_test', owner: 'HUMAN', previousOwner: null,
+    sequence: 1, cause: 'system_init', changedAt: Date.now(),
+  });
   return { engine, provider };
 }
 
@@ -34,7 +40,7 @@ describe('Reservation lifecycle', () => {
   let calId: string;
 
   beforeEach(async () => {
-    const s = createEngine();
+    const s = await createEngine();
     engine = s.engine;
     const cal = await createTestCalendar(s.provider);
     calId = cal.id;
@@ -43,6 +49,7 @@ describe('Reservation lifecycle', () => {
   it('should create and get reservation', async () => {
     const result = await engine.execute('create_reservation', {
       calendarId: calId,
+      conversationId: 'conv_test',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       title: 'Checkup',
@@ -63,6 +70,7 @@ describe('Reservation lifecycle', () => {
   it('should cancel reservation and release slot (I15)', async () => {
     const created = await engine.execute('create_reservation', {
       calendarId: calId,
+      conversationId: 'conv_test',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       title: 'To Cancel',
@@ -71,6 +79,7 @@ describe('Reservation lifecycle', () => {
 
     const result = await engine.execute('cancel_reservation', {
       reservationId: rsvId,
+      conversationId: 'conv_test',
       reason: 'Patient cancelled',
     });
 
@@ -86,14 +95,15 @@ describe('Reservation lifecycle', () => {
   it('should reject cancellation of already cancelled (I9)', async () => {
     const created = await engine.execute('create_reservation', {
       calendarId: calId,
+      conversationId: 'conv_test',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       title: 'Double Cancel',
     });
     const rsvId = (created.reservation as any).id;
 
-    await engine.execute('cancel_reservation', { reservationId: rsvId });
-    const second = await engine.execute('cancel_reservation', { reservationId: rsvId });
+    await engine.execute('cancel_reservation', { reservationId: rsvId, conversationId: 'conv_test' });
+    const second = await engine.execute('cancel_reservation', { reservationId: rsvId, conversationId: 'conv_test' });
 
     expect(second.error).toBeDefined();
     expect(second.error).toBe('ALREADY_CANCELLED');
@@ -102,6 +112,7 @@ describe('Reservation lifecycle', () => {
   it('should reject reservation on non-existent calendar', async () => {
     const result = await engine.execute('create_reservation', {
       calendarId: 'cal_nonexistent',
+      conversationId: 'conv_test',
       startAt: Date.now() + 36000000,
       endAt: Date.now() + 39600000,
       title: 'Ghost booking',
@@ -115,7 +126,7 @@ describe('Reschedule (I12)', () => {
   let calId: string;
 
   beforeEach(async () => {
-    const s = createEngine();
+    const s = await createEngine();
     engine = s.engine;
     const cal = await createTestCalendar(s.provider);
     calId = cal.id;
@@ -124,6 +135,7 @@ describe('Reschedule (I12)', () => {
   it('should reschedule = atomic cancel + create (I12)', async () => {
     const created = await engine.execute('create_reservation', {
       calendarId: calId,
+      conversationId: 'conv_test',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       title: 'Reschedule Me',
@@ -132,6 +144,7 @@ describe('Reschedule (I12)', () => {
 
     const result = await engine.execute('reschedule_reservation', {
       reservationId: rsvId,
+      conversationId: 'conv_test',
       newStartAt: tomorrowAt(15),
       newEndAt: tomorrowAt(16),
     });

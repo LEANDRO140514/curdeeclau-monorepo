@@ -1,4 +1,8 @@
-import type { DomainEvent } from '@curdeeclau/shared';
+import type { DomainEvent, LifecycleState } from '@curdeeclau/shared';
+import {
+  createDomainEvent,
+  validateOwnershipTransition,
+} from '@curdeeclau/shared';
 import type {
   HandoffEngineConfig,
   HandoffEngineInterface,
@@ -10,6 +14,7 @@ import type {
   ConversationOwner,
   SuppressionMode,
   HandoffTrigger,
+  OwnershipChangeCause,
 } from '../types';
 import { HandoffPolicyEvaluator } from '../policies/HandoffPolicyEvaluator';
 import { OwnershipManager } from '../ownership/OwnershipManager';
@@ -36,6 +41,19 @@ export class HandoffEngine implements HandoffEngineInterface {
   private recoveryManager: RecoveryManager;
   private requests = new Map<string, HandoffRequest>();
 
+  // ── RT-4 Lifecycle State (#34: constructor is allocation-only) ──
+
+  private _lifecycleState: LifecycleState = 'UNINITIALIZED';
+
+  get lifecycleState(): LifecycleState {
+    return this._lifecycleState;
+  }
+
+  // ── RT-4 Ownership Authority (#35: conversational authority participant) ──
+
+  private ownershipView: Map<string, ConversationOwner> = new Map();
+  private sequenceMap: Map<string, number> = new Map();
+
   constructor(config: HandoffEngineConfig) {
     this.config = config;
     this.policyEvaluator = new HandoffPolicyEvaluator();
@@ -48,15 +66,94 @@ export class HandoffEngine implements HandoffEngineInterface {
     }
   }
 
+  // ── RT-4 Lifecycle ───────────────────────────────────────
+
+  async start(): Promise<void> {
+    if (this._lifecycleState !== 'UNINITIALIZED') return;
+    this._lifecycleState = 'READY';
+  }
+
+  async stop(): Promise<void> {
+    if (this._lifecycleState === 'STOPPED') return;
+    this._lifecycleState = 'STOPPED';
+  }
+
   // ── Engine Contract (workflow-orchestrator compatible) ──
 
   async execute(
     action: string,
     context: Record<string, unknown>,
   ): Promise<Record<string, unknown>> {
+    // ── RT-4 Readiness gate (#36: lifecycle reflects real operational behavior) ──
+    if (this._lifecycleState !== 'READY') {
+      return { error: 'engine_not_ready', message: `Engine is ${this._lifecycleState}. Call start() before execute().` };
+    }
+
     const conversationId = context.conversationId as string;
 
     switch (action) {
+      // ── RT-4: Canonical ownership authority ──────────────
+
+      case 'set_ownership': {
+        const owner = context.owner as ConversationOwner | undefined;
+        const cause = (context.cause as OwnershipChangeCause) ?? 'system_init';
+        const initiatedBy = context.initiatedBy as string | undefined;
+        const reason = context.reason as string | undefined;
+        const workflowId = context.workflowId as string | undefined;
+
+        if (!conversationId || !owner) {
+          return { error: 'VALIDATION_ERROR', message: 'set_ownership requires conversationId and owner' };
+        }
+
+        const previousOwner: ConversationOwner = this.ownershipView.get(conversationId) ?? 'AI';
+        if (!validateOwnershipTransition(previousOwner, owner)) {
+          return { error: 'OWNERSHIP_LOCKED', message: `Transition ${previousOwner} → ${owner} is not allowed` };
+        }
+
+        const sequence = (this.sequenceMap.get(conversationId) ?? 0) + 1;
+
+        this.ownershipView.set(conversationId, owner);
+        this.sequenceMap.set(conversationId, sequence);
+
+        const event = createDomainEvent('OwnershipChanged', {
+          conversationId,
+          workflowId,
+          actorId: initiatedBy ?? 'handoff-engine',
+          payload: {
+            conversationId,
+            owner,
+            previousOwner,
+            sequence,
+            cause,
+            changedAt: Date.now(),
+            initiatedBy: initiatedBy ?? 'handoff-engine',
+            workflowId,
+            reason,
+          },
+        });
+
+        this.emitAll([event]);
+
+        return {
+          conversationId,
+          owner,
+          previousOwner,
+          sequence,
+          cause,
+        };
+      }
+
+      case 'get_ownership': {
+        if (!conversationId) {
+          return { error: 'VALIDATION_ERROR', message: 'get_ownership requires conversationId' };
+        }
+        const owner = this.ownershipView.get(conversationId) ?? 'AI';
+        const sequence = this.sequenceMap.get(conversationId) ?? 0;
+        return { conversationId, owner, sequence };
+      }
+
+      // ── Existing handoff workflow (unchanged) ────────────
+
       case 'evaluate': {
         const evalCtx: HandoffEvalContext = {
           conversationId,

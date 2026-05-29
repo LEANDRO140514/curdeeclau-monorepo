@@ -11,6 +11,13 @@ describe('Integration — E2E booking workflow', () => {
   beforeEach(async () => {
     provider = new InMemoryCalendarProvider();
     engine = new CalendarEngine({ provider });
+    await engine.start();
+
+    // Seed HUMAN ownership so mutations are allowed in integration tests
+    engine.handleOwnershipChanged({
+      conversationId: 'conv_flow', owner: 'HUMAN', previousOwner: null,
+      sequence: 1, cause: 'system_init', changedAt: Date.now(),
+    });
 
     const cal = await provider.createCalendar({
       name: 'Dr. García — Clínica Dental',
@@ -40,6 +47,7 @@ describe('Integration — E2E booking workflow', () => {
     // 1. Check availability
     const avail = await engine.execute('check_availability', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       correlationId: 'corr-flow-1',
@@ -49,6 +57,7 @@ describe('Integration — E2E booking workflow', () => {
     // 2. Create reservation
     const created = await engine.execute('create_reservation', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       title: 'Limpieza dental',
@@ -64,6 +73,7 @@ describe('Integration — E2E booking workflow', () => {
     // 3. Verify slot is now unavailable
     const checkAgain = await engine.execute('check_availability', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
     });
@@ -72,6 +82,7 @@ describe('Integration — E2E booking workflow', () => {
     // 4. Add reminder
     const reminder = await engine.execute('create_reminder', {
       reservationId: rsvId,
+      conversationId: 'conv_flow',
       type: 'upcoming',
       channel: 'whatsapp',
       scheduledAt: tomorrowAt(10) - 3600000, // 1 hour before
@@ -83,6 +94,7 @@ describe('Integration — E2E booking workflow', () => {
     const cancelled = await engine.execute('cancel_reservation', {
       reservationId: rsvId,
       reason: 'Paciente solicitó cancelación',
+      conversationId: 'conv_flow',
       correlationId: 'corr-flow-1',
     });
     expect((cancelled.reservation as any).status).toBe('cancelled');
@@ -90,6 +102,7 @@ describe('Integration — E2E booking workflow', () => {
     // 6. Slot should be available again (I15)
     const afterCancel = await engine.execute('check_availability', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
     });
@@ -107,6 +120,7 @@ describe('Integration — E2E booking workflow', () => {
   it('Scenario 2: book → reschedule', async () => {
     const created = await engine.execute('create_reservation', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       title: 'Revisión',
@@ -116,6 +130,7 @@ describe('Integration — E2E booking workflow', () => {
     // Reschedule to 15:00-16:00
     const rescheduled = await engine.execute('reschedule_reservation', {
       reservationId: rsvId,
+      conversationId: 'conv_flow',
       newStartAt: tomorrowAt(15),
       newEndAt: tomorrowAt(16),
     });
@@ -138,13 +153,15 @@ describe('Integration — E2E booking workflow', () => {
 
     // Old slot (10-11) should be available
     const oldSlot = await engine.execute('check_availability', {
-      calendarId, startAt: tomorrowAt(10), endAt: tomorrowAt(11),
+      calendarId, conversationId: 'conv_flow',
+      startAt: tomorrowAt(10), endAt: tomorrowAt(11),
     });
     expect(oldSlot.available).toBe(true);
 
     // New slot (15-16) should be taken
     const newSlot = await engine.execute('check_availability', {
-      calendarId, startAt: tomorrowAt(15), endAt: tomorrowAt(16),
+      calendarId, conversationId: 'conv_flow',
+      startAt: tomorrowAt(15), endAt: tomorrowAt(16),
     });
     expect(newSlot.available).toBe(false);
 
@@ -158,6 +175,7 @@ describe('Integration — E2E booking workflow', () => {
     // Block a time slot
     const blocked = await engine.execute('block_time_slot', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(13),
       endAt: tomorrowAt(14),
       reason: 'Lunch break',
@@ -171,6 +189,7 @@ describe('Integration — E2E booking workflow', () => {
     // Verify blocked slot is unavailable
     const check = await engine.execute('check_availability', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(13),
       endAt: tomorrowAt(14),
     });
@@ -178,7 +197,10 @@ describe('Integration — E2E booking workflow', () => {
 
     // Release it
     const tsId = (blocked.timeSlot as any).id;
-    const released = await engine.execute('release_time_slot', { timeSlotId: tsId });
+    const released = await engine.execute('release_time_slot', {
+      timeSlotId: tsId,
+      conversationId: 'conv_flow',
+    });
     expect(released.timeSlot).toBeDefined();
     if (released.timeSlot) {
       expect((released.timeSlot as any).status).toBe('available');
@@ -187,6 +209,7 @@ describe('Integration — E2E booking workflow', () => {
     // Verify slot is now available
     const checkAfter = await engine.execute('check_availability', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(13),
       endAt: tomorrowAt(14),
     });
@@ -197,6 +220,7 @@ describe('Integration — E2E booking workflow', () => {
   it('Scenario 4: two non-overlapping bookings', async () => {
     const rsv1 = await engine.execute('create_reservation', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(9),
       endAt: tomorrowAt(10),
       title: 'Paciente A',
@@ -205,6 +229,7 @@ describe('Integration — E2E booking workflow', () => {
 
     const rsv2 = await engine.execute('create_reservation', {
       calendarId,
+      conversationId: 'conv_flow',
       startAt: tomorrowAt(10),
       endAt: tomorrowAt(11),
       title: 'Paciente B',
@@ -218,10 +243,10 @@ describe('Integration — E2E booking workflow', () => {
   // Scenario 5: Structured error model — errors are returned, never thrown
   it('Scenario 5: errors are returned, never thrown', async () => {
     const results = await Promise.all([
-      engine.execute('check_availability', { calendarId: 'cal_bad', startAt: 10, endAt: 5 }),
-      engine.execute('create_reservation', { calendarId: 'cal_bad', startAt: 1, endAt: 2, title: 'X' }),
-      engine.execute('cancel_reservation', { reservationId: 'rsv_bad' }),
-      engine.execute('create_reminder', { reservationId: 'rsv_bad', type: 'upcoming', channel: 'whatsapp', scheduledAt: 1 }),
+      engine.execute('check_availability', { calendarId: 'cal_bad', conversationId: 'conv_flow', startAt: 10, endAt: 5 }),
+      engine.execute('create_reservation', { calendarId: 'cal_bad', conversationId: 'conv_flow', startAt: 1, endAt: 2, title: 'X' }),
+      engine.execute('cancel_reservation', { reservationId: 'rsv_bad', conversationId: 'conv_flow' }),
+      engine.execute('create_reminder', { reservationId: 'rsv_bad', conversationId: 'conv_flow', type: 'upcoming', channel: 'whatsapp', scheduledAt: 1 }),
     ]);
 
     for (const result of results) {

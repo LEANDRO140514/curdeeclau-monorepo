@@ -4,8 +4,8 @@ export type { DomainEvent } from '@curdeeclau/shared';
 
 // ── Ownership ──────────────────────────────────────────
 
-import type { ConversationOwner } from '@curdeeclau/shared';
-export type { ConversationOwner };
+import type { ConversationOwner, OwnershipChangeCause } from '@curdeeclau/shared';
+export type { ConversationOwner, OwnershipChangeCause };
 
 // ── Suppression ────────────────────────────────────────
 

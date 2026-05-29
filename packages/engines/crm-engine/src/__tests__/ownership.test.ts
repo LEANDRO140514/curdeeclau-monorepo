@@ -3,7 +3,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CRMEngine } from '../engine/CRMEngine';
 import { InMemoryCRMProvider } from '../providers/memory/InMemoryCRMProvider';
-import type { CRMEngineContext } from '../types';
+import type { CRMEngineContext, ConversationOwner } from '../types';
 
 function makeContext(overrides: Partial<CRMEngineContext> = {}): CRMEngineContext {
   return {
@@ -15,13 +15,23 @@ function makeContext(overrides: Partial<CRMEngineContext> = {}): CRMEngineContex
   };
 }
 
+function seedOwnership(engine: CRMEngine, owner: ConversationOwner, conversationId = 'conv_test'): void {
+  engine.handleOwnershipChanged({
+    conversationId,
+    owner,
+    previousOwner: null,
+    sequence: 1,
+    cause: 'system_init',
+    changedAt: Date.now(),
+  });
+}
+
 describe('OwnershipGuard', () => {
   it('should block all write operations under LOCKED ownership (I17)', async () => {
     const provider = new InMemoryCRMProvider();
-    const engine = new CRMEngine({
-      provider,
-      ownershipResolver: () => 'LOCKED',
-    });
+    const engine = new CRMEngine({ provider });
+    await engine.start();
+    seedOwnership(engine, 'LOCKED');
 
     const ctx = makeContext();
 
@@ -34,10 +44,9 @@ describe('OwnershipGuard', () => {
 
   it('should allow AI to create and update contacts', async () => {
     const provider = new InMemoryCRMProvider();
-    const engine = new CRMEngine({
-      provider,
-      ownershipResolver: () => 'AI',
-    });
+    const engine = new CRMEngine({ provider });
+    await engine.start();
+    // AI is the constitutional default — no seed needed
 
     const ctx = makeContext();
 
@@ -54,6 +63,7 @@ describe('OwnershipGuard', () => {
   it('should allow AI to add and remove tags (I19)', async () => {
     const provider = new InMemoryCRMProvider();
     const engine = new CRMEngine({ provider });
+    await engine.start();
 
     const ctx = makeContext();
 
@@ -71,10 +81,9 @@ describe('OwnershipGuard', () => {
 
   it('should block AI from pipeline mutations (I18)', async () => {
     const provider = new InMemoryCRMProvider();
-    const engine = new CRMEngine({
-      provider,
-      ownershipResolver: () => 'AI',
-    });
+    const engine = new CRMEngine({ provider });
+    await engine.start();
+    // AI is default — no seed needed
 
     const pipelineActions = ['create_pipeline', 'create_campaign', 'create_opportunity', 'move_opportunity', 'pause_campaign', 'resume_campaign'];
     for (const action of pipelineActions) {
@@ -95,10 +104,9 @@ describe('OwnershipGuard', () => {
 
   it('should block SHARED from pipeline mutations without approval', async () => {
     const provider = new InMemoryCRMProvider();
-    const engine = new CRMEngine({
-      provider,
-      ownershipResolver: () => 'SHARED',
-    });
+    const engine = new CRMEngine({ provider });
+    await engine.start();
+    seedOwnership(engine, 'SHARED');
 
     const result = await engine.execute('create_pipeline', {
       ...makeContext(),
@@ -111,10 +119,9 @@ describe('OwnershipGuard', () => {
 
   it('should allow HUMAN to perform all operations', async () => {
     const provider = new InMemoryCRMProvider();
-    const engine = new CRMEngine({
-      provider,
-      ownershipResolver: () => 'HUMAN',
-    });
+    const engine = new CRMEngine({ provider });
+    await engine.start();
+    seedOwnership(engine, 'HUMAN');
 
     const ctx = makeContext();
 
@@ -131,15 +138,13 @@ describe('OwnershipGuard', () => {
   });
 
   it('should resolve ownership from conversation context', async () => {
-    const resolved: string[] = [];
     const provider = new InMemoryCRMProvider();
-    const engine = new CRMEngine({
-      provider,
-      ownershipResolver: (convId) => {
-        resolved.push(convId);
-        return convId === 'conv_locked' ? 'LOCKED' : 'AI';
-      },
-    });
+    const engine = new CRMEngine({ provider });
+    await engine.start();
+
+    // Seed conversation-specific ownership
+    seedOwnership(engine, 'LOCKED', 'conv_locked');
+    // conv_ai defaults to 'AI' (no seed needed)
 
     // AI conversation
     const result = await engine.execute('create_contact', {
@@ -148,7 +153,6 @@ describe('OwnershipGuard', () => {
       name: 'Test',
     });
     expect(result).toHaveProperty('contact');
-    expect(resolved).toContain('conv_ai');
 
     // LOCKED conversation
     const blocked = await engine.execute('create_contact', {
@@ -157,6 +161,5 @@ describe('OwnershipGuard', () => {
       name: 'Test',
     });
     expect(blocked).toHaveProperty('error', 'OWNERSHIP_LOCKED');
-    expect(resolved).toContain('conv_locked');
   });
 });

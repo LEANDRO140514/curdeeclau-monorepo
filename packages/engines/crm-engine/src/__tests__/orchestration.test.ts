@@ -6,16 +6,26 @@ import { InMemoryCRMProvider } from '../providers/memory/InMemoryCRMProvider';
 import type { CRMEngineContext, CRMError } from '../types';
 import { isCRMError } from '../types';
 
+function seedOwnership(engine: CRMEngine, owner: 'AI' | 'HUMAN' | 'SHARED' | 'LOCKED', conversationId = 'conv_test'): void {
+  engine.handleOwnershipChanged({
+    conversationId,
+    owner,
+    previousOwner: null,
+    sequence: 1,
+    cause: 'system_init',
+    changedAt: Date.now(),
+  });
+}
+
 describe('CRMEngine Orchestration', () => {
   let engine: CRMEngine;
   let provider: InMemoryCRMProvider;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     provider = new InMemoryCRMProvider();
-    engine = new CRMEngine({
-      provider,
-      ownershipResolver: () => 'HUMAN',
-    });
+    engine = new CRMEngine({ provider });
+    await engine.start();
+    seedOwnership(engine, 'HUMAN');
   });
 
   it('should implement Engine contract with engineName', () => {
@@ -104,5 +114,26 @@ describe('CRMEngine Orchestration', () => {
     });
 
     expect(received).toEqual(['ContactCreated', 'TagAdded']);
+  });
+
+  it('should reject execute() before start()', async () => {
+    const cold = new CRMEngine({ provider: new InMemoryCRMProvider() });
+    const result = await cold.execute('create_contact', { name: 'Test' });
+    expect(result).toHaveProperty('error', 'engine_not_ready');
+  });
+
+  it('should transition lifecycle states correctly', async () => {
+    const e = new CRMEngine({ provider: new InMemoryCRMProvider() });
+    expect(e.lifecycleState).toBe('UNINITIALIZED');
+
+    await e.start();
+    expect(e.lifecycleState).toBe('READY');
+
+    await e.stop();
+    expect(e.lifecycleState).toBe('STOPPED');
+
+    // stop() is idempotent
+    await e.stop();
+    expect(e.lifecycleState).toBe('STOPPED');
   });
 });

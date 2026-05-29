@@ -2,9 +2,15 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { CalendarEngine } from '../CalendarEngine';
 import { InMemoryCalendarProvider } from '../providers/InMemoryCalendarProvider';
 
-function createEngine() {
+async function createEngine() {
   const provider = new InMemoryCalendarProvider();
   const engine = new CalendarEngine({ provider });
+  await engine.start();
+  // Seed HUMAN ownership so mutations are allowed
+  engine.handleOwnershipChanged({
+    conversationId: 'conv_test', owner: 'HUMAN', previousOwner: null,
+    sequence: 1, cause: 'system_init', changedAt: Date.now(),
+  });
   return { engine, provider };
 }
 
@@ -14,7 +20,7 @@ async function setupReservation(engine: CalendarEngine) {
     name: 'Reminder Test',
     timezone: 'America/Mexico_City',
     availabilityWindows: [{
-      daysOfWeek: [1, 2, 3, 4, 5],
+      daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
       startTime: '09:00',
       endTime: '18:00',
       slotDurationMs: 60 * 60 * 1000,
@@ -24,7 +30,8 @@ async function setupReservation(engine: CalendarEngine) {
   const startAt = new Date(tomorrow).setHours(10, 0, 0, 0);
   const endAt = new Date(tomorrow).setHours(11, 0, 0, 0);
   const rsvResult = await engine.execute('create_reservation', {
-    calendarId: cal.id, startAt, endAt, title: 'Test Reservation',
+    calendarId: cal.id, conversationId: 'conv_test',
+    startAt, endAt, title: 'Test Reservation',
   });
   return { calendarId: cal.id, reservation: rsvResult.reservation as any, startAt, endAt };
 }
@@ -32,8 +39,9 @@ async function setupReservation(engine: CalendarEngine) {
 describe('Reminder lifecycle', () => {
   let engine: CalendarEngine;
 
-  beforeEach(() => {
-    engine = createEngine().engine;
+  beforeEach(async () => {
+    const s = await createEngine();
+    engine = s.engine;
   });
 
   it('should create reminder for existing reservation (I17)', async () => {
@@ -42,6 +50,7 @@ describe('Reminder lifecycle', () => {
 
     const result = await engine.execute('create_reminder', {
       reservationId: reservation.id,
+      conversationId: 'conv_test',
       type: 'upcoming',
       channel: 'whatsapp',
       scheduledAt: future,
@@ -62,6 +71,7 @@ describe('Reminder lifecycle', () => {
   it('should reject reminder for non-existent reservation (I17)', async () => {
     const result = await engine.execute('create_reminder', {
       reservationId: 'rsv_nonexistent',
+      conversationId: 'conv_test',
       type: 'upcoming',
       channel: 'whatsapp',
       scheduledAt: Date.now() + 86400000,
@@ -73,6 +83,7 @@ describe('Reminder lifecycle', () => {
     const { reservation } = await setupReservation(engine);
     const result = await engine.execute('create_reminder', {
       reservationId: reservation.id,
+      conversationId: 'conv_test',
       type: 'upcoming',
       channel: 'whatsapp',
       scheduledAt: reservation.startAt + 1000,
@@ -84,6 +95,7 @@ describe('Reminder lifecycle', () => {
     const { reservation } = await setupReservation(engine);
     const result = await engine.execute('create_reminder', {
       reservationId: reservation.id,
+      conversationId: 'conv_test',
       type: 'follow_up',
       channel: 'email',
       scheduledAt: reservation.endAt - 1000,
@@ -95,6 +107,7 @@ describe('Reminder lifecycle', () => {
     const { reservation } = await setupReservation(engine);
     const result = await engine.execute('create_reminder', {
       reservationId: reservation.id,
+      conversationId: 'conv_test',
       type: 'custom',
       channel: 'sms',
       scheduledAt: 1, // Way in the past
@@ -106,13 +119,17 @@ describe('Reminder lifecycle', () => {
     const { reservation } = await setupReservation(engine);
     const created = await engine.execute('create_reminder', {
       reservationId: reservation.id,
+      conversationId: 'conv_test',
       type: 'upcoming',
       channel: 'whatsapp',
       scheduledAt: reservation.startAt - 3600000,
     });
     const rmdId = (created.reminder as any).id;
 
-    const result = await engine.execute('cancel_reminder', { reminderId: rmdId });
+    const result = await engine.execute('cancel_reminder', {
+      reminderId: rmdId,
+      conversationId: 'conv_test',
+    });
     expect(result.error).toBeUndefined();
     if (result.reminder) {
       expect((result.reminder as any).status).toBe('cancelled');
@@ -123,14 +140,18 @@ describe('Reminder lifecycle', () => {
     const { reservation } = await setupReservation(engine);
     const created = await engine.execute('create_reminder', {
       reservationId: reservation.id,
+      conversationId: 'conv_test',
       type: 'upcoming',
       channel: 'whatsapp',
       scheduledAt: reservation.startAt - 3600000,
     });
     const rmdId = (created.reminder as any).id;
-    await engine.execute('cancel_reminder', { reminderId: rmdId });
+    await engine.execute('cancel_reminder', { reminderId: rmdId, conversationId: 'conv_test' });
 
-    const second = await engine.execute('cancel_reminder', { reminderId: rmdId });
+    const second = await engine.execute('cancel_reminder', {
+      reminderId: rmdId,
+      conversationId: 'conv_test',
+    });
     expect(second.error).toBe('REMINDER_ALREADY_CANCELLED');
   });
 });

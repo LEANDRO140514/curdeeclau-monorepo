@@ -10,9 +10,15 @@
 //
 // All results are structured: { entity } on success, { error, message } on failure.
 // Events are emitted on every successful mutation (I20).
+//
+// Ownership is event-driven (#35, #37). The ownershipView Map is the
+// local-authoritative source, populated via handleOwnershipChanged().
+// No query-driven ownership remains on the execute() hot path.
 
 import type { CRMProvider, CRMError, CRMEngineConfig, CRMEngineContext, CreateContactInput, UpdateContactInput, CreateOpportunityInput, MoveOpportunityInput, CreatePipelineInput, CreateCampaignInput } from '../types';
+import type { LifecycleState, OwnershipChangedPayload } from '@curdeeclau/shared';
 import { wrapProviderError } from '@curdeeclau/shared';
+import type { ConversationOwner } from '@curdeeclau/shared';
 import { OwnershipGuard } from '../runtime/OwnershipGuard';
 import { CRMEventEmitter } from '../runtime/CRMEventEmitter';
 import { CRMValidation } from '../runtime/CRMValidation';
@@ -35,9 +41,21 @@ export class CRMEngine {
   private campaigns: CampaignManager;
   private tags: TagManager;
 
+  // ── Lifecycle State (#34: constructor is allocation-only) ──
+
+  private _lifecycleState: LifecycleState = 'UNINITIALIZED';
+
+  get lifecycleState(): LifecycleState {
+    return this._lifecycleState;
+  }
+
+  // ── Ownership (#35: local-authoritative, event-driven) ─────
+
+  private ownershipView: Map<string, ConversationOwner> = new Map();
+
   constructor(config: CRMEngineConfig) {
     this.provider = config.provider;
-    this.guard = new OwnershipGuard(config.ownershipResolver);
+    this.guard = new OwnershipGuard(this.ownershipView);
     this.events = new CRMEventEmitter();
     this.validation = new CRMValidation();
     this.contacts = new ContactManager(this.provider, this.events);
@@ -47,9 +65,31 @@ export class CRMEngine {
     this.tags = new TagManager(this.provider, this.events);
   }
 
+  // ── Lifecycle ───────────────────────────────────────────
+
+  async start(): Promise<void> {
+    if (this._lifecycleState !== 'UNINITIALIZED') return;
+    this._lifecycleState = 'READY';
+  }
+
+  async stop(): Promise<void> {
+    if (this._lifecycleState === 'STOPPED') return;
+    this._lifecycleState = 'STOPPED';
+  }
+
+  // ── Ownership Propagation ───────────────────────────────
+
+  handleOwnershipChanged(payload: OwnershipChangedPayload): void {
+    this.ownershipView.set(payload.conversationId, payload.owner);
+  }
+
   // ── Engine Contract ──────────────────────────────────────
 
   async execute(action: string, context: Record<string, unknown>): Promise<Record<string, unknown>> {
+    if (this._lifecycleState !== 'READY') {
+      return { error: 'engine_not_ready', message: `Engine is ${this._lifecycleState}. Call start() before execute().` };
+    }
+
     const ctx = this.resolveContext(context);
 
     // ── Ownership check ──

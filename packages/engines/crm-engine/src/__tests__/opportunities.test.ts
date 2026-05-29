@@ -17,9 +17,11 @@ function makeContext(overrides: Partial<CRMEngineContext> = {}): CRMEngineContex
 
 async function setupEngine() {
   const provider = new InMemoryCRMProvider();
-  const engine = new CRMEngine({
-    provider,
-    ownershipResolver: () => 'HUMAN',
+  const engine = new CRMEngine({ provider });
+  await engine.start();
+  engine.handleOwnershipChanged({
+    conversationId: 'conv_test', owner: 'HUMAN', previousOwner: null,
+    sequence: 1, cause: 'system_init', changedAt: Date.now(),
   });
 
   const ctx = makeContext();

@@ -18,16 +18,26 @@ function makeContext(overrides: Partial<CRMEngineContext> = {}): CRMEngineContex
   };
 }
 
+function seedOwnership(engine: CRMEngine, owner: 'AI' | 'HUMAN' | 'SHARED' | 'LOCKED', conversationId: string): void {
+  engine.handleOwnershipChanged({
+    conversationId,
+    owner,
+    previousOwner: null,
+    sequence: 1,
+    cause: 'system_init',
+    changedAt: Date.now(),
+  });
+}
+
 describe('CRM Engine Integration', () => {
   let engine: CRMEngine;
   let provider: InMemoryCRMProvider;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     provider = new InMemoryCRMProvider();
-    engine = new CRMEngine({
-      provider,
-      ownershipResolver: () => 'HUMAN',
-    });
+    engine = new CRMEngine({ provider });
+    await engine.start();
+    seedOwnership(engine, 'HUMAN', 'conv_integration');
   });
 
   it('should execute full contact → opportunity → move pipeline workflow', async () => {
@@ -35,7 +45,7 @@ describe('CRM Engine Integration', () => {
 
     // 1. Create contact
     const cResult = await engine.execute('create_contact', {
-      ...ctx, name: 'María García', phone: '+525512345678', email: 'maria@example.com',
+      ...ctx, name: 'Maria Garcia', phone: '+525512345678', email: 'maria@example.com',
     });
     expect(cResult).toHaveProperty('contact');
     const contact = (cResult as any).contact;
@@ -156,16 +166,15 @@ describe('CRM Engine Integration', () => {
     expect(r3).toHaveProperty('error', 'CAMPAIGN_NOT_FOUND');
   });
 
-  it('should distinguish between conversations via ownership resolver', async () => {
+  it('should distinguish between conversations via ownership view', async () => {
     const provider = new InMemoryCRMProvider();
-    const engine = new CRMEngine({
-      provider,
-      ownershipResolver: (convId) => {
-        if (convId === 'conv_a') return 'AI';
-        if (convId === 'conv_b') return 'HUMAN';
-        return 'LOCKED';
-      },
-    });
+    const engine = new CRMEngine({ provider });
+    await engine.start();
+
+    // Seed conversation-specific ownership
+    // conv_a → AI (default, no seed needed)
+    seedOwnership(engine, 'HUMAN', 'conv_b');
+    seedOwnership(engine, 'LOCKED', 'conv_c');
 
     const ctxA = makeContext({ conversationId: 'conv_a' });
     const ctxB = makeContext({ conversationId: 'conv_b' });

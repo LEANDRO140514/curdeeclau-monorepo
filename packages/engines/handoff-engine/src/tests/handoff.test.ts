@@ -63,7 +63,7 @@ const dentalPolicies: HandoffPolicySet = {
   maxQueueSize: 10,
 };
 
-function makeEngine(policies?: HandoffPolicySet) {
+async function makeEngine(policies?: HandoffPolicySet) {
   const events: DomainEvent[] = [];
   const engine = new HandoffEngine({
     defaultTimeoutMs: 300_000,
@@ -71,6 +71,7 @@ function makeEngine(policies?: HandoffPolicySet) {
     policies: policies ?? dentalPolicies,
     emitFn: (e) => events.push(e),
   });
+  await engine.start();
   return { engine, events };
 }
 
@@ -173,7 +174,7 @@ describe('HandoffPolicyEvaluator', () => {
 
 describe('HandoffEngine — evaluate flow', () => {
   it('debe generar handoff por trigger válido (LEGAL_RISK)', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     const result = await engine.evaluate({
       conversationId: 'conv-001',
@@ -194,7 +195,7 @@ describe('HandoffEngine — evaluate flow', () => {
   });
 
   it('debe generar handoff por EMERGENCY critical', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     const result = await engine.evaluate({
       conversationId: 'conv-002',
@@ -212,7 +213,7 @@ describe('HandoffEngine — evaluate flow', () => {
   });
 
   it('debe manejar trigger inválido (sin match)', async () => {
-    const { engine } = makeEngine();
+    const { engine } = await makeEngine();
 
     const result = await engine.evaluate({
       conversationId: 'conv-003',
@@ -225,7 +226,7 @@ describe('HandoffEngine — evaluate flow', () => {
   });
 
   it('debe emitir eventos de lifecycle completos', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     await engine.evaluate({
       conversationId: 'conv-lifecycle',
@@ -243,7 +244,7 @@ describe('HandoffEngine — evaluate flow', () => {
   });
 
   it('debe respetar cooldown de reglas', async () => {
-    const { engine } = makeEngine();
+    const { engine } = await makeEngine();
 
     const ctx: HandoffEvalContext = {
       conversationId: 'conv-cooldown',
@@ -264,7 +265,7 @@ describe('HandoffEngine — evaluate flow', () => {
 
 describe('HandoffEngine — accept / reject flow', () => {
   it('debe aceptar handoff pendiente y cambiar ownership a HUMAN', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     await engine.evaluate({
       conversationId: 'conv-accept',
@@ -283,7 +284,7 @@ describe('HandoffEngine — accept / reject flow', () => {
   });
 
   it('debe rechazar handoff y restaurar AI', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     await engine.evaluate({
       conversationId: 'conv-reject',
@@ -304,7 +305,7 @@ describe('HandoffEngine — accept / reject flow', () => {
   });
 
   it('debe cerrar handoff correctamente', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     await engine.evaluate({
       conversationId: 'conv-close',
@@ -323,7 +324,7 @@ describe('HandoffEngine — accept / reject flow', () => {
 
 describe('HandoffEngine — execute (engine contract)', () => {
   it('debe ejecutar vía execute con action evaluate', async () => {
-    const { engine } = makeEngine();
+    const { engine } = await makeEngine();
 
     const result = await engine.execute('evaluate', {
       conversationId: 'conv-exec',
@@ -336,7 +337,7 @@ describe('HandoffEngine — execute (engine contract)', () => {
   });
 
   it('debe retornar error estructurado con action desconocido', async () => {
-    const { engine } = makeEngine();
+    const { engine } = await makeEngine();
 
     const result = await engine.execute('unknown_action', { conversationId: 'c1' });
     expect(result).toEqual({ error: 'VALIDATION_ERROR', message: 'Unknown handoff action: unknown_action' });

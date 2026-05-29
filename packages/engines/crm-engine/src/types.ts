@@ -163,7 +163,6 @@ export interface CRMProvider {
 
 export interface CRMEngineConfig {
   provider: CRMProvider;
-  ownershipResolver?: (conversationId: string) => ConversationOwner;
 }
 
 // ── Engine Contract Context ───────────────────────────────

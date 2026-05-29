@@ -62,7 +62,7 @@ const dentalPolicies: HandoffPolicySet = {
   maxQueueSize: 10,
 };
 
-function makeEngine() {
+async function makeEngine() {
   const events: DomainEvent[] = [];
   const engine = new HandoffEngine({
     defaultTimeoutMs: 300_000,
@@ -70,12 +70,13 @@ function makeEngine() {
     policies: dentalPolicies,
     emitFn: (e) => events.push(e),
   });
+  await engine.start();
   return { engine, events };
 }
 
 describe('HandoffEngine — integration flows', () => {
   it('flujo completo: evaluate → accept → close', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     // 1. Evaluate — trigger handoff
     const evalResult = await engine.evaluate({
@@ -107,7 +108,7 @@ describe('HandoffEngine — integration flows', () => {
   });
 
   it('flujo: evaluate → reject → AI restaurado', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     await engine.evaluate({
       conversationId: 'flow-2',
@@ -127,7 +128,7 @@ describe('HandoffEngine — integration flows', () => {
   });
 
   it('flujo: evaluate → accept → recover → AI restaurado', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     // Handoff to human
     await engine.evaluate({
@@ -149,7 +150,7 @@ describe('HandoffEngine — integration flows', () => {
   });
 
   it('flujo de integración con orchestrator vía execute()', async () => {
-    const { engine } = makeEngine();
+    const { engine } = await makeEngine();
 
     // Simula el flujo: orchestrator recibe ConversationReadyToFlush → knowledge gap → handoff
 
@@ -186,7 +187,7 @@ describe('HandoffEngine — integration flows', () => {
   });
 
   it('LOCKED ownership previene takeover en integración', async () => {
-    const { engine } = makeEngine();
+    const { engine } = await makeEngine();
 
     // Set up a conversation and lock it
     engine.getOwnershipManager().getOrCreate('locked-conv');
@@ -204,7 +205,7 @@ describe('HandoffEngine — integration flows', () => {
   });
 
   it('debe manejar after-hours trigger', async () => {
-    const { engine, events } = makeEngine();
+    const { engine, events } = await makeEngine();
 
     const result = await engine.evaluate({
       conversationId: 'after-hours-conv',
@@ -220,18 +221,18 @@ describe('HandoffEngine — integration flows', () => {
     expect((requested!.payload as HandoffEventPayload).targetId).toBe('guardia');
   });
 
-  it('engineName debe ser handoff-engine', () => {
-    const { engine } = makeEngine();
+  it('engineName debe ser handoff-engine', async () => {
+    const { engine } = await makeEngine();
     expect(engine.engineName).toBe('handoff-engine');
   });
 
-  it('getState debe retornar undefined para conversación nueva', () => {
-    const { engine } = makeEngine();
+  it('getState debe retornar undefined para conversación nueva', async () => {
+    const { engine } = await makeEngine();
     expect(engine.getState('no-existe')).toBeUndefined();
   });
 
-  it('loadPolicies debe actualizar políticas', () => {
-    const { engine } = makeEngine();
+  it('loadPolicies debe actualizar políticas', async () => {
+    const { engine } = await makeEngine();
 
     const newPolicies: HandoffPolicySet = {
       vertical: 'dental',
@@ -252,5 +253,111 @@ describe('HandoffEngine — integration flows', () => {
 
     engine.loadPolicies(newPolicies);
     // Policy change verified via evaluation
+  });
+});
+
+// ── RT-4: Ownership authority E2E ───────────────────────
+
+describe('RT-4 HandoffEngine — ownership authority E2E', () => {
+  it('set_ownership → get_ownership → verify OwnershipChanged event', async () => {
+    const { engine, events } = await makeEngine();
+
+    // 1. Get initial ownership (default AI, sequence 0)
+    const initial = await engine.execute('get_ownership', {
+      conversationId: 'e2e_conv',
+    });
+    expect(initial.owner).toBe('AI');
+    expect(initial.sequence).toBe(0);
+
+    // 2. Set ownership to HUMAN
+    const setResult = await engine.execute('set_ownership', {
+      conversationId: 'e2e_conv',
+      owner: 'HUMAN',
+      cause: 'handoff_accepted',
+      initiatedBy: 'usr_e2e',
+      reason: 'User accepted handoff',
+    });
+    expect(setResult.owner).toBe('HUMAN');
+    expect(setResult.sequence).toBe(1);
+
+    // 3. Verify OwnershipChanged event was emitted with correct shape
+    const ownershipEvents = events.filter((e) => e.type === 'OwnershipChanged');
+    expect(ownershipEvents).toHaveLength(1);
+    const evt = ownershipEvents[0];
+    expect(evt.conversationId).toBe('e2e_conv');
+    expect(evt.type).toBe('OwnershipChanged');
+    expect(typeof evt.id).toBe('string');
+    expect(typeof evt.timestamp).toBe('number');
+
+    const payload = evt.payload as any;
+    expect(payload.conversationId).toBe('e2e_conv');
+    expect(payload.owner).toBe('HUMAN');
+    expect(payload.previousOwner).toBe('AI');
+    expect(payload.sequence).toBe(1);
+    expect(payload.cause).toBe('handoff_accepted');
+    expect(payload.initiatedBy).toBe('usr_e2e');
+    expect(payload.reason).toBe('User accepted handoff');
+    expect(typeof payload.changedAt).toBe('number');
+
+    // 4. Verify get_ownership reflects the change
+    const after = await engine.execute('get_ownership', {
+      conversationId: 'e2e_conv',
+    });
+    expect(after.owner).toBe('HUMAN');
+    expect(after.sequence).toBe(1);
+  });
+
+  it('set_ownership to LOCKED then get_ownership', async () => {
+    const { engine, events } = await makeEngine();
+
+    await engine.execute('set_ownership', {
+      conversationId: 'e2e_locked',
+      owner: 'LOCKED',
+      cause: 'compliance_lock',
+      reason: 'Legal hold',
+    });
+
+    const result = await engine.execute('get_ownership', {
+      conversationId: 'e2e_locked',
+    });
+    expect(result.owner).toBe('LOCKED');
+    expect(result.sequence).toBe(1);
+
+    // LOCKED → anything should be rejected by validateOwnershipTransition
+    const blocked = await engine.execute('set_ownership', {
+      conversationId: 'e2e_locked',
+      owner: 'AI',
+      cause: 'compliance_unlock',
+    });
+    expect(blocked.error).toBe('OWNERSHIP_LOCKED');
+
+    // Ownership unchanged
+    const still = await engine.execute('get_ownership', {
+      conversationId: 'e2e_locked',
+    });
+    expect(still.owner).toBe('LOCKED');
+  });
+
+  it('multiple conversations have independent ownership', async () => {
+    const { engine } = await makeEngine();
+
+    await engine.execute('set_ownership', {
+      conversationId: 'conv_a',
+      owner: 'HUMAN',
+      cause: 'handoff_accepted',
+    });
+    await engine.execute('set_ownership', {
+      conversationId: 'conv_b',
+      owner: 'SHARED',
+      cause: 'co_pilot_activated',
+    });
+
+    const a = await engine.execute('get_ownership', { conversationId: 'conv_a' });
+    const b = await engine.execute('get_ownership', { conversationId: 'conv_b' });
+    const c = await engine.execute('get_ownership', { conversationId: 'conv_c' });
+
+    expect(a.owner).toBe('HUMAN');
+    expect(b.owner).toBe('SHARED');
+    expect(c.owner).toBe('AI'); // default
   });
 });

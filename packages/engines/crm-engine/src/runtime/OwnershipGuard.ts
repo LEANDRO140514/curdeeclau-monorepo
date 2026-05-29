@@ -6,7 +6,9 @@
 //   I18: SHARED requires human approval for pipeline/opportunity mutations.
 //   I19: Tag operations under AI are allowed; pipeline mutations are blocked.
 //
-// Ownership is read from context. Only handoff-engine writes ownership.
+// Ownership is read from a local-authoritative Map (#37).
+// The Map is populated via handleOwnershipChanged() on the engine.
+// Only handoff-engine mutates ownership at source.
 
 import type { ConversationOwner } from '@curdeeclau/shared';
 import type { CRMError } from '../types';
@@ -29,15 +31,15 @@ const CONTACT_ACTIONS = new Set(['create_contact', 'update_contact']);
 // ── Permission Check ──────────────────────────────────────
 
 export class OwnershipGuard {
-  private ownershipResolver: (conversationId: string) => ConversationOwner;
+  private ownershipView: Map<string, ConversationOwner>;
 
-  constructor(ownershipResolver?: (conversationId: string) => ConversationOwner) {
-    this.ownershipResolver = ownershipResolver ?? (() => 'AI');
+  constructor(ownershipView: Map<string, ConversationOwner>) {
+    this.ownershipView = ownershipView;
   }
 
-  /** Returns the effective owner for a conversation. */
+  /** Returns the effective owner for a conversation. Defaults to 'AI' per constitutional default. */
   getOwner(conversationId: string): ConversationOwner {
-    return this.ownershipResolver(conversationId);
+    return this.ownershipView.get(conversationId) ?? 'AI';
   }
 
   /**

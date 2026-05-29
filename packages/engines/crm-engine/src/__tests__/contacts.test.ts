@@ -19,9 +19,10 @@ describe('ContactManager', () => {
   let engine: CRMEngine;
   let provider: InMemoryCRMProvider;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     provider = new InMemoryCRMProvider();
     engine = new CRMEngine({ provider });
+    await engine.start();
   });
 
   it('should create a contact and emit ContactCreated event', async () => {

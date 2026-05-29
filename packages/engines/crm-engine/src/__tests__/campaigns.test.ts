@@ -19,11 +19,13 @@ describe('CampaignManager', () => {
   let engine: CRMEngine;
   let provider: InMemoryCRMProvider;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     provider = new InMemoryCRMProvider();
-    engine = new CRMEngine({
-      provider,
-      ownershipResolver: () => 'HUMAN',
+    engine = new CRMEngine({ provider });
+    await engine.start();
+    engine.handleOwnershipChanged({
+      conversationId: 'conv_test', owner: 'HUMAN', previousOwner: null,
+      sequence: 1, cause: 'system_init', changedAt: Date.now(),
     });
   });
 
