@@ -62,6 +62,8 @@ export type RuntimeEventType =
   | 'ReminderCreated'
   | 'ReminderTriggered'
   | 'ReminderCancelled'
+  // ── Telegram Provider ──────────────────────────
+  | 'TelegramMessageReceived'
   // ── Future verticals ────────────────────────────
   | 'AppointmentBooked';
 
