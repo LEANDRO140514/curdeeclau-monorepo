@@ -1,7 +1,10 @@
 // ── Lead Store ────────────────────────────────────────────
 //
 // Local lead identification by (channel, channelUserId).
-// Wraps InMemoryCRMProvider for deterministic, provider-agnostic storage.
+// Supports any CRMProvider implementation via constructor injection.
+//
+// BV-2: Accepts CRMProvider injection (PostgresCRMProvider for real persistence,
+// InMemoryCRMProvider as default for tests and backward compatibility).
 //
 // BV-1.02 scope:
 //   - identify(channel, channelUserId) → find or create lead
@@ -9,11 +12,11 @@
 //   - Log NEW_LEAD or EXISTING_LEAD
 //
 // Explicitly NOT in scope:
-//   - GHL (provider-agnostic — InMemoryCRMProvider only)
 //   - Name/email capture
 //   - AI / ownership / handoffs
 
 import { InMemoryCRMProvider } from '@curdeeclau/crm-engine';
+import type { CRMProvider } from '@curdeeclau/crm-engine';
 import type { CRMContact } from '@curdeeclau/shared';
 
 // ── Result ─────────────────────────────────────────────────
@@ -26,10 +29,10 @@ export interface LeadIdentificationResult {
 // ── Lead Store ─────────────────────────────────────────────
 
 export class LeadStore {
-  private provider: InMemoryCRMProvider;
+  private provider: CRMProvider;
 
-  constructor() {
-    this.provider = new InMemoryCRMProvider();
+  constructor(provider?: CRMProvider) {
+    this.provider = provider ?? new InMemoryCRMProvider();
   }
 
   // ── Identification ───────────────────────────────────────
@@ -92,7 +95,7 @@ export class LeadStore {
 
   // ── Introspection ────────────────────────────────────────
 
-  getProvider(): InMemoryCRMProvider {
+  getProvider(): CRMProvider {
     return this.provider;
   }
 }
