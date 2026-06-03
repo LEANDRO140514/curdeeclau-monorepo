@@ -44,6 +44,7 @@ import { TelegramProvider } from './TelegramProvider';
 import { LeadStore } from './LeadStore';
 import { GHLSyncService } from './GHLSyncService';
 import { PostgresCRMProvider } from './PostgresCRMProvider';
+import { AdmissionFlow } from './AdmissionFlow';
 
 // ── Config ────────────────────────────────────────────────
 
@@ -114,11 +115,13 @@ if (GHL_API_KEY && GHL_LOCATION_ID) {
 
 // ── Telegram Provider ─────────────────────────────────────
 
-const provider = new TelegramProvider({ botToken: BOT_TOKEN }, dispatcher, leadStore, ghlSync);
+const admissionFlow = new AdmissionFlow();
+const provider = new TelegramProvider({ botToken: BOT_TOKEN }, dispatcher, leadStore, ghlSync, admissionFlow);
 provider.start();
 
 console.log('[bv-1.03] Telegram → LeadStore → GHL → Orchestrator bridge active');
-console.log('[bv-1.03] Send "Hola" from Telegram to verify full pipeline');
+console.log('[uv-1] AdmissionFlow enabled — conversational lead capture ready');
+console.log('[uv-1] Send any message from Telegram to start the admission flow');
 
 // ── Graceful shutdown ─────────────────────────────────────
 

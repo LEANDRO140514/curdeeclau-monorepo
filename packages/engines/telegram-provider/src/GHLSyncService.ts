@@ -62,10 +62,12 @@ export class GHLSyncService {
     // ── Create GHL contact ─────────────────────────────────
     try {
       const ghlContact = await this.client.createContact({
-        firstName: lead.source ?? 'telegram',
-        lastName: lead.providerIds?.[lead.source ?? 'telegram'] ?? lead.name,
+        firstName: lead.firstName || lead.name || 'unknown',
+        lastName: lead.lastName || '',
+        phone: lead.phone,
+        email: lead.email,
         source: lead.source ?? 'telegram',
-        tags: [],
+        tags: lead.tags ?? [],
         customFields: {},
       });
 
