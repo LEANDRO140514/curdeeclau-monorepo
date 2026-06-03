@@ -3,3 +3,4 @@ packages:
   - "packages/*"
   - "packages/algorithmus/*"
   - "packages/engines/*"
+  - "packages/memory/*"
