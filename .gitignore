@@ -32,7 +32,9 @@ Thumbs.db
 
 # Cursor / Claude / tools
 .cursor/
-.claude/
+.claude/*
+!.claude/memory/
+!.claude/settings.json
 .npm/
 
 # Python cache
