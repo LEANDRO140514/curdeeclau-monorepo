@@ -3,7 +3,7 @@
 > Tipo: reference (índice raíz)
 > Versión: 1.0.0 — Fundacional
 > Creado: 2026-06-06
-> Actualizado: 2026-06-07
+> Actualizado: 2026-06-11
 >
 > **Regla de entrada:** Este es el primer documento que todo agente debe leer.
 > Después de leer este índice, el agente debe leer `institutional/constitucion.md`
@@ -149,12 +149,14 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `institutional/dna/pekin.md`
 - [x] `MEMORY.md` (este archivo)
 
-### Poblamiento pendiente (Registro Civil)
-- [ ] `institutional/dna/vertical-algorithmus.md`
-- [ ] `institutional/dna/vertical-dental.md`
-- [ ] `institutional/dna/vertical-uv1.md`
-- [ ] `institutional/dna/producto-quiniela.md`
-- [ ] `institutional/dna/producto-admissionflow.md`
+### Poblamiento completado (Registro Civil, 2026-06-11)
+- [x] `institutional/dna/vertical-algorithmus.md`
+- [x] `institutional/dna/vertical-dental.md`
+- [x] `institutional/dna/vertical-uv1.md`
+- [x] `institutional/dna/producto-quiniela.md`
+- [x] `institutional/dna/producto-admissionflow.md`
+
+### Poblamiento pendiente (Catálogo y Patrones)
 - [ ] `reference/legoland-catalogo.md`
 - [ ] `pattern/` (7 patrones descubiertos)
 
