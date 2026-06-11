@@ -1,3 +1,12 @@
+---
+ESTADO: SUPERSEDIDO COMO AUTORIDAD ACTIVA
+Fecha: 2026-06-11
+Supersedido por: .claude/memory/institutional/constitucion.md + .claude/memory/MEMORY.md
+Motivo: Pekín Foundation establece la autoridad constitucional activa de CURDEECLAU. OpenSpec se autodeclaraba "architectural governance layer" independiente. Pekín preserva OpenSpec como proceso de especificación técnica, templates y conocimiento histórico — pero sin autoridad constitucional.
+Uso permitido: proceso de especificación técnica, templates de diseño, referencia histórica, absorción institucional futura.
+Uso prohibido: citarlo como autoridad constitucional, gobernanza activa o fuente de decisiones arquitectónicas que contradigan Pekín.
+---
+
 # Algorithmus OpenSpec
 
 ## What is OpenSpec?

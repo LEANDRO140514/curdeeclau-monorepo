@@ -1,3 +1,12 @@
+---
+ESTADO: SUPERSEDIDO COMO AUTORIDAD ACTIVA
+Fecha: 2026-06-11
+Supersedido por: .claude/memory/institutional/constitucion.md
+Motivo: Pekín Foundation establece la autoridad constitucional activa de CURDEECLAU. Este documento declara "constitutionally protected" nombres que son convenciones de Nivel 2 (Governance), no Nivel 1 (Constitution). Su contenido técnico de normalización semántica y topología permanece válido como propuesta de diseño.
+Uso permitido: consulta histórica, propuesta técnica de normalización semántica, referencia para futura evaluación por El Senado.
+Uso prohibido: citar protecciones "constitucionales" sobre nombres. El naming es Nivel 2 (Governance) bajo Pekín.
+---
+
 # Runtime Naming & Topology Normalization Plan
 
 > **Phase:** Pre-RT-2 semantic normalization.

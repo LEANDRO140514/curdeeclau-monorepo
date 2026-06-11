@@ -1,3 +1,12 @@
+---
+ESTADO: SUPERSEDIDO COMO AUTORIDAD ACTIVA
+Fecha: 2026-06-11
+Supersedido por: .claude/memory/institutional/constitucion.md
+Motivo: Pekín Foundation establece la autoridad constitucional activa de CURDEECLAU. Las definiciones canónicas de capas (Foundation, Runtime, Engine, Provider, App, Vertical) quedan supersedidas por la jerarquía de 7 niveles de Pekín (Article IX). El inventario técnico (17 ID types, 38 eventos, catálogo de packages) permanece válido como referencia técnica.
+Uso permitido: consulta histórica, inventario técnico de entidades y eventos, referencia para futura absorción en reference/legoland-catalogo.md y reference/catalogo-eventos.md.
+Uso prohibido: citarlo como taxonomía de autoridad activa. La jerarquía canónica es la Constitución de Pekín Article IX (7 niveles).
+---
+
 # CURDEECLAU — CANONICAL GOVERNANCE DEFINITIONS
 
 > Derivadas del código real. No aspiracionales.

@@ -1,3 +1,12 @@
+---
+ESTADO: SUPERSEDIDO COMO AUTORIDAD ACTIVA
+Fecha: 2026-06-11
+Supersedido por: .claude/memory/institutional/constitucion.md
+Motivo: Pekín Foundation establece la autoridad constitucional activa de CURDEECLAU. Este documento pertenece a la etapa pre-Pekín / RT-1.5 y queda preservado como antecedente histórico o referencia técnica. Su contenido técnico permanece válido como referencia hasta su absorción formal por Pekín.
+Uso permitido: consulta histórica, extracción de patrones, referencia técnica, absorción institucional.
+Uso prohibido: citarlo como autoridad constitucional, gobernanza activa o fuente superior a Pekín.
+---
+
 # RT-1.5 — Semantic Freeze Constitution
 
 > **Nature:** Constitutive. Not aspirational, not descriptive.

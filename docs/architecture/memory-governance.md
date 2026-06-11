@@ -1,3 +1,12 @@
+---
+ESTADO: SUPERSEDIDO COMO AUTORIDAD ACTIVA
+Fecha: 2026-06-11
+Supersedido por: .claude/memory/institutional/constitucion.md (Principio II: Primacía de la Memoria)
+Motivo: Pekín Foundation establece la autoridad constitucional activa de CURDEECLAU. Este documento declara "runtime-first, memory-second" y ubica la memoria permanente en CLAUDE.md + OpenSpec + docs/, contradiciendo el Principio II de Pekín que establece .claude/memory/ como la memoria institucional canónica.
+Uso permitido: consulta histórica, referencia técnica sobre filosofía de memoria pre-Pekín.
+Uso prohibido: guiar decisiones de arquitectura de memoria, gobernanza de memoria o políticas de persistencia del conocimiento institucional.
+---
+
 # Runtime Memory Philosophy
 
 **runtime-first, memory-second.**

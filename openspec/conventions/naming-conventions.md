@@ -1,3 +1,12 @@
+---
+ESTADO: SUPERSEDIDO COMO AUTORIDAD ACTIVA
+Fecha: 2026-06-11
+Supersedido por: .claude/memory/institutional/constitucion.md
+Motivo: Pekín Foundation establece la autoridad constitucional activa de CURDEECLAU. Estas convenciones de nomenclatura (ID prefixes, entity naming) son Nivel 2 (Governance) bajo Pekín, no reglas constitucionales autónomas. Su contenido técnico permanece válido como convención de ingeniería.
+Uso permitido: referencia técnica para patrones de nomenclatura de entidades, IDs y eventos.
+Uso prohibido: citarlo como autoridad constitucional o estándar que no pueda ser modificado por gobernanza Pekín.
+---
+
 # Naming Conventions
 
 ## Core Principle

@@ -1,3 +1,12 @@
+---
+ESTADO: SUPERSEDIDO COMO AUTORIDAD ACTIVA
+Fecha: 2026-06-11
+Supersedido por: .claude/memory/institutional/constitucion.md + .claude/memory/MEMORY.md
+Motivo: Pekín Foundation establece la autoridad constitucional activa de CURDEECLAU. Este índice referencia documentos de gobernanza pre-Pekín. La autoridad institucional ahora reside en .claude/memory/. Los documentos referenciados aquí quedan como fuentes técnicas históricas.
+Uso permitido: navegación histórica de documentos pre-Pekín, referencia cruzada con fuentes absorbidas por Pekín.
+Uso prohibido: citarlo como índice de autoridad activa. El índice canónico es .claude/memory/MEMORY.md.
+---
+
 # CURDEECLAU — Governance Index
 
 > Última actualización: 2026-05-30
