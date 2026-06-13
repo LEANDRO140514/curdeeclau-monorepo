@@ -148,6 +148,20 @@
 
 ---
 
+## ADR-DOMAIN-EVENT-1 -- CANONICAL DOMAINEVENT: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| ADR | ADR-DOMAIN-EVENT-1 |
+| Decision | shared/ es autoridad canonica exclusiva de DomainEvent |
+| Wrapper orchestrator | Valido como helper (no es redefinicion) |
+| Import desviado | telegram-provider (1 archivo) |
+| Codigo modificado | Cero |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -166,7 +180,7 @@
 |------|----------|
 | institutional/ | 5 (constitucion, principios, instituciones, governance, ADN pekin) |
 | institutional/dna/ | 6 (pekin + 3 verticales + 2 productos) |
-| institutional/adr/ | 1 (ADR-000) |
+| institutional/adr/ | 2 (ADR-000, ADR-DOMAIN-EVENT-1) |
 | reference/ | 7 (catalogo-eventos, rt4-closure, legoland, uv1-directive, rt-1.6-drift, mapa-sistemas) |
 | pattern/ | 6 (ownership, runtime, engine, orchestration, fsm-authority, +1) |
 | operational/ | 4 (estado-actual, drift-catalog, 2 auditorias) |
@@ -187,7 +201,7 @@
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**ADR-DOMAIN-EVENT-1 -- Unificar DomainEvent.** Resolver duplicidad D-001/D-002 unificando tipos en shared/. Es el riesgo P0 mas quirurgico y de mayor impacto inmediato. Seguido de ADR-LLM-1.
+**FIX-DOMAIN-EVENT-1 -- Corregir import canonico.** Cambiar el import de DomainEvent en telegram-provider de @curdeeclau/workflow-orchestrator a @curdeeclau/shared. Verificar typecheck y tests. Seguido de ADR-LLM-1.
 
 ---
 

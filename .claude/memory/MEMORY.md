@@ -199,8 +199,11 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (RISK-1 Technical Risk Triage, 2026-06-13)
 - [x] `operational/reports/risk-1-technical-triage-report.md` — 10 riesgos clasificados y priorizados
 
+### Poblamiento completado (ADR-DOMAIN-EVENT-1, 2026-06-13)
+- [x] `institutional/adr/ADR-DOMAIN-EVENT-1.md` — DomainEvent canonico ratificado
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] ADR-DOMAIN-EVENT-1 — Unificar DomainEvent (D-001/D-002)
+- [ ] FIX-DOMAIN-EVENT-1 — Corregir import en telegram-provider
 - [ ] ADR-LLM-1 — Definir LLMProvider
 - [ ] Templates de DNA para engines, providers, agentes
 
