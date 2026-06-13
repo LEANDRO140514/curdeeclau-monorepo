@@ -182,7 +182,7 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [ ] `reference/mapa-sistemas.md`
 - [ ] `institutional/governance.md` (Nivel 2 — gobernanza operativa)
 - [ ] Templates de DNA para engines, providers, agentes
-- [ ] Phase E — archival de documentos legacy absorbidos
+- [x] Phase E — archival de documentos legacy absorbidos
 
 ---
 

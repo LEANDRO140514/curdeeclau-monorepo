@@ -34,20 +34,31 @@
 
 ---
 
-## PRÓXIMA FASE
+## PHASE E — ARCHIVAL: COMPLETADA ✅
 
-**Phase E — Archival de documentos legacy**
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Autoridad | ADR-000 |
+| Commit | Pendiente de commit |
+| Archivos movidos | 4 |
+| Archivos creados | 1 (docs/archive/README.md) |
+| Conocimiento eliminado | Cero |
+| Documentos legacy | Movidos a `docs/archive/` y `apps/quiniela-2026/docs/` |
 
-Objetivo: mover documentos legacy cuyo conocimiento ya fue absorbido a `docs/archive/`, preservando trazabilidad.
+Detalle de movimientos:
 
-Restricción: no ejecutar sin autorización explícita.
+| Origen | Destino |
+|--------|---------|
+| `docs/architecture/migration-roadmap.md` | `docs/archive/migration-roadmap.md` |
+| `docs/project-state-map.md` | `docs/archive/project-state-map.md` |
+| `docs/openspec/monorepo-alignment.md` | `docs/archive/monorepo-alignment.md` |
+| `docs/openspec/mvp-product-architecture.md` | `apps/quiniela-2026/docs/mvp-product-architecture.md` |
 
 ---
 
 ## RESTRICCIONES ACTIVAS
 
-- No continuar desarrollo de verticales hasta cerrar archival o decisión del Senado
-- No modificar documentos legacy sin autorización
 - No crear nuevas capas de gobernanza fuera de `.claude/memory/`
 - UV-1 y AdmissionFlow sin cambios
 
