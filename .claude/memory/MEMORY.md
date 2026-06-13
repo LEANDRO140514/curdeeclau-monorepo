@@ -179,12 +179,15 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (ORG-1 Monorepo Order Recovery, 2026-06-13)
 - [x] ORG-1A — Repository + Module + Pattern Identity Audit
 - [x] ORG-1B — Documentation cleanup (STATE.md + governance docs archived)
+- [x] ORG-1C — Operational reports preserved in git
 
-### Poblamiento pendiente (Próximos hitos)
+### Poblamiento completado (GOV-1 Governance Level 2, 2026-06-13)
+- [x] `institutional/governance.md` — Governance Level 2 creado
+
+### Poblamiento pendiente (Proximos hitos)
 - [ ] `procedural/naturalizacion/` (GHL, Telegram, Supabase, OpenAI, Pinecone)
 - [ ] `procedural/runbooks/`
 - [ ] `reference/mapa-sistemas.md`
-- [ ] `institutional/governance.md` (Nivel 2 — gobernanza operativa)
 - [ ] Templates de DNA para engines, providers, agentes
 - [x] Phase E — archival de documentos legacy absorbidos
 - [ ] ORG-1C — (pendiente de decision)

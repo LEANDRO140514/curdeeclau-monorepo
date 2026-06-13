@@ -82,6 +82,28 @@ Preservado en ubicacion original:
 
 ---
 
+## ORG-1C — OPERATIONAL REPORTS: CLOSED ✅
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Commit | 681d101 |
+| Reportes preservados | 2 (adr-triage-report.md, org1a-synthesis-report.md) |
+| Working tree | Limpio |
+
+---
+
+## GOV-1 — GOVERNANCE LEVEL 2: CLOSED ✅
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Archivo creado | `institutional/governance.md` |
+| Contenido | 14 secciones: jerarquia, autoridades, tipos de activos, estados, naturalizacion, reglas de modificacion, movimiento de codigo, reglas para agentes, Legoland, Forge-Pro, productos, criterios de cierre, prohibiciones |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -94,27 +116,33 @@ Preservado en ubicacion original:
 
 ---
 
-## ARCHIVO DE PEKÍN — INVENTARIO
-
-27 archivos poblados en 6 capas:
+## ARCHIVO DE PEKIN — INVENTARIO
 
 | Capa | Archivos |
 |------|----------|
-| `institutional/` | 4 (constitución, principios, instituciones, ADN pekin) |
+| `institutional/` | 5 (constitucion, principios, instituciones, governance, ADN pekin) |
 | `institutional/dna/` | 6 (pekin + 3 verticales + 2 productos) |
 | `institutional/adr/` | 1 (ADR-000) |
 | `reference/` | 6 (catalogo-eventos, rt4-closure, legoland, uv1-directive, rt-1.6-drift) |
 | `pattern/` | 6 (ownership, runtime, engine, orchestration, fsm-authority, +1) |
 | `operational/` | 4 (estado-actual, drift-catalog, 2 auditorias) |
+| `operational/reports/` | 2 (adr-triage-report, org1a-synthesis-report) |
 | `procedural/` | 2 (invariant-conventions, openspec-process) |
 
 ---
 
 ## PENDIENTES DESTACADOS
 
-- Phase E archival
-- `institutional/governance.md` (Nivel 2)
 - `procedural/naturalizacion/` (GHL, Telegram, Supabase, OpenAI, Pinecone)
+- `procedural/runbooks/`
+- `reference/mapa-sistemas.md`
+- Templates de DNA para engines, providers, agentes
+
+---
+
+## SIGUIENTE LINEA RECOMENDADA
+
+**NAT-1 — Naturalization Framework.** Poblar `procedural/naturalizacion/` con fichas de los providers activos (GHL, Telegram, Supabase, OpenAI, Pinecone), aplicando las reglas de naturalizacion definidas en Governance Level 2, Seccion 6.
 - `procedural/runbooks/`
 - `reference/mapa-sistemas.md`
 - Templates de DNA para engines, providers, agentes
