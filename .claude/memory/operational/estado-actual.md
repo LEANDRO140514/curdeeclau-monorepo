@@ -120,6 +120,18 @@
 | Archivo creado | `reference/mapa-sistemas.md` (15 secciones) |
 | Basado en | ORG-1A Repository Identity Audit |
 | Codigo modificado | Cero |
+| Commit | 8e32b3b |
+
+---
+
+## RUN-1 -- INITIAL RUNBOOKS: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Archivos creados | 8 (README + 7 runbooks) |
+| Runbooks | phase-closure, document-archival, operational-report, working-tree, adr-decision, handoff, no-code-change |
+| Codigo modificado | Cero |
 | Commit | Pendiente de commit |
 
 ---
@@ -150,12 +162,13 @@
 | procedural/ | 2 (invariant-conventions, openspec-process) |
 | procedural/naturalizacion/ | 7 (README, TEMPLATE + 5 fichas) |
 | procedural/dna/ | 8 (README + 7 templates) |
+| procedural/runbooks/ | 8 (README + 7 runbooks) |
 
 ---
 
 ## PENDIENTES DESTACADOS
 
-- `procedural/runbooks/`
+
 
 - Drifts D-001..D-004 activos requieren remediacion (backlog de La Forja)
 
@@ -163,7 +176,7 @@
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**RUN-1 -- Initial runbooks.** Crear runbooks operativos iniciales en `procedural/runbooks/` para los flujos criticos identificados en el mapa de sistemas.
+**ADR-TOP-1 -- Topology ADR draft.** Redactar un ADR que evalue las opciones de reorganizacion topologica identificadas en ORG-1A y mapeadas en MAP-1, o diferir a **RISK-1 -- Technical risk triage** si se prefiere atacar drifts y riesgos tecnicos primero.
 
 ---
 

@@ -193,8 +193,11 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (MAP-1 System Map, 2026-06-13)
 - [x] `reference/mapa-sistemas.md` — Primer mapa institucional de sistemas
 
+### Poblamiento completado (RUN-1 Initial Runbooks, 2026-06-13)
+- [x] `procedural/runbooks/` — README + 7 runbooks operativos
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] `procedural/runbooks/`
+- [ ] Remediacion de drifts D-001..D-004 (backlog de La Forja)
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---
