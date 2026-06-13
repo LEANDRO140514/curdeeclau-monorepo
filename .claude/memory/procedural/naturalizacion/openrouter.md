@@ -185,23 +185,35 @@ OpenRouter provee acceso unificado a multiples modelos de lenguaje via una sola 
 
 ## 17. ESTADO DE IMPLEMENTACION
 
-- [x] No iniciado
-- [ ] En progreso
-- [ ] Funcional (requiere proveedor)
-- [ ] Funcional (mock para desarrollo)
-- [ ] Completo y verificado
+- [ ] No iniciado
+- [x] En progreso — Adapter implementado (LLM-2). Tests con fake HTTP pasan.
+- [ ] Funcional (requiere proveedor) — Pendiente operacion real.
+- [x] Funcional (mock para desarrollo) — Fake HTTP client en tests.
+- [ ] Completo y verificado — Pendiente integracion real.
 
 ---
 
 ## 18. DECISION
 
-Proceder con naturalizacion como **Naturalized Candidate**. El adapter se implementara en LLM-2. Mientras tanto, OpenRouter es **Allied** (referenciado, utilizado en diseno, sin adapter formal).
+Proceder con naturalizacion como **Naturalized Candidate**. El adapter inicial existe (`OpenRouterAdapter` en `algorithmus-core-engine/src/infra/providers/openrouter/`), implementa `LLMProvider`, y tiene 11 tests con fake HTTP client.
+
+**Lo que existe:**
+- Adapter funcional con HTTP client inyectable.
+- Tests que validan mapeo de mensajes, usage, errores y modelo.
+- Sin llamadas reales a API. Sin credenciales.
+
+**Lo que falta para naturalizacion completa:**
+- Operacion real con API key de OpenRouter.
+- Migracion de consumidores existentes (semantic-memory, LLMGateway).
+- Verificacion en entorno con llamadas reales.
+
+OpenRouter sigue siendo **Allied / Naturalized Candidate**. No es autoridad institucional.
 
 ---
 
 ## 19. PROXIMO PASO AUTORIZADO
 
-**LLM-2 — Implementar OpenRouterAdapter** que satisfaga `LLMProvider` de shared/.
+**LLM-3 — OpenAIAdapter directo** (fallback). O **LLM-MIG-1** para migrar consumidores existentes detras de `LLMProvider`.
 
 ---
 

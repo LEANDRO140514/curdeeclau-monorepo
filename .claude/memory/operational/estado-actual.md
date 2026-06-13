@@ -216,6 +216,21 @@
 
 ---
 
+## LLM-2 -- OPENROUTER ADAPTER: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Adapter | OpenRouterAdapter en algorithmus-core-engine/src/infra/providers/openrouter/ |
+| Contrato | Implementa LLMProvider de shared/ |
+| Tests | 11 pasan (fake HTTP), 0 fallan |
+| LLamadas reales | Cero |
+| Credenciales | Cero |
+| Engines/Apps migrados | Cero |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -255,7 +270,7 @@
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**LLM-2 -- Implementar OpenRouterAdapter.** Crear adapter de OpenRouter que satisfaga LLMProvider en shared/. Sin tocar engines existentes. Sin migrar consumidores todavia.
+**LLM-3 -- OpenAI direct adapter fallback.** Implementar OpenAIAdapter directo que satisfaga LLMProvider. O diferir a ADR-TOP-1 segun prioridad del Senado.
 
 ---
 

@@ -215,8 +215,11 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `institutional/adr/ADR-LLM-2.md` — Estrategia OpenRouter-first multi-provider ratificada
 - [x] `procedural/naturalizacion/openrouter.md` — Ficha OpenRouter creada
 
+### Poblamiento completado (LLM-2 OpenRouter Adapter, 2026-06-13)
+- [x] `packages/algorithmus/algorithmus-core-engine/src/infra/providers/openrouter/` — OpenRouterAdapter + 11 tests
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] LLM-2 — OpenRouterAdapter behind LLMProvider
+- [ ] LLM-3 — OpenAI direct adapter fallback
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---
