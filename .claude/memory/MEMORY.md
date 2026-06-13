@@ -184,13 +184,13 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (GOV-1 Governance Level 2, 2026-06-13)
 - [x] `institutional/governance.md` — Governance Level 2 creado
 
+### Poblamiento completado (NAT-1 Naturalization Framework, 2026-06-13)
+- [x] `procedural/naturalizacion/` — README + TEMPLATE + 5 fichas (GHL, Telegram, Supabase, OpenAI, Pinecone)
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] `procedural/naturalizacion/` (GHL, Telegram, Supabase, OpenAI, Pinecone)
 - [ ] `procedural/runbooks/`
 - [ ] `reference/mapa-sistemas.md`
 - [ ] Templates de DNA para engines, providers, agentes
-- [x] Phase E — archival de documentos legacy absorbidos
-- [ ] ORG-1C — (pendiente de decision)
 
 ---
 

@@ -104,6 +104,18 @@ Preservado en ubicacion original:
 
 ---
 
+## NAT-1 — NATURALIZATION FRAMEWORK: CLOSED ✅
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Archivos creados | 7 |
+| Fichas | GHL (Allied), Telegram (Naturalized Candidate), Supabase (Naturalized Candidate), OpenAI (Allied), Pinecone (Referenced) |
+| Codigo modificado | Cero |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -128,25 +140,22 @@ Preservado en ubicacion original:
 | `operational/` | 4 (estado-actual, drift-catalog, 2 auditorias) |
 | `operational/reports/` | 2 (adr-triage-report, org1a-synthesis-report) |
 | `procedural/` | 2 (invariant-conventions, openspec-process) |
+| `procedural/naturalizacion/` | 7 (README, TEMPLATE, ghl, telegram, supabase, openai, pinecone) |
 
 ---
 
 ## PENDIENTES DESTACADOS
 
-- `procedural/naturalizacion/` (GHL, Telegram, Supabase, OpenAI, Pinecone)
 - `procedural/runbooks/`
 - `reference/mapa-sistemas.md`
 - Templates de DNA para engines, providers, agentes
+- Drifts D-001..D-004 activos requieren remediacion (backlog de La Forja)
 
 ---
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**NAT-1 — Naturalization Framework.** Poblar `procedural/naturalizacion/` con fichas de los providers activos (GHL, Telegram, Supabase, OpenAI, Pinecone), aplicando las reglas de naturalizacion definidas en Governance Level 2, Seccion 6.
-- `procedural/runbooks/`
-- `reference/mapa-sistemas.md`
-- Templates de DNA para engines, providers, agentes
-- Drifts D-001..D-004 activos requieren remediación (backlog de La Forja)
+**DNA-1 — DNA Templates.** Crear plantillas de DNA para engines, providers y agentes, usando la taxonomia y estados definidos en Governance Level 2.
 - 9 items diferidos RT-4 (E-1..E-9)
 - Extracción de providers críticos (YCloud PL-1, Pinecone PL-2/PL-3)
 - Math engine atrapado en quiniela app (AP-1)
