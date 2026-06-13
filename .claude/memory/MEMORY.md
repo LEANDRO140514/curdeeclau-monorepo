@@ -176,6 +176,10 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `procedural/invariant-conventions-absorbed.md` — Formato MUST/SHALL/CANNOT
 - [x] `procedural/openspec-process-absorbed.md` — OpenSpec como proceso técnico bajo Pekín
 
+### Poblamiento completado (ORG-1 Monorepo Order Recovery, 2026-06-13)
+- [x] ORG-1A — Repository + Module + Pattern Identity Audit
+- [x] ORG-1B — Documentation cleanup (STATE.md + governance docs archived)
+
 ### Poblamiento pendiente (Próximos hitos)
 - [ ] `procedural/naturalizacion/` (GHL, Telegram, Supabase, OpenAI, Pinecone)
 - [ ] `procedural/runbooks/`
@@ -183,6 +187,7 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [ ] `institutional/governance.md` (Nivel 2 — gobernanza operativa)
 - [ ] Templates de DNA para engines, providers, agentes
 - [x] Phase E — archival de documentos legacy absorbidos
+- [ ] ORG-1C — (pendiente de decision)
 
 ---
 

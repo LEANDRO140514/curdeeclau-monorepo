@@ -40,27 +40,57 @@
 |-------|-------|
 | Fecha | 2026-06-13 |
 | Autoridad | ADR-000 |
-| Commit | Pendiente de commit |
+| Commit | 4d8daa5 |
 | Archivos movidos | 4 |
 | Archivos creados | 1 (docs/archive/README.md) |
 | Conocimiento eliminado | Cero |
-| Documentos legacy | Movidos a `docs/archive/` y `apps/quiniela-2026/docs/` |
 
-Detalle de movimientos:
+---
+
+## ORG-1A — REPOSITORY AUDIT: CLOSED ✅
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Reporte | `.claude/memory/operational/reports/org1a-synthesis-report.md` |
+| Conclusión | CURDEECLAU-MONOREPO es el nombre correcto. Pekin es la autoridad. Legoland es el catalogo. No se autoriza mover codigo todavia. |
+
+---
+
+## ORG-1B — DOCUMENTATION CLEANUP: CLOSED ✅
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Archivos archivados | 3 |
+| Archivos actualizados | MEMORY.md, estado-actual.md |
+| Codigo modificado | Cero |
+
+Detalle de archival:
 
 | Origen | Destino |
 |--------|---------|
-| `docs/architecture/migration-roadmap.md` | `docs/archive/migration-roadmap.md` |
-| `docs/project-state-map.md` | `docs/archive/project-state-map.md` |
-| `docs/openspec/monorepo-alignment.md` | `docs/archive/monorepo-alignment.md` |
-| `docs/openspec/mvp-product-architecture.md` | `apps/quiniela-2026/docs/mvp-product-architecture.md` |
+| `STATE.md` | `docs/archive/STATE.superseded.md` |
+| `docs/governance/README.md` | `docs/archive/governance-README.superseded.md` |
+| `docs/governance/canonical-definitions.md` | `docs/archive/canonical-definitions.superseded.md` |
+
+Preservado en ubicacion original:
+
+| Archivo | Razon |
+|---------|-------|
+| `docs/governance/uv1-directive.md` | No tiene header de supersedencia. Contenido tecnico activo como referencia UV-1. |
 
 ---
 
 ## RESTRICCIONES ACTIVAS
 
+- No mover codigo, packages, engines ni providers
+- No renombrar paquetes ni carpetas
+- No ejecutar topologia propuesta en ORG-1A sin ADR que la ratifique
 - No crear nuevas capas de gobernanza fuera de `.claude/memory/`
+- No cambiar remote sin autorizacion explicita
 - UV-1 y AdmissionFlow sin cambios
+- No iniciar PWA sin autorizacion
 
 ---
 
