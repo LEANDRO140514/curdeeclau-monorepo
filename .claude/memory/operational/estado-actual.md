@@ -202,6 +202,20 @@
 
 ---
 
+## ADR-LLM-2 -- MULTI-PROVIDER LLM STRATEGY: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| ADR | ADR-LLM-2 |
+| Decision | OpenRouter-first, not OpenRouter-only. LLMProvider canonico. OpenAI/DeepSeek/Claude como fallbacks. |
+| Ficha OpenRouter | procedural/naturalizacion/openrouter.md (Allied candidate) |
+| Ficha OpenAI actualizada | Secciones 18-19 (rutas de consumo via OpenRouter + directo) |
+| Codigo modificado | Cero |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -220,13 +234,13 @@
 |------|----------|
 | institutional/ | 5 (constitucion, principios, instituciones, governance, ADN pekin) |
 | institutional/dna/ | 6 (pekin + 3 verticales + 2 productos) |
-| institutional/adr/ | 3 (ADR-000, ADR-DOMAIN-EVENT-1, ADR-LLM-1) |
+| institutional/adr/ | 4 (ADR-000, ADR-DOMAIN-EVENT-1, ADR-LLM-1, ADR-LLM-2) |
 | reference/ | 7 (catalogo-eventos, rt4-closure, legoland, uv1-directive, rt-1.6-drift, mapa-sistemas) |
 | pattern/ | 6 (ownership, runtime, engine, orchestration, fsm-authority, +1) |
 | operational/ | 4 (estado-actual, drift-catalog, 2 auditorias) |
 | operational/reports/ | 3 (adr-triage-report, org1a-synthesis-report) |
 | procedural/ | 2 (invariant-conventions, openspec-process) |
-| procedural/naturalizacion/ | 7 (README, TEMPLATE + 5 fichas) |
+| procedural/naturalizacion/ | 8 (README, TEMPLATE + 5 fichas) |
 | procedural/dna/ | 8 (README + 7 templates) |
 | procedural/runbooks/ | 8 (README + 7 runbooks) |
 
@@ -241,7 +255,7 @@
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**LLM-2 -- OpenAI adapter behind LLMProvider.** Implementar adapter de OpenAI que satisfaga el contrato LLMProvider en shared/. Sin tocar otros engines. O diferir a ADR-TOP-1 segun prioridad del Senado.
+**LLM-2 -- Implementar OpenRouterAdapter.** Crear adapter de OpenRouter que satisfaga LLMProvider en shared/. Sin tocar engines existentes. Sin migrar consumidores todavia.
 
 ---
 

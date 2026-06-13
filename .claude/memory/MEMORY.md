@@ -211,8 +211,12 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (LLM-1 LLM Contracts, 2026-06-13)
 - [x] `packages/shared/src/llm/` — LLMProvider + EmbeddingProvider + tests (64 pasan)
 
+### Poblamiento completado (ADR-LLM-2 Multi-provider Strategy, 2026-06-13)
+- [x] `institutional/adr/ADR-LLM-2.md` — Estrategia OpenRouter-first multi-provider ratificada
+- [x] `procedural/naturalizacion/openrouter.md` — Ficha OpenRouter creada
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] LLM-2 — OpenAI adapter behind LLMProvider
+- [ ] LLM-2 — OpenRouterAdapter behind LLMProvider
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---

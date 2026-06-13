@@ -164,6 +164,8 @@ Componentes de alta reutilizacion, arquitectonicamente alineados con Pekin:
 | `algorithmus-core-engine` (supabase client) | [INT] | Active | Supabase | Naturalized Candidate |
 | `knowledge-engine` (pinecone adapter) | [INT] | Active | Pinecone | Referenced |
 | `algorithmus-core-engine` (openai gateway) | [INT] | Active | OpenAI | Allied |
+| OpenRouter (futuro LLM-2) | [EXT] External AI Gateway | Candidato | OpenRouter (multi-modelo) | Candidato (ADR-LLM-2) |
+| `packages/shared/src/llm/LLMProvider.ts` | [FND] Contrato canonico | Active (LLM-1) | N/A (interno) | N/A |
 
 ---
 

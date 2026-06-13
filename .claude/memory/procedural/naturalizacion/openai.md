@@ -186,22 +186,25 @@ OpenAI provee capacidad de razonamiento, generacion de texto, y embeddings para 
 
 ## 18. DECISION
 
-Mantener como **Aliado** por ahora. OpenAI se usa activamente, pero:
+Mantener como **Allied** por ahora, con ruta clara hacia Naturalized.
 
-- El adapter no esta completamente aislado (no hay interfaz `LLMProvider` como si la hay `CRMProvider`)
-- No hay plan de contingencia verificado con un proveedor alternativo concreto
-- El acoplamiento es medio (el SDK de OpenAI se referencia en multiple puntos)
+**Avances desde la ficha original (v1.0.0):**
+- [x] Interfaz `LLMProvider` definida en `packages/shared/src/llm/LLMProvider.ts` (LLM-1).
+- [x] Estrategia multi-provider definida en ADR-LLM-2.
 
-Para proceder a Naturalizado se requiere:
-1. Definir interfaz `LLMProvider` en `shared/` o en el engine correspondiente
-2. Envolver OpenAI detras de esa interfaz
-3. Implementar un segundo provider (DeepSeek o Anthropic) como prueba de intercambiabilidad
+**Ruta de consumo de OpenAI en CURDEECLAU:**
+
+1. **Via OpenRouterAdapter (LLM-2, proximo).** OpenAI sera accesible indirectamente a traves del gateway multi-modelo OpenRouter, que implementa `LLMProvider`. Esta es la ruta recomendada para la mayoria de los casos de uso.
+
+2. **Via OpenAIAdapter directo (LLM-3, futuro).** OpenAI tendra su propio adapter directo como fallback y para casos donde la latencia o el costo de pasar por OpenRouter no se justifique.
+
+OpenAI sigue siendo Allied / Naturalized Candidate. La naturalizacion completa requiere que al menos uno de los dos adapters (OpenRouter -> OpenAI, o OpenAI directo) este implementado y verificado.
 
 ---
 
 ## 19. PROXIMO PASO AUTORIZADO
 
-Ninguno. La naturalizacion completa requiere trabajo de ingenieria (definir `LLMProvider` interface). Diferir hasta que el Senado priorice la extraccion del provider de LLM.
+**LLM-2 — OpenRouterAdapter** (acceso indirecto a OpenAI via gateway). Seguido de **LLM-3 — OpenAIAdapter** (acceso directo como fallback).
 
 ---
 
