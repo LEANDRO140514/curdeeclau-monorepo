@@ -136,6 +136,18 @@
 
 ---
 
+## RISK-1 -- TECHNICAL RISK TRIAGE: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Archivo creado | operational/reports/risk-1-technical-triage-report.md |
+| Riesgos clasificados | 10 (2 P0, 2 P1, 3 P2, 3 P3) |
+| Codigo modificado | Cero |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -158,7 +170,7 @@
 | reference/ | 7 (catalogo-eventos, rt4-closure, legoland, uv1-directive, rt-1.6-drift, mapa-sistemas) |
 | pattern/ | 6 (ownership, runtime, engine, orchestration, fsm-authority, +1) |
 | operational/ | 4 (estado-actual, drift-catalog, 2 auditorias) |
-| operational/reports/ | 2 (adr-triage-report, org1a-synthesis-report) |
+| operational/reports/ | 3 (adr-triage-report, org1a-synthesis-report) |
 | procedural/ | 2 (invariant-conventions, openspec-process) |
 | procedural/naturalizacion/ | 7 (README, TEMPLATE + 5 fichas) |
 | procedural/dna/ | 8 (README + 7 templates) |
@@ -170,13 +182,12 @@
 
 
 
-- Drifts D-001..D-004 activos requieren remediacion (backlog de La Forja)
 
 ---
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**ADR-TOP-1 -- Topology ADR draft.** Redactar un ADR que evalue las opciones de reorganizacion topologica identificadas en ORG-1A y mapeadas en MAP-1, o diferir a **RISK-1 -- Technical risk triage** si se prefiere atacar drifts y riesgos tecnicos primero.
+**ADR-DOMAIN-EVENT-1 -- Unificar DomainEvent.** Resolver duplicidad D-001/D-002 unificando tipos en shared/. Es el riesgo P0 mas quirurgico y de mayor impacto inmediato. Seguido de ADR-LLM-1.
 
 ---
 

@@ -196,8 +196,12 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (RUN-1 Initial Runbooks, 2026-06-13)
 - [x] `procedural/runbooks/` — README + 7 runbooks operativos
 
+### Poblamiento completado (RISK-1 Technical Risk Triage, 2026-06-13)
+- [x] `operational/reports/risk-1-technical-triage-report.md` — 10 riesgos clasificados y priorizados
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] Remediacion de drifts D-001..D-004 (backlog de La Forja)
+- [ ] ADR-DOMAIN-EVENT-1 — Unificar DomainEvent (D-001/D-002)
+- [ ] ADR-LLM-1 — Definir LLMProvider
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---
