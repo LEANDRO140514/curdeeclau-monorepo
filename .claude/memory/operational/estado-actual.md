@@ -162,6 +162,19 @@
 
 ---
 
+## FIX-DOMAIN-EVENT-1 -- IMPORT CORREGIDO: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Archivo modificado | telegram-provider/src/run.ts (1 linea) |
+| Cambio | DomainEvent import de @curdeeclau/workflow-orchestrator a @curdeeclau/shared |
+| Typecheck | shared, orchestrator, telegram — pasan |
+| Tests | 115 pasan, 15 skipped (Postgres), 0 fallan |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -201,7 +214,7 @@
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**FIX-DOMAIN-EVENT-1 -- Corregir import canonico.** Cambiar el import de DomainEvent en telegram-provider de @curdeeclau/workflow-orchestrator a @curdeeclau/shared. Verificar typecheck y tests. Seguido de ADR-LLM-1.
+**ADR-LLM-1 -- Definir LLMProvider.** Crear ADR que defina la interfaz LLMProvider en shared/, estableciendo el contrato provider-agnostico para modelos de lenguaje. Es el riesgo P0 restante segun RISK-1.
 
 ---
 

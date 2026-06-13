@@ -202,8 +202,10 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (ADR-DOMAIN-EVENT-1, 2026-06-13)
 - [x] `institutional/adr/ADR-DOMAIN-EVENT-1.md` — DomainEvent canonico ratificado
 
+### Poblamiento completado (FIX-DOMAIN-EVENT-1, 2026-06-13)
+- [x] FIX-DOMAIN-EVENT-1 — Import de DomainEvent corregido en telegram-provider
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] FIX-DOMAIN-EVENT-1 — Corregir import en telegram-provider
 - [ ] ADR-LLM-1 — Definir LLMProvider
 - [ ] Templates de DNA para engines, providers, agentes
 

@@ -38,7 +38,7 @@ try {
 
 import { Pool } from 'pg';
 import { WorkflowOrchestrator } from '@curdeeclau/workflow-orchestrator';
-import type { DomainEvent } from '@curdeeclau/workflow-orchestrator';
+import type { DomainEvent } from '@curdeeclau/shared';
 import { GHLClient } from '@curdeeclau/ghl-engine';
 import { TelegramProvider } from './TelegramProvider';
 import { LeadStore } from './LeadStore';
