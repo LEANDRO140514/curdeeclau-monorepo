@@ -114,6 +114,31 @@ export type {
   StateTransition,
 } from './workflow/WorkflowState';
 
+// ── LLM ───────────────────────────────────────────────────
+export {
+  type LLMProvider,
+  type LLMRole,
+  type LLMMessage,
+  type LLMMetadata,
+  type LLMRequest,
+  type LLMResponse,
+  type LLMUsage,
+  LLMProviderError,
+  createUserMessage,
+  createSystemMessage,
+  createAssistantMessage,
+} from './llm/LLMProvider';
+
+export {
+  type EmbeddingProvider,
+  type EmbeddingVector,
+  type EmbeddingRequest,
+  type EmbeddingBatchRequest,
+  type EmbeddingResponse,
+  type EmbeddingBatchResponse,
+  EmbeddingProviderError,
+} from './llm/EmbeddingProvider';
+
 // ── Calendar ─────────────────────────────────────────────
 export { createCalendar } from './calendar/Calendar';
 export type { Calendar, AvailabilityWindow } from './calendar/Calendar';

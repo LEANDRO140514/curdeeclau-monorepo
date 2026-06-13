@@ -208,8 +208,11 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (ADR-LLM-1, 2026-06-13)
 - [x] `institutional/adr/ADR-LLM-1.md` — LLMProvider canonico ratificado
 
+### Poblamiento completado (LLM-1 LLM Contracts, 2026-06-13)
+- [x] `packages/shared/src/llm/` — LLMProvider + EmbeddingProvider + tests (64 pasan)
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] LLM-1 — Implementar contratos LLMProvider y EmbeddingProvider en shared/
+- [ ] LLM-2 — OpenAI adapter behind LLMProvider
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---

@@ -188,6 +188,20 @@
 
 ---
 
+## LLM-1 -- LLM PROVIDER CONTRACTS: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Archivos creados | 4 (LLMProvider.ts, EmbeddingProvider.ts, index.ts, llm.test.ts) |
+| Typecheck | Pasa |
+| Tests | 64 pasan (55 + 9 LLM), 0 fallan |
+| Engines/Apps tocados | Cero |
+| Dependencias externas | Cero |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -227,7 +241,7 @@
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**LLM-1 -- Implementar contratos LLMProvider.** Crear LLMProvider y EmbeddingProvider en shared/, con mocks y tests. Sin tocar engines existentes.
+**LLM-2 -- OpenAI adapter behind LLMProvider.** Implementar adapter de OpenAI que satisfaga el contrato LLMProvider en shared/. Sin tocar otros engines. O diferir a ADR-TOP-1 segun prioridad del Senado.
 
 ---
 
