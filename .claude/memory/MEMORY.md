@@ -156,15 +156,33 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `institutional/dna/producto-quiniela.md`
 - [x] `institutional/dna/producto-admissionflow.md`
 
-### Poblamiento pendiente (Catálogo y Patrones)
-- [ ] `reference/legoland-catalogo.md`
-- [ ] `pattern/` (7 patrones descubiertos)
+### Poblamiento completado (Absorción Legacy RT-1.5/OpenSpec, 2026-06-11)
 
-### Poblamiento pendiente (Distritos)
+- [x] `institutional/adr/ADR-000-pekin-supersedes-rt15-governance.md` — Ratificado
+- [x] `reference/catalogo-eventos.md` — 28 eventos canónicos, DomainEvent, causalidad
+- [x] `reference/legoland-catalogo.md` — 17 ID types, 7 engines, 10 providers, taxonomía
+- [x] `reference/rt4-closure-report.md` — RT-4 closure, 69/69 tests, 4 motores
+- [x] `reference/uv1-directive-reference.md` — Contexto histórico UV-1
+- [x] `reference/rt-1.6-drift-closure-historical.md` — Plan de remediación V-C1..V-C5
+- [x] `pattern/ownership-propagation.md` — AI/HUMAN/SHARED/LOCKED, matriz de permisos
+- [x] `pattern/runtime-semantics.md` — Estados, transiciones, recovery, side effects
+- [x] `pattern/engine-governance.md` — Engine vs Provider, contrato, requisitos, ciclo de vida
+- [x] `pattern/workflow-orchestration.md` — WorkflowOrchestrator, DAGs, state machines
+- [x] `pattern/fsm-authority.md` — 5 lifecycle types, naming, estados terminales
+- [x] `operational/auditorias/leakage-audit-absorbed.md` — 18 fugas, 6 categorías
+- [x] `operational/auditorias/constitutional-drift-audit-absorbed.md` — V-C1..V-C5, V-O1..V-O7
+- [x] `operational/drift-catalog-absorbed.md` — D-001..D-010 reclasificados
+- [x] `operational/estado-actual.md` — Checkpoint post-absorción
+- [x] `procedural/invariant-conventions-absorbed.md` — Formato MUST/SHALL/CANNOT
+- [x] `procedural/openspec-process-absorbed.md` — OpenSpec como proceso técnico bajo Pekín
+
+### Poblamiento pendiente (Próximos hitos)
 - [ ] `procedural/naturalizacion/` (GHL, Telegram, Supabase, OpenAI, Pinecone)
 - [ ] `procedural/runbooks/`
 - [ ] `reference/mapa-sistemas.md`
-- [ ] `reference/catalogo-eventos.md`
+- [ ] `institutional/governance.md` (Nivel 2 — gobernanza operativa)
+- [ ] Templates de DNA para engines, providers, agentes
+- [ ] Phase E — archival de documentos legacy absorbidos
 
 ---
 
