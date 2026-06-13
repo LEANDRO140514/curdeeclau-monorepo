@@ -187,6 +187,9 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (NAT-1 Naturalization Framework, 2026-06-13)
 - [x] `procedural/naturalizacion/` — README + TEMPLATE + 5 fichas (GHL, Telegram, Supabase, OpenAI, Pinecone)
 
+### Poblamiento completado (DNA-1 DNA Templates, 2026-06-13)
+- [x] `procedural/dna/` — README + 7 templates (Engine, Provider, Agent, App, Workflow, Pattern, Integration)
+
 ### Poblamiento pendiente (Proximos hitos)
 - [ ] `procedural/runbooks/`
 - [ ] `reference/mapa-sistemas.md`
