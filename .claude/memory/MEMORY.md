@@ -190,9 +190,11 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (DNA-1 DNA Templates, 2026-06-13)
 - [x] `procedural/dna/` — README + 7 templates (Engine, Provider, Agent, App, Workflow, Pattern, Integration)
 
+### Poblamiento completado (MAP-1 System Map, 2026-06-13)
+- [x] `reference/mapa-sistemas.md` — Primer mapa institucional de sistemas
+
 ### Poblamiento pendiente (Proximos hitos)
 - [ ] `procedural/runbooks/`
-- [ ] `reference/mapa-sistemas.md`
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---

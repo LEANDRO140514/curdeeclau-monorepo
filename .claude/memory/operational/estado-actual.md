@@ -108,6 +108,18 @@
 | Archivos creados | 8 (README + 7 templates) |
 | Templates | Engine, Provider, Agent, App, Workflow, Pattern, Integration |
 | Codigo modificado | Cero |
+| Commit | 4b69577 |
+
+---
+
+## MAP-1 — SYSTEM MAP: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| Archivo creado | `reference/mapa-sistemas.md` (15 secciones) |
+| Basado en | ORG-1A Repository Identity Audit |
+| Codigo modificado | Cero |
 | Commit | Pendiente de commit |
 
 ---
@@ -131,7 +143,7 @@
 | institutional/ | 5 (constitucion, principios, instituciones, governance, ADN pekin) |
 | institutional/dna/ | 6 (pekin + 3 verticales + 2 productos) |
 | institutional/adr/ | 1 (ADR-000) |
-| reference/ | 6 (catalogo-eventos, rt4-closure, legoland, uv1-directive, rt-1.6-drift) |
+| reference/ | 7 (catalogo-eventos, rt4-closure, legoland, uv1-directive, rt-1.6-drift, mapa-sistemas) |
 | pattern/ | 6 (ownership, runtime, engine, orchestration, fsm-authority, +1) |
 | operational/ | 4 (estado-actual, drift-catalog, 2 auditorias) |
 | operational/reports/ | 2 (adr-triage-report, org1a-synthesis-report) |
@@ -143,15 +155,15 @@
 
 ## PENDIENTES DESTACADOS
 
-- procedural/runbooks/
-- reference/mapa-sistemas.md
+- `procedural/runbooks/`
+
 - Drifts D-001..D-004 activos requieren remediacion (backlog de La Forja)
 
 ---
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**MAP-1 — mapa-sistemas.md.** Crear el mapa de dependencias entre engines, providers y apps de CURDEECLAU, usando los tipos y estados definidos en Governance Level 2 y los modulos catalogados en ORG-1A.
+**RUN-1 -- Initial runbooks.** Crear runbooks operativos iniciales en `procedural/runbooks/` para los flujos criticos identificados en el mapa de sistemas.
 
 ---
 
