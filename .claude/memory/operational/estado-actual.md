@@ -175,6 +175,19 @@
 
 ---
 
+## ADR-LLM-1 -- CANONICAL LLM PROVIDER: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-13 |
+| ADR | ADR-LLM-1 |
+| Decision | LLMProvider y EmbeddingProvider en shared/. Embeddings interfaz separada. Streaming/tool calling diferidos a v2. |
+| Acoplamientos detectados | LLMGateway (tipos locales), EmbeddingService (skeleton), semantic-memory (OpenAI directo) |
+| Codigo modificado | Cero |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -193,7 +206,7 @@
 |------|----------|
 | institutional/ | 5 (constitucion, principios, instituciones, governance, ADN pekin) |
 | institutional/dna/ | 6 (pekin + 3 verticales + 2 productos) |
-| institutional/adr/ | 2 (ADR-000, ADR-DOMAIN-EVENT-1) |
+| institutional/adr/ | 3 (ADR-000, ADR-DOMAIN-EVENT-1, ADR-LLM-1) |
 | reference/ | 7 (catalogo-eventos, rt4-closure, legoland, uv1-directive, rt-1.6-drift, mapa-sistemas) |
 | pattern/ | 6 (ownership, runtime, engine, orchestration, fsm-authority, +1) |
 | operational/ | 4 (estado-actual, drift-catalog, 2 auditorias) |
@@ -214,7 +227,7 @@
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**ADR-LLM-1 -- Definir LLMProvider.** Crear ADR que defina la interfaz LLMProvider en shared/, estableciendo el contrato provider-agnostico para modelos de lenguaje. Es el riesgo P0 restante segun RISK-1.
+**LLM-1 -- Implementar contratos LLMProvider.** Crear LLMProvider y EmbeddingProvider en shared/, con mocks y tests. Sin tocar engines existentes.
 
 ---
 

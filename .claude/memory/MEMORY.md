@@ -205,8 +205,11 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (FIX-DOMAIN-EVENT-1, 2026-06-13)
 - [x] FIX-DOMAIN-EVENT-1 — Import de DomainEvent corregido en telegram-provider
 
+### Poblamiento completado (ADR-LLM-1, 2026-06-13)
+- [x] `institutional/adr/ADR-LLM-1.md` — LLMProvider canonico ratificado
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] ADR-LLM-1 — Definir LLMProvider
+- [ ] LLM-1 — Implementar contratos LLMProvider y EmbeddingProvider en shared/
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---
