@@ -3,7 +3,7 @@
 > Tipo: operational
 > Version: 1.0.0
 > Creado: 2026-06-11
-> Actualizado: 2026-06-13
+> Actualizado: 2026-06-14
 > Autoridad vigente: Constitucion de Pekin
 
 ---
@@ -231,6 +231,38 @@
 
 ---
 
+## LLM-3 -- OPENAI DIRECT ADAPTER: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Adapter | OpenAIAdapter en algorithmus-core-engine/src/infra/providers/openai/ |
+| Contrato | Implementa LLMProvider de shared/ |
+| Tests | 11 pasan (fake HTTP), 0 fallan |
+| LLamadas reales | Cero |
+| Credenciales | Cero |
+| Engines/Apps migrados | Cero |
+| Dependencias externas | Cero (usa fetch nativo) |
+| Commit | Pendiente de commit |
+
+---
+
+## LLM-4 -- DEEPSEEK ADAPTER: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Adapter | DeepSeekAdapter en algorithmus-core-engine/src/infra/providers/deepseek/ |
+| Contrato | Implementa LLMProvider de shared/ |
+| Tests | 13 pasan (fake HTTP), 0 fallan |
+| LLamadas reales | Cero |
+| Credenciales | Cero |
+| Engines/Apps migrados | Cero |
+| Dependencias externas | Cero (usa fetch nativo) |
+| Commit | Pendiente de commit |
+
+---
+
 ## RESTRICCIONES ACTIVAS
 
 - No mover codigo, packages, engines ni providers
@@ -255,22 +287,21 @@
 | operational/ | 4 (estado-actual, drift-catalog, 2 auditorias) |
 | operational/reports/ | 3 (adr-triage-report, org1a-synthesis-report) |
 | procedural/ | 2 (invariant-conventions, openspec-process) |
-| procedural/naturalizacion/ | 8 (README, TEMPLATE + 5 fichas) |
+| procedural/naturalizacion/ | 9 (README, TEMPLATE + 6 fichas) |
 | procedural/dna/ | 8 (README + 7 templates) |
-| procedural/runbooks/ | 8 (README + 7 runbooks) |
+| procedural/runbooks/ | 9 (README + 8 runbooks) |
 
 ---
 
 ## PENDIENTES DESTACADOS
 
-
-
+*Sin pendientes destacados en este momento.*
 
 ---
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**LLM-3 -- OpenAI direct adapter fallback.** Implementar OpenAIAdapter directo que satisfaga LLMProvider. O diferir a ADR-TOP-1 segun prioridad del Senado.
+**Templates de DNA** para engines, providers, agentes. O LLM-5 (AnthropicAdapter premium). Segun prioridad del Senado.
 
 ---
 

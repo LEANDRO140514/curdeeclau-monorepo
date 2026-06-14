@@ -3,7 +3,7 @@
 > Tipo: reference (índice raíz)
 > Versión: 1.0.0 — Fundacional
 > Creado: 2026-06-06
-> Actualizado: 2026-06-11
+> Actualizado: 2026-06-14
 >
 > **Regla de entrada:** Este es el primer documento que todo agente debe leer.
 > Después de leer este índice, el agente debe leer `institutional/constitucion.md`
@@ -218,8 +218,14 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (LLM-2 OpenRouter Adapter, 2026-06-13)
 - [x] `packages/algorithmus/algorithmus-core-engine/src/infra/providers/openrouter/` — OpenRouterAdapter + 11 tests
 
+### Poblamiento completado (LLM-3 OpenAI Direct Adapter, 2026-06-14)
+- [x] `packages/algorithmus/algorithmus-core-engine/src/infra/providers/openai/OpenAIAdapter.ts` — OpenAIAdapter + 11 tests
+
+### Poblamiento completado (LLM-4 DeepSeek Adapter, 2026-06-14)
+- [x] `packages/algorithmus/algorithmus-core-engine/src/infra/providers/deepseek/DeepSeekAdapter.ts` — DeepSeekAdapter + 13 tests
+- [x] `procedural/naturalizacion/deepseek.md` — Ficha DeepSeek creada
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] LLM-3 — OpenAI direct adapter fallback
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---

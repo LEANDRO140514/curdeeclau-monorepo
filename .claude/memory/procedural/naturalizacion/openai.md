@@ -178,33 +178,35 @@ OpenAI provee capacidad de razonamiento, generacion de texto, y embeddings para 
 
 - [ ] No iniciado
 - [ ] En progreso
-- [x] Funcional (requiere proveedor)
-- [ ] Funcional (mock para desarrollo)
-- [ ] Completo y verificado
+- [x] Funcional (requiere proveedor) — via OpenRouterAdapter (LLM-2) y OpenAIAdapter directo (LLM-3)
+- [x] Funcional (mock para desarrollo) — OpenAIAdapter con fake HTTP client
+- [ ] Completo y verificado — pendiente integracion real con API key
 
 ---
 
 ## 18. DECISION
 
-Mantener como **Allied** por ahora, con ruta clara hacia Naturalized.
+Mantener como **Allied / Naturalized Candidate**. Ambos adapters existen ahora:
 
 **Avances desde la ficha original (v1.0.0):**
 - [x] Interfaz `LLMProvider` definida en `packages/shared/src/llm/LLMProvider.ts` (LLM-1).
 - [x] Estrategia multi-provider definida en ADR-LLM-2.
+- [x] OpenRouterAdapter implementado (LLM-2) — acceso indirecto a OpenAI via gateway.
+- [x] OpenAIAdapter implementado (LLM-3) — acceso directo como fallback.
 
 **Ruta de consumo de OpenAI en CURDEECLAU:**
 
-1. **Via OpenRouterAdapter (LLM-2, proximo).** OpenAI sera accesible indirectamente a traves del gateway multi-modelo OpenRouter, que implementa `LLMProvider`. Esta es la ruta recomendada para la mayoria de los casos de uso.
+1. **Via OpenRouterAdapter (LLM-2, existente).** OpenAI accesible indirectamente a traves del gateway multi-modelo OpenRouter, que implementa `LLMProvider`. Ruta recomendada para la mayoria de los casos de uso.
 
-2. **Via OpenAIAdapter directo (LLM-3, futuro).** OpenAI tendra su propio adapter directo como fallback y para casos donde la latencia o el costo de pasar por OpenRouter no se justifique.
+2. **Via OpenAIAdapter directo (LLM-3, existente).** OpenAI tiene su propio adapter directo como fallback. Implementa `LLMProvider`. Usar cuando la latencia o el costo de pasar por OpenRouter no se justifique, o cuando OpenRouter no este disponible.
 
-OpenAI sigue siendo Allied / Naturalized Candidate. La naturalizacion completa requiere que al menos uno de los dos adapters (OpenRouter -> OpenAI, o OpenAI directo) este implementado y verificado.
+OpenAI sigue siendo Allied / Naturalized Candidate. Ambos adapters (OpenRouter -> OpenAI indirecto, y OpenAI directo) estan implementados con 11 tests cada uno. Falta verificacion con API key real.
 
 ---
 
 ## 19. PROXIMO PASO AUTORIZADO
 
-**LLM-2 — OpenRouterAdapter** (acceso indirecto a OpenAI via gateway). Seguido de **LLM-3 — OpenAIAdapter** (acceso directo como fallback).
+**LLM-MIG-1** — Migrar consumidores existentes detras de `LLMProvider`. O **LLM-4 — DeepSeekAdapter** (fallback economico). Segun prioridad del Senado.
 
 ---
 
