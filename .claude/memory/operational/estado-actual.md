@@ -344,9 +344,33 @@
 
 ---
 
+## LLM-RTR-1 — LLM ROUTER v1: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Router | LLMRouter en algorithmus-core-engine/src/core/llm/LLMRouter.ts |
+| Dependencia | LLMProvider de shared/ |
+| Providers | Inyectados via register() — sin instanciacion interna |
+| Estrategias | default, cheap, premium, reasoning, specificProvider |
+| Fallback | Automatico en errores retryable. Secuencia configurable via fallbackSequence. |
+| Tests | 28 pasan (mock providers), 0 fallan |
+| Llamadas reales | Cero |
+| Credenciales | Cero |
+| APIs conectadas | Cero |
+| Apps migradas | Cero |
+| semantic-memory modificado | Cero |
+| Adaptadores modificados | AnthropicAdapter (fix tipos filter/map, no logica) |
+| DNA | dna/llm/LLMRouter.dna.md |
+| Commit | Pendiente de commit |
+
+**Resumen:** LLM-RTR-1 implementa la capa interna de seleccion multi-provider prevista en ADR-LLM-2. LLMRouter opera sobre instancias de LLMProvider inyectadas, selecciona por estrategia simple (default → openrouter, cheap → deepseek, premium/reasoning → anthropic), y aplica fallback automatico en errores retryable. No conoce endpoints, no maneja credenciales, no llama APIs. 81 tests totales entre router + 4 adapters. Typecheck: solo TS2307 preexistentes (workspace resolution de @curdeeclau/shared).
+
+---
+
 ## SIGUIENTE LINEA RECOMENDADA
 
-**LLM-RTR-1 — LLMRouter v1** para habilitar seleccion multi-provider real con los 4 adapters. O **LLM-MIG-1** para migrar consumidores existentes detras de `LLMProvider`.
+**LLM-MIG-1 — Migration** para migrar consumidores existentes (LLMGateway legacy) a LLMProvider/LLMRouter. O **LLM-OBS-1 — Observabilidad de costos** para operacion real.
 
 ---
 

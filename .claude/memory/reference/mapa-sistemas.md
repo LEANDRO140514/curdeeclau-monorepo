@@ -163,8 +163,12 @@ Componentes de alta reutilizacion, arquitectonicamente alineados con Pekin:
 | `telegram-provider` | [PRV] | Active (mal ubicado) | Telegram | Naturalized Candidate |
 | `algorithmus-core-engine` (supabase client) | [INT] | Active | Supabase | Naturalized Candidate |
 | `knowledge-engine` (pinecone adapter) | [INT] | Active | Pinecone | Referenced |
-| `algorithmus-core-engine` (openai gateway) | [INT] | Active | OpenAI | Allied |
-| OpenRouter (futuro LLM-2) | [EXT] External AI Gateway | Candidato | OpenRouter (multi-modelo) | Candidato (ADR-LLM-2) |
+| `algorithmus-core-engine` (openai gateway legacy) | [INT] | Active (pre-ADR) | OpenAI | Allied (pendiente migracion) |
+| `algorithmus-core-engine` (openrouter adapter) | [PRV] | Active (LLM-2) | OpenRouter | Allied |
+| `algorithmus-core-engine` (openai adapter) | [PRV] | Active (LLM-3) | OpenAI | Allied |
+| `algorithmus-core-engine` (deepseek adapter) | [PRV] | Active (LLM-4) | DeepSeek | Allied |
+| `algorithmus-core-engine` (anthropic adapter) | [PRV] | Active (LLM-5) | Anthropic | Allied |
+| `algorithmus-core-engine` (llm router) | [INT] | Active (LLM-RTR-1) | N/A (interno) | N/A |
 | `packages/shared/src/llm/LLMProvider.ts` | [FND] Contrato canonico | Active (LLM-1) | N/A (interno) | N/A |
 
 ---

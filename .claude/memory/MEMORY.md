@@ -238,8 +238,12 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `procedural/naturalizacion/anthropic.md` — Ficha Anthropic creada
 - [x] `dna/llm/AnthropicAdapter.dna.md` — DNA AnthropicAdapter creado
 
+### Poblamiento completado (LLM-RTR-1 LLMRouter v1, 2026-06-14)
+- [x] `packages/algorithmus/algorithmus-core-engine/src/core/llm/LLMRouter.ts` — LLMRouter + 28 tests
+- [x] `dna/llm/LLMRouter.dna.md` — DNA LLMRouter creado
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] LLM-RTR-1 LLMRouter v1 para seleccion multi-provider
+- [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---

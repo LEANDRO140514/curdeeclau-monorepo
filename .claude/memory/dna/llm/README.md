@@ -57,10 +57,11 @@ ADR-LLM-2 definio la estrategia **OpenRouter-first, not OpenRouter-only**:
 apps / agents / workflows / engines
         |
         v
-   LLMRouter (futuro, NO IMPLEMENTADO)
-   - Seleccion por costo, calidad, latencia
-   - Fallback automatico
-   - Rate limiting, circuit breaker
+   LLMRouter (IMPLEMENTADO, LLM-RTR-1)
+   - Seleccion por estrategia simple (default, cheap, premium, reasoning)
+   - Fallback automatico en errores retryable
+   - Metadata de trazabilidad (selectedProviderId, fallbackUsed, attemptedProviders)
+   - providerId: componente interno (no es un adapter)
         |
         v
    LLMProvider (shared/, IMPLEMENTADO)
@@ -97,12 +98,13 @@ apps / agents / workflows / engines
 | **OpenAIAdapter** | Implementado, sin llamadas reales | `algorithmus-core-engine/src/infra/providers/openai/` | 11 (fake HTTP) |
 | **DeepSeekAdapter** | Implementado, sin llamadas reales | `algorithmus-core-engine/src/infra/providers/deepseek/` | 13 (fake HTTP) |
 | **AnthropicAdapter** | Implementado, sin llamadas reales | `algorithmus-core-engine/src/infra/providers/anthropic/` | 18 (fake HTTP) |
+| **LLMRouter** | Implementado, sin llamadas reales | `algorithmus-core-engine/src/core/llm/` | 28 (mock providers) |
 
 ---
 
 ## 8. QUE NO EXISTE TODAVIA
 
-- **LLM-RTR-1** — LLM-RTR-1 pendiente.
+
 - **LLM-MIG-1** — Migracion de consumidores existentes a `LLMProvider`.
 - **Operacion real con API keys** — Todos los tests usan fake HTTP. Sin verificacion contra APIs reales.
 - **Streaming** — Diferido a v2 del contrato.
@@ -118,8 +120,8 @@ apps / agents / workflows / engines
 
 | Fase | Entregable | Prioridad |
 |------|-----------|-----------|
-| **LLM-5** | AnthropicAdapter premium | **COMPLETADO** — familia de fallbacks directos completa |
-| **LLM-RTR-1** | LLMRouter v1 (seleccion interna por costo/calidad/disponibilidad) | Alta — habilita multi-provider real |
+| **LLM-5** | AnthropicAdapter premium | **COMPLETADO** |
+| **LLM-RTR-1** | LLMRouter v1 | **COMPLETADO** — 28 tests, 5 estrategias, fallback retryable |
 | **LLM-MIG-1** | Migrar consumidores existentes a `LLMProvider` | Media — reduce acoplamiento directo a OpenAI |
 | **LLM-OBS-1** | Observabilidad de costos y uso | Media — requerido para operacion real |
 | **LLM-SEC-1** | Manejo de secretos y politicas de API keys | Media — requerido para operacion real |
@@ -137,6 +139,7 @@ apps / agents / workflows / engines
 | OpenAIAdapter | `OpenAIAdapter.dna.md` | LLM Adapter / Direct External AI Provider Adapter |
 | DeepSeekAdapter | `DeepSeekAdapter.dna.md` | LLM Adapter / Direct External AI Provider Adapter |
 | AnthropicAdapter | `AnthropicAdapter.dna.md` | LLM Adapter / Direct External AI Provider Adapter |
+| LLMRouter | `LLMRouter.dna.md` | Internal Component / Provider-Agnostic Routing Layer |
 
 ---
 

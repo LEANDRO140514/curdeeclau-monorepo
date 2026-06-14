@@ -28,6 +28,7 @@ import type {
   LLMRequest,
   LLMResponse,
   LLMUsage,
+  LLMMessage,
 } from '@curdeeclau/shared';
 import { LLMProviderError } from '@curdeeclau/shared';
 import pino, { type Logger } from 'pino';
@@ -136,12 +137,12 @@ export class AnthropicAdapter implements LLMProvider {
       // Only user and assistant roles are allowed in messages[].
 
       const systemMessages = request.messages
-        .filter((m) => m.role === 'system')
-        .map((m) => m.content);
+        .filter((m: LLMMessage) => m.role === 'system')
+        .map((m: LLMMessage) => m.content);
 
       const conversationMessages: AnthropicMessage[] = request.messages
-        .filter((m) => m.role === 'user' || m.role === 'assistant')
-        .map((m) => ({
+        .filter((m: LLMMessage) => m.role === 'user' || m.role === 'assistant')
+        .map((m: LLMMessage) => ({
           role: m.role as 'user' | 'assistant',
           content: m.content,
         }));
