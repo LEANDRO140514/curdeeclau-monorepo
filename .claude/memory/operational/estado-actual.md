@@ -263,7 +263,29 @@
 
 ---
 
-## RESTRICCIONES ACTIVAS
+## DNA-LLM-1 -- LLM FAMILY DNA: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Autoridad | ADR-LLM-1, ADR-LLM-2 |
+| Activos documentados | 5 (LLMProvider, EmbeddingProvider, OpenRouterAdapter, OpenAIAdapter, DeepSeekAdapter) |
+| Archivos creados | 6 (README + 5 fichas DNA) |
+| Codigo modificado | Cero |
+| Evidencia usada | ADR-LLM-1, ADR-LLM-2, codigo fuente, tests, fichas de naturalizacion |
+| Commit | Pendiente de commit |
+
+**Resumen:** DNA-LLM-1 documenta la identidad institucional de la familia LLM. Cada activo tiene ficha DNA con: proposito, responsabilidades, exclusiones, riesgos, evidencia, tests, relacion con Pekin, ADRs y naturalizacion, y como regenerarlo si se pierde.
+
+**Hallazgos:**
+- LLMProvider es el contrato canonico. 3 adapters lo implementan. 9 tests pasan.
+- EmbeddingProvider esta implementado como contrato, pero sin adapter operativo.
+- Los 3 adapters comparten patron estructural identico: `HttpFetch` inyectable, `LLMProviderError`, timeout, mapeo OpenAI-compatible.
+- Ningun adapter ha ejecutado llamadas reales. Todos operan con fake HTTP en tests.
+- La familia LLM esta lista para recibir LLM-5 (AnthropicAdapter), LLM-RTR-1 (Router) y LLM-MIG-1 (migracion de consumidores).
+
+---
+
 
 - No mover codigo, packages, engines ni providers
 - No renombrar paquetes ni carpetas
@@ -289,6 +311,7 @@
 | procedural/ | 2 (invariant-conventions, openspec-process) |
 | procedural/naturalizacion/ | 9 (README, TEMPLATE + 6 fichas) |
 | procedural/dna/ | 8 (README + 7 templates) |
+| dna/llm/ | 6 (README + 5 fichas LLM family DNA) |
 | procedural/runbooks/ | 9 (README + 8 runbooks) |
 
 ---
@@ -301,7 +324,7 @@
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**Templates de DNA** para engines, providers, agentes. O LLM-5 (AnthropicAdapter premium). Segun prioridad del Senado.
+**LLM-5 — AnthropicAdapter premium**, siguiendo el mismo patron estructural de los 3 adapters existentes. O **LLM-RTR-1 — LLMRouter v1** para habilitar seleccion multi-provider real.
 
 ---
 

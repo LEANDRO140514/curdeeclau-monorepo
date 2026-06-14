@@ -225,7 +225,16 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `packages/algorithmus/algorithmus-core-engine/src/infra/providers/deepseek/DeepSeekAdapter.ts` — DeepSeekAdapter + 13 tests
 - [x] `procedural/naturalizacion/deepseek.md` — Ficha DeepSeek creada
 
+### Poblamiento completado (DNA-LLM-1 LLM Family DNA, 2026-06-14)
+- [x] `dna/llm/README.md` — LLM Family overview
+- [x] `dna/llm/LLMProvider.dna.md` — Canonical contract DNA
+- [x] `dna/llm/EmbeddingProvider.dna.md` — Canonical contract DNA
+- [x] `dna/llm/OpenRouterAdapter.dna.md` — Gateway adapter DNA
+- [x] `dna/llm/OpenAIAdapter.dna.md` — Direct fallback adapter DNA
+- [x] `dna/llm/DeepSeekAdapter.dna.md` — Economic fallback adapter DNA
+
 ### Poblamiento pendiente (Proximos hitos)
+- [ ] LLM-5 AnthropicAdapter premium
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---
