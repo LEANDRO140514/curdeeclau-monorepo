@@ -318,13 +318,35 @@
 
 ## PENDIENTES DESTACADOS
 
-*Sin pendientes destacados en este momento.*
+- **LLM-RTR-1 — LLMRouter v1:** Habilitar seleccion multi-provider real con los 4 adapters.
+- **LLM-MIG-1 — Migration:** Migrar consumidores existentes detras de `LLMProvider`.
+
+---
+
+## LLM-5 — ANTHROPIC ADAPTER PREMIUM: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Adapter | AnthropicAdapter en algorithmus-core-engine/src/infra/providers/anthropic/ |
+| Contrato | Implementa LLMProvider de shared/ |
+| Tests | 18 pasan (fake HTTP), 0 fallan |
+| LLamadas reales | Cero |
+| Credenciales | Cero |
+| Engines/Apps migrados | Cero |
+| Dependencias externas | Cero (usa fetch nativo) |
+| API | Anthropic Messages (no OpenAI-compatible) |
+| Ficha naturalizacion | procedural/naturalizacion/anthropic.md |
+| DNA | dna/llm/AnthropicAdapter.dna.md |
+| Commit | Pendiente de commit |
+
+**Resumen:** LLM-5 completa la familia de 4 adapters LLM (OpenRouter gateway, OpenAI directo, DeepSeek economico, Anthropic premium). AnthropicAdapter es el unico adapter que NO usa API OpenAI-compatible — mapea la API Messages de Anthropic con system como top-level param, x-api-key header, anthropic-version, y response content[] arrays. 53 tests totales entre los 4 adapters (18 Anthropic + 13 DeepSeek + 11 OpenAI + 11 OpenRouter).
 
 ---
 
 ## SIGUIENTE LINEA RECOMENDADA
 
-**LLM-5 — AnthropicAdapter premium**, siguiendo el mismo patron estructural de los 3 adapters existentes. O **LLM-RTR-1 — LLMRouter v1** para habilitar seleccion multi-provider real.
+**LLM-RTR-1 — LLMRouter v1** para habilitar seleccion multi-provider real con los 4 adapters. O **LLM-MIG-1** para migrar consumidores existentes detras de `LLMProvider`.
 
 ---
 

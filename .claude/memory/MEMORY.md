@@ -233,8 +233,13 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `dna/llm/OpenAIAdapter.dna.md` — Direct fallback adapter DNA
 - [x] `dna/llm/DeepSeekAdapter.dna.md` — Economic fallback adapter DNA
 
+### Poblamiento completado (LLM-5 AnthropicAdapter Premium, 2026-06-14)
+- [x] `packages/algorithmus/algorithmus-core-engine/src/infra/providers/anthropic/AnthropicAdapter.ts` — AnthropicAdapter + 18 tests
+- [x] `procedural/naturalizacion/anthropic.md` — Ficha Anthropic creada
+- [x] `dna/llm/AnthropicAdapter.dna.md` — DNA AnthropicAdapter creado
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] LLM-5 AnthropicAdapter premium
+- [ ] LLM-RTR-1 LLMRouter v1 para seleccion multi-provider
 - [ ] Templates de DNA para engines, providers, agentes
 
 ---
@@ -251,6 +256,14 @@ Si eres un agente nuevo en CURDEECLAU:
 6. **Nunca escribas en `institutional/`** sin autorización de la Asamblea.
 7. **Registra tus decisiones** en `operational/`.
 8. **Respeta los principios.** No son sugerencias.
+
+## PARA TODOS LOS AGENTES (cada sesión)
+
+**ANTES de escribir cualquier archivo o output**, ejecuta el checklist de inicio:
+
+1. **Lee `procedural/session-startup.md`** — Checklist obligatorio de inicio de sesión.
+2. **Ejecuta el Paso 2 (encoding de terminal)** — Sin esto, los caracteres Unicode (tildes, eñes, box-drawing) se corrompen en la salida.
+3. **Verifica con `chcp`** que la página de códigos activa es 65001.
 
 ---
 

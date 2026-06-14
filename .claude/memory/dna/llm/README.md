@@ -81,7 +81,7 @@ apps / agents / workflows / engines
         |   - Fallback economico
         |   - providerId: 'deepseek'
         |
-        +-- AnthropicAdapter (NO IMPLEMENTADO, LLM-5 futuro)
+        +-- AnthropicAdapter (IMPLEMENTADO, LLM-5)
             - Fallback premium
 ```
 
@@ -96,13 +96,13 @@ apps / agents / workflows / engines
 | **OpenRouterAdapter** | Implementado, sin llamadas reales | `algorithmus-core-engine/src/infra/providers/openrouter/` | 11 (fake HTTP) |
 | **OpenAIAdapter** | Implementado, sin llamadas reales | `algorithmus-core-engine/src/infra/providers/openai/` | 11 (fake HTTP) |
 | **DeepSeekAdapter** | Implementado, sin llamadas reales | `algorithmus-core-engine/src/infra/providers/deepseek/` | 13 (fake HTTP) |
+| **AnthropicAdapter** | Implementado, sin llamadas reales | `algorithmus-core-engine/src/infra/providers/anthropic/` | 18 (fake HTTP) |
 
 ---
 
 ## 8. QUE NO EXISTE TODAVIA
 
-- **AnthropicAdapter** — LLM-5 pendiente.
-- **LLMRouter** — LLM-RTR-1 pendiente.
+- **LLM-RTR-1** — LLM-RTR-1 pendiente.
 - **LLM-MIG-1** — Migracion de consumidores existentes a `LLMProvider`.
 - **Operacion real con API keys** — Todos los tests usan fake HTTP. Sin verificacion contra APIs reales.
 - **Streaming** — Diferido a v2 del contrato.
@@ -118,7 +118,7 @@ apps / agents / workflows / engines
 
 | Fase | Entregable | Prioridad |
 |------|-----------|-----------|
-| **LLM-5** | AnthropicAdapter premium | Alta — completa la familia de fallbacks directos |
+| **LLM-5** | AnthropicAdapter premium | **COMPLETADO** — familia de fallbacks directos completa |
 | **LLM-RTR-1** | LLMRouter v1 (seleccion interna por costo/calidad/disponibilidad) | Alta — habilita multi-provider real |
 | **LLM-MIG-1** | Migrar consumidores existentes a `LLMProvider` | Media — reduce acoplamiento directo a OpenAI |
 | **LLM-OBS-1** | Observabilidad de costos y uso | Media — requerido para operacion real |
@@ -136,6 +136,7 @@ apps / agents / workflows / engines
 | OpenRouterAdapter | `OpenRouterAdapter.dna.md` | LLM Adapter / External AI Gateway Adapter |
 | OpenAIAdapter | `OpenAIAdapter.dna.md` | LLM Adapter / Direct External AI Provider Adapter |
 | DeepSeekAdapter | `DeepSeekAdapter.dna.md` | LLM Adapter / Direct External AI Provider Adapter |
+| AnthropicAdapter | `AnthropicAdapter.dna.md` | LLM Adapter / Direct External AI Provider Adapter |
 
 ---
 
