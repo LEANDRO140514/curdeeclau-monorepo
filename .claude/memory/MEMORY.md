@@ -250,8 +250,12 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `packages/engines/ghl-engine/src/GHLClient.ts` — findContactByPhone + updateContact implementados
 - [x] `packages/algorithmus/algorithmus-core-engine/src/core/leads/types.ts` — Tipos UV-1
 
+### Poblamiento completado (UV-2 AI Admissions Assistant, 2026-06-14)
+- [x] `packages/algorithmus/algorithmus-core-engine/src/core/admissions/AIAdmissionsAssistant.ts` — Asistente + 25 tests
+- [x] `packages/algorithmus/algorithmus-core-engine/src/core/admissions/types.ts` — Tipos UV-2
+- [x] `verticals/universidad-latino/` — Vertical completo (DNA, knowledge, prompts, flows)
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] UV-2 AI Admissions Assistant
 - [ ] UV-DEMO Demo comercial integrada
 - [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
 

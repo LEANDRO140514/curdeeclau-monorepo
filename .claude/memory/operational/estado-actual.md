@@ -418,9 +418,35 @@
 
 ---
 
+## UV-2 — AI ADMISSIONS ASSISTANT: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Asistente | AIAdmissionsAssistant en algorithmus-core-engine/src/core/admissions/ |
+| LLM | LLMProvider inyectado (mock en tests) |
+| Captura | LeadCaptureFn inyectado → delega a LeadCaptureService (UV-1) |
+| Conocimiento | Estatico versionado en verticals/universidad-latino/knowledge/ |
+| Prompt | Template versionado en verticals/universidad-latino/prompts/ |
+| Estados | GREETING → COLLECTING → CONFIRMING → CAPTURING → DONE/ERROR |
+| Extraccion | Heuristicas: E.164 regex, keywords de carreras, horarios, canales |
+| Fallback LLM | Respuesta generica si LLM falla. Estado preservado. |
+| Vertical | Creado: PRODUCT_DNA, CLIENT_DNA, FAQ, oferta-academica, flows, prompts |
+| Tests | 25 pasan (mock LLMProvider + mock captureFn), 0 fallan |
+| Engine tests | 188 pasan, 13 suites, 0 fallan |
+| Typecheck | Solo TS2307 preexistentes |
+| APIs reales | Cero |
+| Credenciales | Cero |
+| GHL directo | Cero — el asistente no conoce GHL |
+| Commit | Pendiente de commit |
+
+**Resumen:** UV-2 implementa el asistente conversacional de admisiones de Universidad Latino. Usa LLMProvider inyectado para generacion de lenguaje natural, conocimiento estatico versionado (FAQ + oferta academica en verticals/), maquina de estados (GREETING→COLLECTING→CONFIRMING→CAPTURING→DONE/ERROR), extraccion de datos por heuristicas (E.164, keywords de carreras/horarios/canales), y delegacion a LeadCaptureService (UV-1) para la captura final. No llama GHL directamente. 25 tests con mocks prueban 5 casos de aceptacion UV-2.
+
+---
+
 ## SIGUIENTE LINEA RECOMENDADA
 
-**UV-2 — AI Admissions Assistant.** Asistente conversacional usando LLMProvider/LLMRouter con base de conocimiento de Universidad Latino (RAG). Conexion con UV-1 para captura de lead al finalizar la conversacion.
+**UV-DEMO — Demo comercial integrada.** Conectar UV-1 + UV-2 en un flujo completo funcional. Preparar script de demo, datos de ejemplo, y entorno controlado para presentacion a Universidad Latino.
 
 ---
 
