@@ -526,11 +526,32 @@
 
 ---
 
+## UV-KB-1 — REAL KNOWLEDGE BASE: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Fuentes | 5 archivos del cliente (PDFs, TXT, CSV, DOCX) |
+| Archivos creados | 10 de conocimiento + 1 sources README |
+| Oferta academica | 12 carreras reales con costos, RVOE, CTAs |
+| FAQs informativas | ~45 preguntas en 11 categorias |
+| FAQs conversacionales | 16 FAQs en 8 categorias con triggers |
+| Costos/becas | Consolidado con ejemplos por nivel de beca |
+| Requisitos | Proceso 5 pasos, documentos, admision en linea |
+| Contacto/campus | Direccion, telefono, WhatsApp, horarios, instalaciones |
+| Routing rules | 5 reglas de enrutamiento + 3 capas de conocimiento |
+| Pendientes validacion | 10 items documentados |
+| Codigo modificado | Cero |
+| Tests engine | 216 pasan (sin regresiones — solo docs) |
+| Commit | Pendiente de commit |
+
+**Resumen:** UV-KB-1 integra el conocimiento real de Universidad Latino desde 5 archivos fuente del cliente. La knowledge base ahora tiene datos confirmados de 12 carreras, costos reales, RVOEs, becas, FAQs informativas y conversacionales. Se documentaron 10 items pendientes de validacion humana. Cero cambios funcionales.
+
+---
+
 ## SIGUIENTE LINEA RECOMENDADA
 
-**Decision humana requerida.** Telelgram es el canal de prueba. WhatsApp sera el canal comercial posterior. Opciones:
-- **UV-LIVE** — Activar TELEGRAM_BOT_TOKEN y probar conversacion real.
-- **UV-WA-0** — Planificar canal WhatsApp (solo despues de validar Telegram).
+**UV-LIVE** — Activar TELEGRAM_BOT_TOKEN real con la nueva knowledge base y probar conversacion completa con datos reales de Universidad Latino.
 
 ---
 

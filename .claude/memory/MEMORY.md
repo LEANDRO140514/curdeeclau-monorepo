@@ -269,8 +269,12 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `packages/algorithmus/algorithmus-core-engine/src/demo/universidad-latino/runTelegramAdmissionsDemo.ts` — Runner Telegram + 18 tests
 - [x] `verticals/universidad-latino/demo/TELEGRAM_SETUP.md` — Guia de configuracion Telegram
 
+### Poblamiento completado (UV-KB-1 Knowledge Base Real, 2026-06-14)
+- [x] `verticals/universidad-latino/knowledge/` — 8 archivos con datos reales del cliente
+- [x] `verticals/universidad-latino/knowledge/sources/` — Referencia a archivos fuente
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] UV-LIVE Activacion con credenciales reales (requiere autorizacion)
+- [ ] UV-LIVE Activacion con TELEGRAM_BOT_TOKEN real
 - [ ] UV-WA-0 WhatsApp channel (requiere validacion Telegram previa)
 - [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
 
