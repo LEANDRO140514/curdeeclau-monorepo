@@ -392,9 +392,35 @@
 
 ---
 
+## UV-1 — LEAD CAPTURE + GHL SYNC: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Servicio | LeadCaptureService en algorithmus-core-engine/src/core/leads/ |
+| Dependencias | LeadStore + GHLContactSync (interfaces inyectables) |
+| GHLClient | findContactByPhone + updateContact implementados (eran stubs) |
+| Validacion | 5 campos requeridos + formato E.164 + enums |
+| Normalizacion | Inferencia de nivel_interes, split first/last name, E.164 |
+| Dedup | Por telefono (local + GHL). Upsert sin crear duplicados. |
+| Tags | 7 tags: 3 base + canal + carrera + interes + horario |
+| Pipeline | Nuevo prospecto (stage inicial UV-0) |
+| Logs | Pino estructurado con mascara de telefono |
+| Tests | 36 pasan (mock LeadStore + mock GHL), 0 fallan |
+| Engine tests | 163 pasan, 12 suites, 0 fallan |
+| Typecheck | Solo TS2307 preexistentes |
+| GHL real | Cero llamadas |
+| Credenciales | Cero |
+| IA | No implementada (UV-2) |
+| Commit | Pendiente de commit |
+
+**Resumen:** UV-1 implementa la captura de leads de Universidad Latino con validacion completa (5 campos requeridos, E.164, enums de UV-0), normalizacion, persistencia local (LeadStore inyectable), sincronizacion GHL con dedup (findContactByPhone + create/update), tags estructurados (7 tags), y logs con mascara de telefono. GHLClient extendido con findContactByPhone y updateContact (eran stubs BV-1.03). 36 tests con mocks. Cero APIs reales, cero credenciales, cero IA.
+
+---
+
 ## SIGUIENTE LINEA RECOMENDADA
 
-**UV-1 — Lead Capture + GHL Sync.** Implementar endpoint de captura de lead (datos minimos UV-0), normalizacion en CRM Engine, y sincronizacion con GHL. Sin asistente IA todavia.
+**UV-2 — AI Admissions Assistant.** Asistente conversacional usando LLMProvider/LLMRouter con base de conocimiento de Universidad Latino (RAG). Conexion con UV-1 para captura de lead al finalizar la conversacion.
 
 ---
 

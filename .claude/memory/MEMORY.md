@@ -245,9 +245,14 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 ### Poblamiento completado (UV-0 Universidad Latino Demo Scope, 2026-06-14)
 - [x] `projects/universidad-latino/UV-0-demo-scope.md` — Alcance documental de la demo comercial
 
+### Poblamiento completado (UV-1 Lead Capture + GHL Sync, 2026-06-14)
+- [x] `packages/algorithmus/algorithmus-core-engine/src/core/leads/LeadCaptureService.ts` — Servicio + 36 tests
+- [x] `packages/engines/ghl-engine/src/GHLClient.ts` — findContactByPhone + updateContact implementados
+- [x] `packages/algorithmus/algorithmus-core-engine/src/core/leads/types.ts` — Tipos UV-1
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] UV-1 Lead Capture + GHL Sync
 - [ ] UV-2 AI Admissions Assistant
+- [ ] UV-DEMO Demo comercial integrada
 - [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
 
 ---
