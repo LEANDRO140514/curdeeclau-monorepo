@@ -368,9 +368,33 @@
 
 ---
 
+## UV-0 — UNIVERSIDAD LATINO DEMO SCOPE: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Documento | projects/universidad-latino/UV-0-demo-scope.md (15 secciones) |
+| Tipo | Documental — cero codigo |
+| Flujo definido | Prospecto → IA → LeadStore → CRM → GHL → Pipeline → Seguimiento |
+| Carreras | 10 en oferta minima |
+| Preguntas frecuentes | 23 preguntas clasificadas en 5 categorias |
+| Datos del lead | 9 campos (5 requeridos, 3 recomendados, 1 opcional) |
+| Pipeline GHL | 7 etapas |
+| Criterios de exito | 10 (6 tecnicos, 4 comerciales) |
+| Riesgos | 6 identificados con mitigacion |
+| Fases siguientes | UV-1 (captura + sync), UV-2 (asistente IA), UV-DEMO (demo integrada) |
+| Codigo modificado | Cero |
+| APIs conectadas | Cero |
+| Credenciales | Cero |
+| Commit | Pendiente de commit |
+
+**Resumen:** UV-0 define el alcance comercial y funcional de la demo de admisiones de Universidad Latino con GHL. Pekin ya tiene los motores (LLM, CRM, GHL, WhatsApp). UV-0 define que construir con ellos para un caso de negocio real. UV-1 implementara la captura y sincronizacion. UV-2 implementara el asistente IA.
+
+---
+
 ## SIGUIENTE LINEA RECOMENDADA
 
-**LLM-MIG-1 — Migration** para migrar consumidores existentes (LLMGateway legacy) a LLMProvider/LLMRouter. O **LLM-OBS-1 — Observabilidad de costos** para operacion real.
+**UV-1 — Lead Capture + GHL Sync.** Implementar endpoint de captura de lead (datos minimos UV-0), normalizacion en CRM Engine, y sincronizacion con GHL. Sin asistente IA todavia.
 
 ---
 

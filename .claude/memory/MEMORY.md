@@ -242,9 +242,13 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `packages/algorithmus/algorithmus-core-engine/src/core/llm/LLMRouter.ts` — LLMRouter + 28 tests
 - [x] `dna/llm/LLMRouter.dna.md` — DNA LLMRouter creado
 
+### Poblamiento completado (UV-0 Universidad Latino Demo Scope, 2026-06-14)
+- [x] `projects/universidad-latino/UV-0-demo-scope.md` — Alcance documental de la demo comercial
+
 ### Poblamiento pendiente (Proximos hitos)
+- [ ] UV-1 Lead Capture + GHL Sync
+- [ ] UV-2 AI Admissions Assistant
 - [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
-- [ ] Templates de DNA para engines, providers, agentes
 
 ---
 
