@@ -1,0 +1,43 @@
+{
+  "description": "Perfiles de prospectos de prueba para UV-DEMO. Datos ficticios — no usar en produccion.",
+  "version": "1.0.0",
+  "tenantId": "tenant-uv-demo",
+  "leads": [
+    {
+      "id": "PROSPECT_ALTO",
+      "label": "Prospecto alto interes",
+      "nombre": "Carlos Mendoza Rivera",
+      "telefono": "+5215587654321",
+      "carrera_interes": "DERECHO",
+      "horario_deseado": "MATUTINO",
+      "canal_origen": "WHATSAPP",
+      "nivel_interes": "ALTO",
+      "pregunta_inicial": "Quiero informacion sobre la carrera de Derecho. Cual es el proceso de inscripcion y que documentos necesito?",
+      "escenario": "Prospecto que llega con intencion clara de inscribirse. Pregunta por proceso y documentos. El asistente debe recolectar datos rapidamente y confirmar."
+    },
+    {
+      "id": "PROSPECT_MEDIO",
+      "label": "Prospecto medio interes",
+      "nombre": "Laura Hernandez Diaz",
+      "telefono": "+5233344455667",
+      "carrera_interes": "ADMINISTRACION",
+      "horario_deseado": "VESPERTINO",
+      "canal_origen": "WEB",
+      "nivel_interes": "MEDIO",
+      "pregunta_inicial": "Que carreras tienen en el area de negocios? Me interesa algo que pueda estudiar en la tarde.",
+      "escenario": "Prospecto que explora opciones. Pregunta por carreras y horarios. El asistente debe sugerir Administracion, Contaduria, Mercadotecnia y guiar la eleccion."
+    },
+    {
+      "id": "PROSPECT_INFO",
+      "label": "Prospecto solo informacion",
+      "nombre": "Miguel Angel Torres",
+      "telefono": "+5298765432100",
+      "carrera_interes": "INGENIERIA_SISTEMAS",
+      "horario_deseado": "ONLINE",
+      "canal_origen": "FACEBOOK",
+      "nivel_interes": "SOLO_INFORMACION",
+      "pregunta_inicial": "Tienen Ingenieria en Sistemas en linea? Solo quiero informacion por ahora.",
+      "escenario": "Prospecto que aclara que solo quiere informacion. El asistente debe respetar el ritmo, responder la duda, y recolectar datos sin presion."
+    }
+  ]
+}

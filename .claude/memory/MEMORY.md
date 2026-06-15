@@ -255,8 +255,13 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `packages/algorithmus/algorithmus-core-engine/src/core/admissions/types.ts` — Tipos UV-2
 - [x] `verticals/universidad-latino/` — Vertical completo (DNA, knowledge, prompts, flows)
 
+### Poblamiento completado (UV-DEMO Demo Comercial Integrada, 2026-06-14)
+- [x] `verticals/universidad-latino/demo/` — README, demo script, sample leads, checklist
+- [x] `packages/algorithmus/algorithmus-core-engine/src/demo/universidad-latino/runAdmissionsDemo.ts` — Demo runner + 10 tests
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] UV-DEMO Demo comercial integrada
+- [ ] UV-LIVE Demo con credenciales reales (requiere autorizacion)
+- [ ] UV-PWA Portal de admisiones (fuera de alcance actual)
 - [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
 
 ---

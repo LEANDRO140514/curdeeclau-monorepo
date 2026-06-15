@@ -444,9 +444,33 @@
 
 ---
 
+## UV-DEMO — DEMO COMERCIAL INTEGRADA: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Demo runner | runAdmissionsDemo.ts en src/demo/universidad-latino/ |
+| Modo | Mock (sin APIs, sin credenciales). --live disponible para modo real. |
+| Demo script | verticals/universidad-latino/demo/demo-script.md (conversacion ejemplo, guion comercial) |
+| Sample leads | 3 perfiles (ALTO, MEDIO, SOLO_INFORMACION) en sample-leads.json |
+| Checklist | 2 modos (mock + real) en demo-validation-checklist.md |
+| README | Instrucciones de ejecucion en demo/README.md |
+| Integracion | AIAdmissionsAssistant (UV-2) + LeadCaptureService (UV-1) en flujo completo |
+| Tests demo | 10 pasan (3 perfiles + runAllDemos + error + no GHL) |
+| Engine tests | 198 pasan, 14 suites, 0 fallan |
+| Typecheck | Solo TS2307 preexistentes |
+| APIs reales | Cero |
+| Credenciales | Cero |
+| GHL directo | Cero (el asistente no conoce GHL) |
+| Commit | Pendiente de commit |
+
+**Resumen:** UV-DEMO integra UV-1 + UV-2 en un flujo completo demostrable. Demo runner ejecutable con `npx tsx`, 3 perfiles de prospectos, script comercial para directivos, checklist de validacion pre-presentacion. Todo en modo mock (sin APIs reales). Preparado para UV-LIVE cuando se autoricen credenciales reales.
+
+---
+
 ## SIGUIENTE LINEA RECOMENDADA
 
-**UV-DEMO — Demo comercial integrada.** Conectar UV-1 + UV-2 en un flujo completo funcional. Preparar script de demo, datos de ejemplo, y entorno controlado para presentacion a Universidad Latino.
+**UV-LIVE** — Demo con credenciales reales (requiere autorizacion explicita y API keys). O **UV-PWA** — Portal de admisiones (fuera de alcance actual).
 
 ---
 
