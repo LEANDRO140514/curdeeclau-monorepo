@@ -549,9 +549,30 @@
 
 ---
 
+## UV-LIVE — VALIDACION TELEGRAM: PARCIAL
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Mock mode | VALIDATED — 5 casos OK, 216 tests |
+| Telegram real | BLOCKED — TELEGRAM_BOT_TOKEN no configurado |
+| GHL live | PENDIENTE — requiere autorizacion |
+| Guia creada | TELEGRAM_LIVE_VALIDATION.md (checklist, 5 casos, errores, criterio WhatsApp) |
+| Demo runner | Funcional en mock. Conversacion completa: GREETING→DONE. Payload valido. |
+| Logs | Estructurados sin exponer token. Telefono enmascarado (+521***21). |
+| Codigo modificado | Cero |
+| Commit | Pendiente de commit |
+
+**Resumen:** UV-LIVE prepara la validacion real del bot Telegram. Mock mode completamente validado con 5 casos de prueba. La validacion real con Telegram esta bloqueada por falta de TELEGRAM_BOT_TOKEN. Se creo guia completa de validacion live con checklist, casos de prueba, manejo de errores y criterio para avanzar a WhatsApp.
+
+**Accion requerida:** Solicitar TELEGRAM_BOT_TOKEN (crear bot con @BotFather) y ejecutar validacion real.
+
+---
+
 ## SIGUIENTE LINEA RECOMENDADA
 
-**UV-LIVE** — Activar TELEGRAM_BOT_TOKEN real con la nueva knowledge base y probar conversacion completa con datos reales de Universidad Latino.
+1. **UV-LIVE Real** — Obtener TELEGRAM_BOT_TOKEN y ejecutar los 5 casos de prueba con Telegram real.
+2. **UV-WA-0** — Solo despues de UV-LIVE real completado con evidencia.
 
 ---
 

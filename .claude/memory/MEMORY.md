@@ -273,9 +273,14 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `verticals/universidad-latino/knowledge/` — 8 archivos con datos reales del cliente
 - [x] `verticals/universidad-latino/knowledge/sources/` — Referencia a archivos fuente
 
+### Poblamiento completado (UV-LIVE Validacion Mock, 2026-06-14)
+- [x] `verticals/universidad-latino/demo/TELEGRAM_LIVE_VALIDATION.md` — Guia de validacion live
+- [x] Mock mode: 5 casos de prueba OK, 216 tests pasan
+- [ ] Real Telegram: BLOCKED — `TELEGRAM_BOT_TOKEN` no configurado
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] UV-LIVE Activacion con TELEGRAM_BOT_TOKEN real
-- [ ] UV-WA-0 WhatsApp channel (requiere validacion Telegram previa)
+- [ ] UV-LIVE Real — Configurar `TELEGRAM_BOT_TOKEN` y ejecutar validacion real
+- [ ] UV-WA-0 WhatsApp channel (requiere UV-LIVE real completado)
 - [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
 
 ---

@@ -89,6 +89,16 @@ Ver `demo-script.md` para el guion de presentacion.
 
 ---
 
+## Estado UV-LIVE
+
+| Modo | Estado | Detalle |
+|------|--------|---------|
+| Mock | VALIDATED | 216 tests, 5 casos de prueba OK |
+| Telegram real | BLOCKED | `TELEGRAM_BOT_TOKEN` no configurado |
+| GHL live | PENDIENTE | Requiere autorizacion |
+
+Ver `TELEGRAM_LIVE_VALIDATION.md` para la guia completa de validacion.
+
 ## Estado UV-CLOSE
 
 La linea Universidad Latino esta **completa como demo comercial integrada**.
