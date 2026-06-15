@@ -86,3 +86,38 @@ Ver `demo-script.md` para el guion de presentacion.
 ---
 
 *Fin del README v1.0.0*
+
+---
+
+## Estado UV-CLOSE
+
+La linea Universidad Latino esta **completa como demo comercial integrada**.
+
+| Fase | Commit | Estado |
+|------|--------|--------|
+| UV-0 | `82c1f36` | CLOSED |
+| UV-1 | `66fe18f` | IMPLEMENTED / VALIDATED |
+| UV-2 | `2f69c00` | IMPLEMENTED / VALIDATED |
+| UV-DEMO | `6aeae4a` | READY / VALIDATED |
+| UV-CLOSE | Pendiente | En progreso |
+
+## Documentos de cierre
+
+| Documento | Proposito |
+|-----------|-----------|
+| `HANDOFF.md` | Handoff tecnico para otro agente o desarrollador |
+| `PRESENTATION_NOTES.md` | Notas para presentacion comercial a Universidad Latino |
+| `NEXT_STEPS.md` | Proximos pasos: activacion live, comercial, tecnico futuro |
+| `demo-script.md` | Guion de la demo paso a paso |
+| `demo-validation-checklist.md` | Checklist de validacion pre-presentacion |
+| `sample-leads.json` | Datos de prueba (3 perfiles) |
+
+## Como usar este paquete para presentar la demo
+
+1. Leer `PRESENTATION_NOTES.md` para preparar el discurso.
+2. Leer `demo-script.md` para conocer la conversacion de ejemplo.
+3. Ejecutar `runAdmissionsDemo.ts` en modo mock para verificar que todo funciona.
+4. Si hay credenciales configuradas, probar modo `--live`.
+5. Usar `demo-validation-checklist.md` antes de la presentacion.
+6. Durante la presentacion, mostrar primero el flujo mock, luego GHL si esta disponible.
+7. Usar `NEXT_STEPS.md` para discutir siguientes fases con el cliente.

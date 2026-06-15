@@ -259,9 +259,15 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `verticals/universidad-latino/demo/` — README, demo script, sample leads, checklist
 - [x] `packages/algorithmus/algorithmus-core-engine/src/demo/universidad-latino/runAdmissionsDemo.ts` — Demo runner + 10 tests
 
+### Poblamiento completado (UV-CLOSE Cierre Documental, 2026-06-14)
+- [x] `verticals/universidad-latino/demo/HANDOFF.md` — Handoff tecnico
+- [x] `verticals/universidad-latino/demo/PRESENTATION_NOTES.md` — Notas comerciales
+- [x] `verticals/universidad-latino/demo/NEXT_STEPS.md` — Proximos pasos controlados
+- [x] Linea Universidad Latino cerrada como demo comercial lista para presentacion
+
 ### Poblamiento pendiente (Proximos hitos)
-- [ ] UV-LIVE Demo con credenciales reales (requiere autorizacion)
-- [ ] UV-PWA Portal de admisiones (fuera de alcance actual)
+- [ ] UV-LIVE Activacion con credenciales reales (requiere autorizacion)
+- [ ] UV-PWA Portal de admisiones (requiere decision de cliente)
 - [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
 
 ---
