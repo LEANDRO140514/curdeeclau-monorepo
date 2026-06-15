@@ -265,9 +265,13 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `verticals/universidad-latino/demo/NEXT_STEPS.md` — Proximos pasos controlados
 - [x] Linea Universidad Latino cerrada como demo comercial lista para presentacion
 
+### Poblamiento completado (UV-TELEGRAM Canal Telegram, 2026-06-14)
+- [x] `packages/algorithmus/algorithmus-core-engine/src/demo/universidad-latino/runTelegramAdmissionsDemo.ts` — Runner Telegram + 18 tests
+- [x] `verticals/universidad-latino/demo/TELEGRAM_SETUP.md` — Guia de configuracion Telegram
+
 ### Poblamiento pendiente (Proximos hitos)
 - [ ] UV-LIVE Activacion con credenciales reales (requiere autorizacion)
-- [ ] UV-PWA Portal de admisiones (requiere decision de cliente)
+- [ ] UV-WA-0 WhatsApp channel (requiere validacion Telegram previa)
 - [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
 
 ---

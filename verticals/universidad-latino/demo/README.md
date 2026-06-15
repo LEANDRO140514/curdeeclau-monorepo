@@ -101,6 +101,26 @@ La linea Universidad Latino esta **completa como demo comercial integrada**.
 | UV-DEMO | `6aeae4a` | READY / VALIDATED |
 | UV-CLOSE | Pendiente | En progreso |
 
+## Ejecucion por Telegram
+
+```bash
+# Modo mock (simulado en consola)
+cd packages/algorithmus/algorithmus-core-engine
+npx tsx src/demo/universidad-latino/runTelegramAdmissionsDemo.ts
+
+# Modo Telegram real
+export TELEGRAM_BOT_TOKEN="1234567890:ABCdef..."
+npx tsx src/demo/universidad-latino/runTelegramAdmissionsDemo.ts
+```
+
+**Variables requeridas:** `TELEGRAM_BOT_TOKEN` (token de @BotFather)
+
+**Variables opcionales:** `LLM_PROVIDER_API_KEY`, `DATABASE_URL`, `GHL_API_KEY`, `GHL_LOCATION_ID`
+
+**Flujo esperado:** Telegram User → AIAdmissionsAssistant → LeadCaptureService → LeadStore/CRM → GHL Sync
+
+Ver `TELEGRAM_SETUP.md` para instrucciones completas de configuracion.
+
 ## Documentos de cierre
 
 | Documento | Proposito |

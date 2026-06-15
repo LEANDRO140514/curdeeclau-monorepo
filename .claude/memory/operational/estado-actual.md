@@ -501,13 +501,36 @@
 
 ---
 
+## UV-TELEGRAM — TELEGRAM CHANNEL: CLOSED
+
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-14 |
+| Runner | runTelegramAdmissionsDemo.ts en src/demo/universidad-latino/ |
+| Canal | Telegram (primer canal real de prueba) |
+| Integracion | AIAdmissionsAssistant (UV-2) + LeadCaptureService (UV-1) |
+| Modos | Mock (sin token), Telegram real (con token), Live (+ GHL + DB) |
+| Sesiones | In-memory por chat_id (se pierden al reiniciar — documentado) |
+| Tests | 18 pasan (mock Telegram), 0 fallan |
+| Engine tests | 216 pasan, 15 suites, 0 fallan |
+| Typecheck | Solo TS2307 preexistentes |
+| Token | No hardcodeado. Variables de entorno. |
+| Credenciales | Cero en tests y codigo |
+| TelegramProvider | No modificado (runner independiente) |
+| AIAdmissionsAssistant | Fix: exclusion de palabras de confirmacion en heuristica de nombre |
+| Leads types | Agregado 'TELEGRAM' a CanalOrigen |
+| Documentacion | TELEGRAM_SETUP.md (BotFather, config, troubleshooting, no hacer) |
+| Commit | Pendiente de commit |
+
+**Resumen:** UV-TELEGRAM conecta el flujo Universidad Latino a un bot real de Telegram. El runner usa AIAdmissionsAssistant (UV-2) para la conversacion y LeadCaptureService (UV-1) para la captura. Soporta 3 modos: mock (simulado en consola), Telegram real (solo bot), y Live (+ GHL + Postgres). Las sesiones son in-memory por chat_id. Primer canal real para validar la demo antes de migrar a WhatsApp.
+
+---
+
 ## SIGUIENTE LINEA RECOMENDADA
 
-**Decision humana requerida.** Opciones:
-- **UV-LIVE** — Activar credenciales reales y probar con GHL.
-- **Presentacion comercial** — Mostrar la demo a Universidad Latino.
-- **Nueva vertical** — Iniciar otro caso de negocio con la misma infraestructura.
-- **PWA / WhatsApp** — Expandir canales de entrada.
+**Decision humana requerida.** Telelgram es el canal de prueba. WhatsApp sera el canal comercial posterior. Opciones:
+- **UV-LIVE** — Activar TELEGRAM_BOT_TOKEN y probar conversacion real.
+- **UV-WA-0** — Planificar canal WhatsApp (solo despues de validar Telegram).
 
 ---
 

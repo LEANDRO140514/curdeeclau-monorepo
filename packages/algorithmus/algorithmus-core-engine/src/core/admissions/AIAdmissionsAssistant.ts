@@ -389,7 +389,7 @@ export class AIAdmissionsAssistant {
         const looksLikeName = words.length >= 1 && words.length <= 4 &&
           !namePart.includes('?') &&
           !/^\d+$/.test(namePart) &&
-          !/^(hola|buenas|buenos|que|quisiera|me\s+interesa|quiero|informacion)/i.test(namePart);
+          !/^(hola|buenas|buenos|que|quisiera|me\s+interesa|quiero|informacion|si|no|sip|nop|ok|vale|bien|correcto|gracias)/i.test(namePart);
 
         if (looksLikeName) {
           updated.nombre = namePart;

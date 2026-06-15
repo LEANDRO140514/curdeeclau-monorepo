@@ -20,7 +20,7 @@ export type Carrera =
 export type Horario = 'MATUTINO' | 'VESPERTINO' | 'SABATINO' | 'ONLINE';
 
 /** Canal de origen — UV-0 seccion 5 */
-export type CanalOrigen = 'WHATSAPP' | 'WEB' | 'TELEFONO' | 'FACEBOOK' | 'INSTAGRAM';
+export type CanalOrigen = 'WHATSAPP' | 'WEB' | 'TELEFONO' | 'FACEBOOK' | 'INSTAGRAM' | 'TELEGRAM';
 
 /** Nivel de interes — UV-0 seccion 5 */
 export type NivelInteres = 'ALTO' | 'MEDIO' | 'BAJO' | 'SOLO_INFORMACION';
