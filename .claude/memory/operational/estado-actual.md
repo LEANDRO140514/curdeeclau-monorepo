@@ -627,7 +627,7 @@
 
 ---
 
-## MCP-0 — ACTIVE MCP BOOTSTRAP: EN PROGRESO
+## MCP-0 — ACTIVE MCP BOOTSTRAP: CLOSED
 
 | Campo | Valor |
 |-------|-------|
