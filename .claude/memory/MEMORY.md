@@ -278,10 +278,19 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] Mock mode: 5 casos de prueba OK, 216 tests pasan
 - [ ] Real Telegram: BLOCKED — `TELEGRAM_BOT_TOKEN` no configurado
 
+### Poblamiento completado (GOV-0 Governance Baseline, 2026-06-16)
+- [x] `CLAUDE.md` — Reescrito con identidad, jerarquia, reglas, LOOP Engineering
+- [x] `STATE.md` — Creado en raiz: declaracion de estado real del monorepo
+- [x] `institutional/IMPERIO_ARCHITECTURE.md` — Arquitectura del Imperio Algorithmus
+- [x] `institutional/LOOP_ENGINEERING.md` — Sistema inmunologico de Pekin
+- [x] `operational/estado-actual.md` — Actualizado con cierre GOV-0
+- [x] `MEMORY.md` — Este resumen (este mismo bloque)
+
 ### Poblamiento pendiente (Proximos hitos)
 - [ ] UV-LIVE Real — Configurar `TELEGRAM_BOT_TOKEN` y ejecutar validacion real
 - [ ] UV-WA-0 WhatsApp channel (requiere UV-LIVE real completado)
 - [ ] LLM-MIG-1 Migracion de consumidores a LLMProvider/LLMRouter
+- [ ] GOV-1 — Proximo nivel de gobernanza (refinamiento de harnesses y procedimientos)
 
 ---
 

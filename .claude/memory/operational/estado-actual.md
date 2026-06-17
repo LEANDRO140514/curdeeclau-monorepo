@@ -569,11 +569,45 @@
 
 ---
 
-## SIGUIENTE LINEA RECOMENDADA
+## GOV-0 -- GOVERNANCE BASELINE: CLOSED
 
-1. **UV-LIVE Real** — Obtener TELEGRAM_BOT_TOKEN y ejecutar los 5 casos de prueba con Telegram real.
-2. **UV-WA-0** — Solo despues de UV-LIVE real completado con evidencia.
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-16 |
+| Alcance | Documental unicamente. Cero cambios de codigo. |
+| Archivos creados | STATE.md (raiz), IMPERIO_ARCHITECTURE.md, LOOP_ENGINEERING.md |
+| Archivos actualizados | CLAUDE.md, MEMORY.md, estado-actual.md |
+| Codigo modificado | Cero |
+| Carpetas movidas | Cero |
+| WhatsApp abierto | No |
+| GHL activado | No |
+| PWA/dashboard creado | No |
+| Monorepo reorganizado | No |
+| Push realizado | Pendiente de commit |
+
+**Resumen:** GOV-0 establece la linea base de gobernanza de CURDEECLAU-MONOREPO. Formaliza la identidad de Pekin como capital de Algorithmus, la jerarquia constitucional, las reglas para agentes, LOOP Engineering como sistema inmunologico, y la arquitectura del Imperio. Cero cambios funcionales. Cero movimientos estructurales.
 
 ---
 
-*Fin del Estado Actual v1.0.0*
+## RESTRICCIONES VIGENTES (ACTUALIZADO 2026-06-16)
+
+- No mover codigo, packages, engines ni providers.
+- No renombrar paquetes ni carpetas.
+- No abrir PWA / dashboard / app.
+- No abrir WhatsApp sin UV-LIVE real completado.
+- No activar GHL live sin autorizacion.
+- No reorganizar monorepo sin ADR.
+- No cambiar remote sin autorizacion.
+- UV-LIVE real: **BLOCKED** hasta configurar `TELEGRAM_BOT_TOKEN`.
+- Principio rector: **No reorganizar el Imperio antes de escribir su Constitucion.**
+
+---
+
+## SIGUIENTE LINEA RECOMENDADA
+
+1. **UV-LIVE Real** — Obtener TELEGRAM_BOT_TOKEN y ejecutar los 5 casos de prueba con Telegram real.
+2. **GOV-1** — Proximo nivel de gobernanza (refinamiento de reglas, harnesses, procedimientos).
+
+---
+
+*Fin del Estado Actual v1.0.0 — Actualizado por GOV-0 el 2026-06-16*
