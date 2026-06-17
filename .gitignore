@@ -35,6 +35,8 @@ Thumbs.db
 .claude/*
 !.claude/memory/
 !.claude/settings.json
+!.claude/commands/
+!.claude/skills/
 .npm/
 
 # Python cache

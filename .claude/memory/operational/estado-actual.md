@@ -603,11 +603,35 @@
 
 ---
 
-## SIGUIENTE LINEA RECOMENDADA
+## GOV-1 — BATTLEFIELD READINESS: EN PROGRESO
 
-1. **UV-LIVE Real** — Obtener TELEGRAM_BOT_TOKEN y ejecutar los 5 casos de prueba con Telegram real.
-2. **GOV-1** — Proximo nivel de gobernanza (refinamiento de reglas, harnesses, procedimientos).
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-16 |
+| Alcance | Documental + skills + registros. Cero cambios de codigo. |
+| Archivos creados | ELITE_GUERRERA.md, CONSTRUCTOR_ENVIRONMENT.md, EQUIPMENT_REGISTRY.md, MCP_ACTIVATION_RUNBOOK.md, SKILL_READINESS_RUNBOOK.md, BATTLEFIELD_READINESS_CHECKLIST.md, SOVEREIGN_DATA_ORIGINS.md |
+| Skills creadas | 6 battle skills (verify-harness, review-workload-harness, memory-harness, model-routing-harness, mcp-readiness, equipment-registry) |
+| Skills producto existentes | 0 de 22 (carpeta .claude/skills/ no existia) |
+| MCPs configurados | 0 (.mcp.json no existe) |
+| MCPs clasificados | 16 con estado exacto |
+| Docker | Disponible (29.2.0) |
+| n8n MCP | PRIORITY_PENDING_DOCKER |
+| n8n skills | PRIORITY_PENDING_NETWORK |
+| Supabase/PostgreSQL | Doctrina corregida: activo gobernado |
+| Insforge | Incorporado como prioridad inmediata |
+| Archivos actualizados | IMPERIO_ARCHITECTURE.md, LOOP_ENGINEERING.md, CLAUDE.md, STATE.md, MEMORY.md, estado-actual.md |
+| Codigo modificado | Cero |
+| Acciones destructivas | Cero |
+| Secrets expuestos | Cero |
+| Push realizado | No |
 
 ---
 
-*Fin del Estado Actual v1.0.0 — Actualizado por GOV-0 el 2026-06-16*
+## SIGUIENTE LINEA RECOMENDADA
+
+1. **UV-LIVE Real** — Obtener TELEGRAM_BOT_TOKEN y ejecutar los 5 casos de prueba con Telegram real.
+2. **GOV-2** — Activacion real de MCPs prioritarios cuando haya keys/autorizacion.
+
+---
+
+*Fin del Estado Actual v1.0.0 — Actualizado por GOV-1 el 2026-06-16*

@@ -3,10 +3,10 @@
 Capital tecnológica de Algorithmus.
 
 > Tipo: institutional/governance — Nivel 2 (Jerarquía de Autoridad, Constitución Art. IX)
-> Versión: 2.0.0 — GOV-0 Governance Baseline
+> Versión: 2.1.0 — GOV-1 Battlefield Readiness
 > Creado: 2026-06-07
 > Actualizado: 2026-06-16
-> Deriva de: Constitución de Pekín, Principios Constitucionales, Governance Level 2
+> Deriva de: Constitución de Pekín, Principios Constitucionales, Governance Level 2, GOV-1
 > Autoridad: Senado de Pekín
 
 ---
@@ -125,6 +125,27 @@ Ningún cambio funcional sin verificación. Ningún producto sin aprendizaje dev
 | **Supabase** | Infraestructura | Aliado. Usado como backend. |
 
 Ningún constructor externo dicta la arquitectura de Pekín. Todos son herramientas. Pekín es la civilización.
+
+---
+
+## EQUIPAMIENTO DE BATALLA (GOV-1)
+
+### Equipment Registry
+
+Todo constructor debe consultar `.claude/memory/institutional/EQUIPMENT_REGISTRY.md` antes de iniciar cualquier tarea. Contiene: Skills Registry (22 de producto + 6 de batalla + n8n oficiales), MCP Registry (16 MCPs clasificados por estado y prioridad), y Readiness Matrix.
+
+### Battlefield Readiness Checklist
+
+Antes de entrar al campo, ejecutar `.claude/memory/institutional/BATTLEFIELD_READINESS_CHECKLIST.md`.
+
+### Reglas de equipamiento
+
+- **MCPs activos:** usar cuando la tarea los requiera. Mantenerlos funcionales y verificados.
+- **No declarar herramientas requeridas como prohibidas.** Si una skill o MCP es necesario para una tarea, se usa bajo gobernanza.
+- **Supabase/PostgreSQL:** permitido bajo gobernanza. No restringido a respaldo. Ver `.claude/memory/institutional/SOVEREIGN_DATA_ORIGINS.md`. Restricciones: no SQL destructivo sin autorización, no producción sin autorización, no secrets en logs.
+- **Insforge:** prioritario para nuevos desarrollos agénticos. Backend MCP-first. Ver `.claude/memory/institutional/MCP_ACTIVATION_RUNBOOK.md`.
+- **No inyectar código sin verificar:** todo cambio funcional pasa por verify-harness. Todo cambio estructural requiere review. Ningún código llega a main sin verificación.
+- **No exponer secretos** en logs, commits, ni respuestas.
 
 ---
 

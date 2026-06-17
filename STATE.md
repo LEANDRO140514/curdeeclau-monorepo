@@ -85,7 +85,8 @@ Las siguientes restricciones están activas hasta nuevo aviso del Senado o la As
 | RUN-1 | 2026-06-13 | CLOSED |
 | RISK-1 | 2026-06-13 | CLOSED |
 | LLM Family (1-5, RTR-1) | 2026-06-14 | CLOSED |
-| **GOV-0** | **2026-06-16** | **EN PROGRESO** |
+| **GOV-0** | **2026-06-16** | **CLOSED** |
+| **GOV-1** | **2026-06-16** | **EN PROGRESO** |
 
 ---
 
@@ -93,6 +94,50 @@ Las siguientes restricciones están activas hasta nuevo aviso del Senado o la As
 
 1. **GOV-1 (próximo nivel de gobernanza)** — Refinar reglas, harnesses, y procedimientos operativos.
 2. **UV-LIVE Real** — Cuando exista `TELEGRAM_BOT_TOKEN`, ejecutar validación real con los 5 casos de prueba.
+
+---
+
+## ESTADO DE EQUIPAMIENTO (GOV-1)
+
+### Skills
+
+| Tipo | Cantidad | Estado |
+|------|----------|--------|
+| Skills de producto esperadas | 22 | 0 existen físicamente (carpeta `.claude/skills/` inexistente pre-GOV-1) |
+| Skills de batalla inmediatas | 6 | Creadas como ACTIVE_MINIMAL_READY |
+| n8n official skills | ? | PRIORITY_PENDING_NETWORK |
+| Comandos (.claude/commands/) | 4 | ACTIVE (arquitecto, avivar, cyberneo, simplificador) |
+
+### MCPs
+
+| Tipo | Cantidad | Estado |
+|------|----------|--------|
+| MCPs configurados | 0 | `.mcp.json` no existe |
+| MCPs core (a configurar) | 4 | playwright, next-devtools, supabase, shadcn — MISSING_CONFIG |
+| MCPs prioritarios (top 5) | 5 | insforge, sequential-thinking, chrome-devtools, github, firecrawl-mcp — PRIORITY_PENDING_CONFIG |
+| MCP opcional activo | 1 | resend — MISSING_CONFIG |
+| MCPs pendientes | 5 | stripe, sentry, perplexity, brave-search, svgmaker |
+| n8n MCP | 1 | PRIORITY_PENDING_DOCKER (Docker disponible 29.2.0) |
+| Docker | — | DISPONIBLE |
+
+### Correcciones doctrinales (GOV-1)
+
+- **Supabase/PostgreSQL:** corregido de "solo respaldo" a **activo gobernado**.
+- **Insforge:** incorporado como **prioridad inmediata** para nuevos desarrollos agénticos.
+
+### Registros creados (GOV-1)
+
+- Equipment Registry (`EQUIPMENT_REGISTRY.md`)
+- Élite Guerrera (`ELITE_GUERRERA.md`)
+- Constructor Environment (`CONSTRUCTOR_ENVIRONMENT.md`)
+- MCP Activation Runbook (`MCP_ACTIVATION_RUNBOOK.md`)
+- Skill Readiness Runbook (`SKILL_READINESS_RUNBOOK.md`)
+- Battlefield Readiness Checklist (`BATTLEFIELD_READINESS_CHECKLIST.md`)
+- Sovereign Data Origins (`SOVEREIGN_DATA_ORIGINS.md`)
+
+### UV-LIVE real
+
+**Sigue BLOCKED** hasta configurar `TELEGRAM_BOT_TOKEN`.
 
 ---
 

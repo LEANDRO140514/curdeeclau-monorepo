@@ -286,6 +286,26 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] `operational/estado-actual.md` — Actualizado con cierre GOV-0
 - [x] `MEMORY.md` — Este resumen (este mismo bloque)
 
+### Poblamiento completado (GOV-1 Battlefield Readiness, 2026-06-16)
+- [x] `institutional/ELITE_GUERRERA.md` — Doctrina de Ocho Banderas, roles, límites
+- [x] `institutional/CONSTRUCTOR_ENVIRONMENT.md` — Entorno local, constructores, filesystem
+- [x] `institutional/EQUIPMENT_REGISTRY.md` — Skills (22+6+n8n), MCPs (16), Readiness Matrix
+- [x] `institutional/MCP_ACTIVATION_RUNBOOK.md` — Activación/verificación segura de 16 MCPs
+- [x] `institutional/SKILL_READINESS_RUNBOOK.md` — Revisión, creación, clasificación, n8n sync
+- [x] `institutional/BATTLEFIELD_READINESS_CHECKLIST.md` — Checklist de entrada al campo
+- [x] `institutional/SOVEREIGN_DATA_ORIGINS.md` — Ley de Dos Orígenes, Supabase/Insforge coexistencia
+- [x] `institutional/IMPERIO_ARCHITECTURE.md` — Actualizado con Élite Guerrera y equipamiento
+- [x] `institutional/LOOP_ENGINEERING.md` — Actualizado con herramientas de verificación
+- [x] `.claude/skills/` — 6 battle skills creadas (verify, review, memory, model-routing, mcp-readiness, equipment-registry)
+- [x] `CLAUDE.md` — Actualizado con equipamiento de batalla
+- [x] `STATE.md` — Actualizado con estado de equipamiento GOV-1
+- [x] `estado-actual.md` — Actualizado con checkpoint GOV-1
+- [x] Doctrina Supabase/PostgreSQL corregida: activo gobernado, no restringido
+- [x] Insforge incorporado como prioridad inmediata
+- [x] 22 skills de producto: verificadas (0 existen, todas MISSING)
+- [x] MCPs: 0 configurados. 16 clasificados con estado exacto. Docker disponible.
+- [x] n8n Battle Pack: MCP PRIORITY_PENDING_DOCKER, skills PRIORITY_PENDING_NETWORK
+
 ### Poblamiento pendiente (Proximos hitos)
 - [ ] UV-LIVE Real — Configurar `TELEGRAM_BOT_TOKEN` y ejecutar validacion real
 - [ ] UV-WA-0 WhatsApp channel (requiere UV-LIVE real completado)

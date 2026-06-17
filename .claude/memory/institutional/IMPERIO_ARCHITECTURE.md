@@ -211,7 +211,56 @@ Si todo el código desapareciera mañana, Pekín debe contener suficiente conoci
 
 ---
 
-## IX. JERARQUÍA DE ENTIDADES
+## IX. ÉLITE GUERRERA Y BATTLEFIELD READINESS
+
+La Élite Guerrera es el cuerpo de agentes constructores de Pekín.
+
+No gobierna Pekín. Sirve a Pekín.
+
+La doctrina completa reside en `institutional/ELITE_GUERRERA.md`. Su equipamiento se registra en `institutional/EQUIPMENT_REGISTRY.md`.
+
+### Sistema de Ocho Banderas
+
+Cursor, Claude Code, DeepClaude, Kimchi, Forge/Grok, Shiwei MCP, WSL, n8n — ocho constructores y entornos que ejecutan el trabajo de campo bajo harnesses de Pekín.
+
+### Battlefield Readiness
+
+Todo constructor debe pasar el `BATTLEFIELD_READINESS_CHECKLIST.md` antes de entrar al campo:
+
+1. Leer gobierno (CLAUDE.md, STATE.md, MEMORY.md, estado-actual.md)
+2. Consultar Equipment Registry
+3. Verificar entorno
+4. Confirmar autorización
+5. Ejecutar verificación segura
+6. Documentar aprendizaje
+
+### Equipment Registry
+
+Registro central de skills (22 de producto + 6 de batalla + n8n oficiales), MCPs (4 core + 1 opcional + 5 prioritarios + 6 pendientes) y readiness matrix.
+
+### MCP Activation Runbook
+
+Guía de activación/verificación segura para cada MCP: playwright, next-devtools, supabase, shadcn, resend, insforge, sequential-thinking, chrome-devtools, github, firecrawl-mcp, n8n-mcp.
+
+### Skill Readiness Runbook
+
+Guía para revisar, crear, clasificar y mantener skills. Incluye estructura mínima, detección de skills rotas, clasificación, y sincronización de n8n official skills.
+
+### Supabase/PostgreSQL — Activo Gobernado
+
+Corregido en GOV-1: Supabase/PostgreSQL no está restringido a respaldo. Es equipamiento activo gobernado. Se usa cuando el contexto lo requiere. No se bloquea por dogma.
+
+### Insforge — MCP Prioritario
+
+Backend agéntico. Escudo relacional. MCP-first. Prioridad de activación inmediata para nuevos desarrollos.
+
+### MCPs — Siempre Listos y Alertas
+
+Los MCPs no son accesorios. Son herramientas de batalla. Deben estar configurados, verificados y documentados con estado exacto.
+
+---
+
+## X. JERARQUÍA DE ENTIDADES
 
 ```
 Algorithmus (Imperio)
@@ -231,6 +280,19 @@ Algorithmus (Imperio)
 ├── Legoland (Distrito de legos técnicos)
 ├── Runtime (Sistema nervioso)
 ├── Knowledge (Memoria operativa)
+├── Élite Guerrera (Ocho Banderas)
+│   ├── Cursor
+│   ├── Claude Code
+│   ├── DeepClaude
+│   ├── Kimchi.dev
+│   ├── Forge / Grok Build
+│   ├── Shiwei MCP
+│   ├── WSL
+│   └── n8n Arsenal
+├── Equipment Registry
+│   ├── Skills (22 producto + 6 batalla + n8n oficiales)
+│   ├── MCPs (4 core + 1 opcional + 5 prioritarios + n8n)
+│   └── Readiness Matrix
 └── Aliados externos
     ├── Forge-Pro
     ├── GHL

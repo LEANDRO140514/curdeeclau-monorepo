@@ -163,10 +163,24 @@ LOOP Engineering se implementa a través de harnesses. Cada harness es una mater
 | Harness | Fase del ciclo que refuerza |
 |---------|---------------------------|
 | **Verify Harness** | Verify — Tests, typecheck, lint |
-| **Review Workload Harness** | Verify — Revisión de cambios por pares |
+| **Review Workload Harness** | Verify + Correct — Revisión de cambios por pares |
 | **Memory Harness** | Document + Learn — Escritura en el Archivo |
 | **Model Routing Harness** | Execute — Selección del modelo correcto para cada tarea |
+| **MCP Readiness** | Verify (equipment) — Verificar que MCPs están activos antes de usarlos |
+| **Equipment Registry** | Document (inventory) — Mantener registro de equipamiento actualizado |
 | **Runtime Lifecycle** | Plan + Execute + Correct — Scope, execution, error recovery |
+
+### Herramientas de verificación del ciclo
+
+| Herramienta | Fase LOOP | Función |
+|-------------|-----------|---------|
+| Playwright | Verify | Testing end-to-end de navegador |
+| Chrome DevTools | Verify + Correct | Debug de frontend en runtime real |
+| next-devtools | Verify | Inspección de Next.js en desarrollo |
+| token-auditor | Verify | Auditoría de uso de tokens y costos |
+| web-quality | Verify | Calidad web (accesibilidad, SEO, performance) |
+| impeccable | Verify | Revisión de código (estilo, lint, convenciones) |
+| hallmark | Verify | Verificación de diseño y consistencia visual |
 
 Cada harness responde a una pregunta del ciclo:
 
@@ -174,6 +188,8 @@ Cada harness responde a una pregunta del ciclo:
 - Review Harness: ¿Lo que construí es correcto y seguro?
 - Memory Harness: ¿Lo que aprendí quedó registrado?
 - Model Routing: ¿Estoy usando la capacidad correcta para esta tarea?
+- MCP Readiness: ¿Mis herramientas están listas?
+- Equipment Registry: ¿Sé con qué herramientas cuento?
 - Runtime Lifecycle: ¿Estoy operando dentro de mis límites?
 
 ---
