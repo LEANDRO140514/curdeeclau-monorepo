@@ -306,6 +306,17 @@ Experiencia → Observación → Decisión → Procedimiento → Skill → Patr�
 - [x] MCPs: 0 configurados. 16 clasificados con estado exacto. Docker disponible.
 - [x] n8n Battle Pack: MCP PRIORITY_PENDING_DOCKER, skills PRIORITY_PENDING_NETWORK
 
+### Poblamiento completado (MCP-0 Active MCP Bootstrap, 2026-06-16)
+- [x] `.mcp.json` — Creado con 11 MCPs configurados (5 Fase 1 + 6 Fase 2)
+- [x] MCPs Fase 1 (sin credenciales): 5 ACTIVE_CORE_READY (playwright, browser-tools, shadcn, next-devtools, sequential-thinking)
+- [x] MCPs Fase 2 (con variables de entorno): 6 CONFIGURED_PENDING_KEY (supabase, github, firecrawl, insforge, resend, n8n)
+- [x] Smoke tests: sequential-thinking y playwright verificados
+- [x] n8n official skills: 14 skills sincronizadas desde github.com/n8n-io/skills
+- [x] n8n skills: n8n-agents, n8n-binary-and-data, n8n-code-nodes, n8n-credentials-and-security, n8n-data-tables, n8n-debugging, n8n-error-handling, n8n-expressions, n8n-extending-mcp, n8n-loops, n8n-node-configuration, n8n-subworkflows, n8n-workflow-lifecycle, using-n8n-skills
+- [x] Equipment Registry actualizado con estados reales
+- [x] Zero secrets hardcodeados (todos usan ${VAR_NAME})
+- [x] .gitignore actualizado con skills/ y commands/
+
 ### Poblamiento pendiente (Proximos hitos)
 - [ ] UV-LIVE Real — Configurar `TELEGRAM_BOT_TOKEN` y ejecutar validacion real
 - [ ] UV-WA-0 WhatsApp channel (requiere UV-LIVE real completado)

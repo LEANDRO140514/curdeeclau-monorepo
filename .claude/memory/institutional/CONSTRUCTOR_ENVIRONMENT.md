@@ -86,32 +86,29 @@
 
 ## III. MCPs
 
-### Estado actual
+### Estado actual (MCP-0)
 
-- **Archivo de configuración:** NO EXISTE (ni `.mcp.json`, ni `mcp.json`, ni `example.mcp.json`)
-- **MCPs configurados:** 0
-- **MCPs activos:** 0
+- **Archivo de configuración:** `.mcp.json` — CREADO
+- **MCPs configurados:** 11
+- **MCPs Fase 1 (sin credenciales):** 5 ACTIVE_CORE_READY
+- **MCPs Fase 2 (con variables de entorno):** 6 CONFIGURED_PENDING_KEY
+- **MCPs verificados (smoke test):** 2 (sequential-thinking, playwright)
 
-### MCPs a configurar (prioridad)
+### MCPs configurados
 
-| MCP | Prioridad | Estado |
-|-----|-----------|--------|
-| playwright | CORE | PENDING_CONFIG |
-| next-devtools | CORE | PENDING_CONFIG |
-| supabase | CORE | PENDING_CONFIG |
-| shadcn | CORE | PENDING_CONFIG |
-| insforge | PRIORITY | PENDING_CONFIG |
-| sequential-thinking | PRIORITY | PENDING_CONFIG |
-| chrome-devtools | PRIORITY | PENDING_CONFIG |
-| github | PRIORITY | PENDING_CONFIG |
-| firecrawl-mcp | PRIORITY | PENDING_CONFIG |
-| resend | OPTIONAL | PENDING_KEY |
-| n8n-mcp | PRIORITY | PENDING_DOCKER (Docker disponible) |
-| svgmaker | OPTIONAL | PENDING_CONFIG |
-| stripe | OPTIONAL | PENDING_KEY |
-| sentry | OPTIONAL | PENDING_KEY |
-| perplexity | OPTIONAL | PENDING_KEY |
-| brave-search | OPTIONAL | PENDING_KEY |
+| MCP | Estado | Paquete |
+|-----|--------|---------|
+| playwright | ACTIVE_CORE_READY | `@playwright/mcp@latest` |
+| browser-tools | ACTIVE_CORE_READY | `@agentdeskai/browser-tools-mcp@latest` |
+| shadcn | ACTIVE_CORE_READY | `shadcn-mcp@latest` |
+| next-devtools | ACTIVE_CORE_READY | `next-devtools-mcp@latest` |
+| sequential-thinking | ACTIVE_CORE_READY | `@modelcontextprotocol/server-sequential-thinking` |
+| supabase | CONFIGURED_PENDING_KEY | `supabase-mcp-server@latest` |
+| github | CONFIGURED_PENDING_KEY | `@anthropic/github-mcp@latest` |
+| firecrawl | CONFIGURED_PENDING_KEY | `firecrawl-mcp@latest` |
+| insforge | CONFIGURED_PENDING_KEY | `insforge-mcp@latest` |
+| resend | CONFIGURED_PENDING_KEY | `resend-mcp@latest` |
+| n8n | CONFIGURED_PENDING_KEY | `@neterius/n8n-mcp@latest` |
 
 ### Docker
 

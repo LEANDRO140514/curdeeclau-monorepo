@@ -86,7 +86,8 @@ Las siguientes restricciones están activas hasta nuevo aviso del Senado o la As
 | RISK-1 | 2026-06-13 | CLOSED |
 | LLM Family (1-5, RTR-1) | 2026-06-14 | CLOSED |
 | **GOV-0** | **2026-06-16** | **CLOSED** |
-| **GOV-1** | **2026-06-16** | **EN PROGRESO** |
+| **GOV-1** | **2026-06-16** | **CLOSED** |
+| **MCP-0** | **2026-06-16** | **EN PROGRESO** |
 
 ---
 

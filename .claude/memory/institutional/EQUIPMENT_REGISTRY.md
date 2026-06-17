@@ -100,49 +100,54 @@ Residen en `.claude/commands/`:
 
 ## B. MCP REGISTRY
 
-### B.1 MCPs Core
+### B.1 MCPs Core — Fase 1 (Sin credenciales)
 
-| # | MCP | Estado | Key requerida | Key presente | Dependencia |
-|---|-----|--------|---------------|--------------|-------------|
-| 1 | playwright | MISSING_CONFIG | No | — | npm: @anthropic/mcp-playwright |
-| 2 | next-devtools | MISSING_CONFIG | No | — | Next.js app en ejecución |
-| 3 | supabase | MISSING_CONFIG | Sí (project ref, anon key) | No verificado | Supabase project |
-| 4 | shadcn | MISSING_CONFIG | No | — | Next.js + shadcn/ui |
+| # | MCP | Estado | Paquete | Verificado |
+|---|-----|--------|---------|------------|
+| 1 | playwright | **ACTIVE_CORE_READY** | `@playwright/mcp@latest` | Smoke-test OK |
+| 2 | browser-tools | **ACTIVE_CORE_READY** | `@agentdeskai/browser-tools-mcp@latest` | Package exists |
+| 3 | shadcn | **ACTIVE_CORE_READY** | `shadcn-mcp@latest` | Package exists |
+| 4 | next-devtools | **ACTIVE_CORE_READY** | `next-devtools-mcp@latest` | Package exists |
+| 5 | sequential-thinking | **ACTIVE_CORE_READY** | `@modelcontextprotocol/server-sequential-thinking` | Smoke-test OK |
 
-### B.2 MCPs Opcionales Activos
+### B.2 MCPs Fase 2 — Configurados con variables de entorno
 
-| # | MCP | Estado | Key requerida | Key presente |
-|---|-----|--------|---------------|--------------|
-| 5 | resend | MISSING_CONFIG | Sí (API key) | No verificado |
+| # | MCP | Estado | Key requerida | Key presente | Paquete |
+|---|-----|--------|---------------|--------------|---------|
+| 6 | resend | CONFIGURED_PENDING_KEY | RESEND_API_KEY | No verificado | `resend-mcp@latest` |
+| 7 | github | CONFIGURED_PENDING_KEY | GITHUB_TOKEN | No verificado | `@anthropic/github-mcp@latest` |
+| 8 | firecrawl | CONFIGURED_PENDING_KEY | FIRECRAWL_API_KEY | No verificado | `firecrawl-mcp@latest` |
+| 9 | supabase | CONFIGURED_PENDING_KEY | SUPABASE_URL, SUPABASE_ACCESS_TOKEN, SUPABASE_PROJECT_REF | No verificado | `supabase-mcp-server@latest` |
+| 10 | insforge | CONFIGURED_PENDING_KEY | INSFORGE_API_URL, INSFORGE_API_KEY | No verificado | `insforge-mcp@latest` |
+| 11 | n8n | CONFIGURED_PENDING_KEY | N8N_API_URL, N8N_API_KEY | No verificado | `@neterius/n8n-mcp@latest` |
 
 ### B.3 MCPs Prioritarios (Top 5)
 
 | # | MCP | Estado | Key requerida | Dependencia | Prioridad |
 |---|-----|--------|---------------|-------------|-----------|
-| 6 | insforge | PRIORITY_PENDING_CONFIG | Sí (API key) | insforge server | ALTA |
-| 7 | sequential-thinking | PRIORITY_PENDING_CONFIG | No | npm: @anthropic/mcp-sequential-thinking | ALTA |
-| 8 | chrome-devtools | PRIORITY_PENDING_CONFIG | No | Chrome/Chromium | ALTA |
-| 9 | github | PRIORITY_PENDING_CONFIG | Sí (token) | GitHub account | ALTA |
-| 10 | firecrawl-mcp | PRIORITY_PENDING_CONFIG | Sí (API key) | Firecrawl account | ALTA |
+| — | insforge | CONFIGURED_PENDING_KEY | INSFORGE_API_KEY | insforge server | ALTA |
+| — | sequential-thinking | **ACTIVE_CORE_READY** | No | npm package | ALTA (cumplida) |
+| — | chrome-devtools (browser-tools) | **ACTIVE_CORE_READY** | No | Chrome/Chromium | ALTA |
+| — | github | CONFIGURED_PENDING_KEY | GITHUB_TOKEN | GitHub account | ALTA |
+| — | firecrawl | CONFIGURED_PENDING_KEY | FIRECRAWL_API_KEY | Firecrawl account | ALTA |
 
 ### B.4 MCPs Pendientes
 
 | # | MCP | Estado | Bloqueante |
 |---|-----|--------|------------|
-| 11 | n8n-mcp | PRIORITY_PENDING_DOCKER | Docker disponible. Pendiente: instancia n8n + API key. |
 | 12 | svgmaker | PENDING_CONFIG | Sin dependencias críticas |
 | 13 | stripe | PENDING_KEY | API key de Stripe |
 | 14 | sentry | PENDING_KEY | API key de Sentry |
 | 15 | perplexity | PENDING_KEY | API key de Perplexity |
 | 16 | brave-search | PENDING_KEY | API key de Brave Search |
 
-### B.5 Configuración actual
+### B.5 Configuración actual (MCP-0)
 
-- **`.mcp.json`:** NO EXISTE
-- **`mcp.json`:** NO EXISTE
-- **`example.mcp.json`:** NO EXISTE
-- **MCPs configurados:** 0
-- **MCPs funcionales:** 0
+- **`.mcp.json`:** CREADO — 11 MCPs configurados
+- **MCPs Fase 1 (sin credenciales):** 5 configurados, 5 ACTIVE_CORE_READY
+- **MCPs Fase 2 (con variables de entorno):** 6 configurados, 6 CONFIGURED_PENDING_KEY
+- **MCPs verificados (smoke test):** 2 (sequential-thinking, playwright)
+- **Configuración sin hardcoded secrets:** TODOS usan `${VAR_NAME}`
 
 ---
 
@@ -150,17 +155,17 @@ Residen en `.claude/commands/`:
 
 | Equipment | Type | Category | Status | Ready Now | Requires Key | Requires Install | Requires Docker | Requires Human Auth | Safe Verify | Notes |
 |-----------|------|----------|--------|-----------|--------------|-----------------|------------------|---------------------|-------------|-------|
-| playwright | MCP | Testing/Debug | MISSING_CONFIG | No | No | Sí | No | No | Sí | npm install |
-| next-devtools | MCP | Dev Tools | MISSING_CONFIG | No | No | Sí | No | No | Sí | Requires Next.js running |
-| supabase | MCP | Database | MISSING_CONFIG | No | Sí | Sí | No | No | Sí | Project ref needed |
-| shadcn | MCP | UI | MISSING_CONFIG | No | No | Sí | No | No | Sí | Requires shadcn/ui project |
-| resend | MCP | Email | MISSING_CONFIG | No | Sí | Sí | No | No | Parcial | Verify config w/o send |
-| insforge | MCP | Agentic Backend | PRIORITY_PENDING_CONFIG | No | Sí | Sí | No | Sí | — | Escudo relacional |
-| sequential-thinking | MCP | Reasoning | PRIORITY_PENDING_CONFIG | No | No | Sí | No | No | Sí | npm install |
-| chrome-devtools | MCP | Debug | PRIORITY_PENDING_CONFIG | No | No | Sí | No | No | Sí | Chrome needed |
-| github | MCP | Version Control | PRIORITY_PENDING_CONFIG | No | Sí | Sí | No | Sí | Sí | GitHub token |
-| firecrawl-mcp | MCP | Web Ingest | PRIORITY_PENDING_CONFIG | No | Sí | Sí | No | Sí | No | API key needed |
-| n8n-mcp | MCP | Workflow Automation | PRIORITY_PENDING_DOCKER | No | Sí | Sí | Sí | Sí | — | Docker OK, n8n instance + key pending |
+| playwright | MCP | Testing/Debug | ACTIVE_CORE_READY | Sí | No | Sí (npx) | No | No | Sí | Smoke-test OK |
+| browser-tools | MCP | Debug | ACTIVE_CORE_READY | Sí | No | Sí (npx) | No | No | Sí | Chrome needed |
+| shadcn | MCP | UI | ACTIVE_CORE_READY | Sí | No | Sí (npx) | No | No | Sí | Requires shadcn/ui project |
+| next-devtools | MCP | Dev Tools | ACTIVE_CORE_READY | Sí | No | Sí (npx) | No | No | Sí | Requires Next.js running |
+| sequential-thinking | MCP | Reasoning | ACTIVE_CORE_READY | Sí | No | Sí (npx) | No | No | Sí | Smoke-test OK |
+| supabase | MCP | Database | CONFIGURED_PENDING_KEY | No | Sí | Sí (npx) | No | No | Sí | Project ref needed |
+| github | MCP | Version Control | CONFIGURED_PENDING_KEY | No | Sí | Sí (npx) | No | Sí | Sí | GitHub token needed |
+| firecrawl | MCP | Web Ingest | CONFIGURED_PENDING_KEY | No | Sí | Sí (npx) | No | Sí | No | API key needed |
+| insforge | MCP | Agentic Backend | CONFIGURED_PENDING_KEY | No | Sí | Sí (npx) | No | Sí | — | API key + URL needed |
+| resend | MCP | Email | CONFIGURED_PENDING_KEY | No | Sí | Sí (npx) | No | No | Parcial | Verify config w/o send |
+| n8n | MCP | Workflow Automation | CONFIGURED_PENDING_KEY | No | Sí | Sí (npx) | Sí | Sí | — | Docker OK, n8n instance + key pending |
 | svgmaker | MCP | Graphics | PENDING_CONFIG | No | No | Sí | No | No | Sí | — |
 | stripe | MCP | Payments | PENDING_KEY | No | Sí | Sí | No | Sí | No | Stripe key needed |
 | sentry | MCP | Monitoring | PENDING_KEY | No | Sí | Sí | No | Sí | No | Sentry key needed |
@@ -172,6 +177,7 @@ Residen en `.claude/commands/`:
 | model-routing-harness | Skill | Model/Routing | ACTIVE_MINIMAL_READY | Sí | No | No | No | No | Sí | Creado en GOV-1 |
 | mcp-readiness | Skill | MCP/Equipment | ACTIVE_MINIMAL_READY | Sí | No | No | No | No | Sí | Creado en GOV-1 |
 | equipment-registry | Skill | Memory/Governance | ACTIVE_MINIMAL_READY | Sí | No | No | No | No | Sí | Creado en GOV-1 |
+| n8n official skills (14) | Skill | Workflow Automation | ACTIVE_MINIMAL_READY | Sí | No | No | No | No | Sí | Sincronizadas en MCP-0 |
 
 ---
 
@@ -179,20 +185,20 @@ Residen en `.claude/commands/`:
 
 ### n8n MCP
 
-- **Estado:** PRIORITY_PENDING_DOCKER
+- **Estado:** CONFIGURED_PENDING_KEY
 - **Docker:** Disponible (Docker 29.2.0)
-- **Keys requeridas:** N8N_API_URL, N8N_API_KEY (o N8N_MCP_SERVER_URL, N8N_MCP_AUTH_TOKEN)
-- **Keys presentes:** No verificado
-- **Variables esperadas:** N8N_API_URL, N8N_API_KEY, N8N_MCP_SERVER_URL, N8N_MCP_AUTH_TOKEN, N8N_HOST, N8N_PORT
-- **Próximo paso:** Instalar y configurar n8n local via Docker, luego activar MCP.
+- **Paquete:** `@neterius/n8n-mcp@latest` (45 tools + 7 embedded skills)
+- **Keys requeridas:** N8N_API_URL, N8N_API_KEY
+- **Keys presentes:** No verificado (${N8N_API_URL}, ${N8N_API_KEY} en .mcp.json)
+- **Próximo paso:** Configurar N8N_API_URL + N8N_API_KEY en .env
 
 ### n8n Official Skills
 
 - **Origen:** `https://github.com/n8n-io/skills`
-- **Estado:** PRIORITY_PENDING_NETWORK
-- **Ruta objetivo:** `.claude/skills/n8n-official/`
-- **Skills instaladas:** 0
-- **Próximo paso:** Clonar repo, copiar skills a `.claude/skills/n8n-official/`, registrar número real.
+- **Estado:** **ACTIVE_MINIMAL_READY** (14 skills sincronizadas)
+- **Ruta:** `.claude/skills/n8n-*/` y `.claude/skills/using-n8n-skills/`
+- **Skills instaladas:** 14
+- **Skills:** n8n-agents, n8n-binary-and-data, n8n-code-nodes, n8n-credentials-and-security, n8n-data-tables, n8n-debugging, n8n-error-handling, n8n-expressions, n8n-extending-mcp, n8n-loops, n8n-node-configuration, n8n-subworkflows, n8n-workflow-lifecycle, using-n8n-skills
 
 ### n8n Docker Command (referencia)
 

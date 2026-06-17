@@ -627,11 +627,31 @@
 
 ---
 
-## SIGUIENTE LINEA RECOMENDADA
+## MCP-0 — ACTIVE MCP BOOTSTRAP: EN PROGRESO
 
-1. **UV-LIVE Real** — Obtener TELEGRAM_BOT_TOKEN y ejecutar los 5 casos de prueba con Telegram real.
-2. **GOV-2** — Activacion real de MCPs prioritarios cuando haya keys/autorizacion.
+| Campo | Valor |
+|-------|-------|
+| Fecha | 2026-06-16 |
+| Alcance | Configuracion MCP + skills n8n. Cero cambios de codigo. |
+| .mcp.json | Creado con 11 MCPs |
+| MCPs Fase 1 | 5 ACTIVE_CORE_READY (playwright, browser-tools, shadcn, next-devtools, sequential-thinking) |
+| MCPs Fase 2 | 6 CONFIGURED_PENDING_KEY (supabase, github, firecrawl, insforge, resend, n8n) |
+| Smoke tests | 2 OK (sequential-thinking, playwright) |
+| n8n skills | 14 sincronizadas desde github.com/n8n-io/skills |
+| Secrets hardcodeados | Cero (todos usan ${VAR_NAME}) |
+| Archivos actualizados | EQUIPMENT_REGISTRY.md, CONSTRUCTOR_ENVIRONMENT.md, STATE.md, MEMORY.md, estado-actual.md |
+| Codigo modificado | Cero |
+| Acciones destructivas | Cero |
+| Secrets expuestos | Cero |
+| Push realizado | No |
 
 ---
 
-*Fin del Estado Actual v1.0.0 — Actualizado por GOV-1 el 2026-06-16*
+## SIGUIENTE LINEA RECOMENDADA
+
+1. **UV-LIVE Real** — Obtener TELEGRAM_BOT_TOKEN y ejecutar los 5 casos de prueba con Telegram real.
+2. **MCP-1** — Activar MCPs Fase 2 cuando se obtengan las keys correspondientes.
+
+---
+
+*Fin del Estado Actual v1.0.0 — Actualizado por MCP-0 el 2026-06-16*
