@@ -1,8 +1,9 @@
 # SESSION STARTUP CHECKLIST
 
 > Tipo: procedural
-> Version: 1.0.0
+> Version: 1.1.0
 > Creado: 2026-06-14
+> Actualizado: 2026-06-16 — Reforzado Paso 2 con evidencia de fallo en GOV-0
 > Proposito: Checklist obligatorio que todo agente debe ejecutar al iniciar sesion en CURDEECLAU.
 
 ---
@@ -24,38 +25,41 @@ Leer en orden:
 - [ ] `.claude/memory/institutional/principios.md`
 - [ ] `.claude/memory/operational/estado-actual.md`
 
-### Paso 2: Encoding de terminal (CRITICO)
+### Paso 2: Encoding de terminal (CRITICO — NO SALTAR)
 
-Ejecutar en PowerShell:
+**El error persistente #1 en CURDEECLAU.** `chcp 65001` por sí solo NO basta en PowerShell 7 en Windows. Sin las 3 líneas de `[Console]` y `$OutputEncoding`, el output por stdout se corrompe aunque el código de página sea 65001.
+
+Ejecutar en PowerShell (obligatorio, incluso si `chcp` ya dice 65001):
 
 ```powershell
 [Console]::InputEncoding  = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
-$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
-$PSDefaultParameterValues['*:Encoding'] = 'utf8'
 ```
 
-Verificar:
+Verificar con caracteres reales (no solo `chcp`):
 
 ```powershell
-chcp
-# Debe mostrar: Pagina de codigos activa: 65001
+Write-Host "Verificación: Pekín, Constitución, inmunológico, Jerarquía, ADN, Ñoño"
+# Si ves caracteres rotos (â, Ã³, A±) en vez de tildes y eñes, el encoding NO está corregido.
+# Repetir las 3 líneas de arriba y volver a verificar.
 ```
 
 **Referencia:** `procedural/runbooks/terminal-encoding.md`
+
+**Nota técnica:** `$PSDefaultParameterValues` es opcional y puede dar errores en algunas versiones de pwsh. Las 3 líneas de arriba son el mínimo indispensable y suficiente.
 
 ### Paso 3: Verificar encoding en output
 
 Antes de escribir cualquier contenido, verificar que los caracteres Unicode se renderizan correctamente:
 
 ```
-Espanol: a e i o u n u
-Simbolos: - - ' '
-Box-drawing: -
+Español: á é í ó ú ñ ü
+Símbolos: — – « »
+Box-drawing: ─ │ ┌ ┐ └ ┘ ├ ┤
 ```
 
-Si aparecen caracteres rotos (ej: `a` en vez de `o`, `A3` en vez de caracteres box), repetir Paso 2.
+Si aparecen caracteres rotos (ej: `Ã³` en vez de `ó`, `â”` en vez de `─`), regresar al Paso 2.
 
 ---
 
@@ -73,7 +77,8 @@ Esto aplica especialmente a:
 
 ## 4. ANTI-PATTERNS DE SESION
 
-- Leer MEMORY.md y saltarse la verificacion de encoding.
+- Leer MEMORY.md y saltarse la verificacion de encoding. **← Fallo GOV-0: la tabla de entregables se vio corrupta.**
+- Asumir que `chcp 65001` es suficiente sin setear `[Console]::OutputEncoding`.
 - Escribir archivos UTF-8 sin verificar que la terminal los renderiza bien.
 - Asumir que "la sesion anterior funciono, esta tambien".
 - Ignorar caracteres rotos en el output de `chcp` o `Write-Host`.
