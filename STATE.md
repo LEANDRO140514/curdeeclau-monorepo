@@ -35,6 +35,7 @@ Universidad Latino es un vertical — un ciudadano comercial dentro de la civili
 | UV-CLOSE | `f2f965c` | **CLOSED** — Cierre documental |
 | UV-TELEGRAM | `411bfce` | **VALIDATED** — Canal Telegram (18 tests) |
 | UV-KB-1 | `5dbf238` | **CLOSED** — Knowledge base con datos reales del cliente |
+| UV-KB-2 | `7156b57` | **CLOSED** — Canonical knowledge loader (CSV + 4 MD pattern) |
 | UV-LIVE mock | `111d79b` | **VALIDATED** — 5 casos mock OK, 216 tests |
 | UV-LIVE real | — | **BLOCKED** — `TELEGRAM_BOT_TOKEN` no configurado |
 
