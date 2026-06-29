@@ -2,7 +2,15 @@
   "name": "@curdeeclau/algorithmus-core-engine",
   "version": "0.1.0",
   "private": true,
-  "description": "Deterministic sports mathematical engine — reductions, matrices, probabilities, validators, scoring, contest logic, optimization",
+  "description": "Conversational AI orchestration engine — LLM gateway, FSM state machine, RAG with Pinecone, identity resolution, AI validation pipeline, multi-provider adapters",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/app/server.js",
@@ -13,6 +21,7 @@
     "prepush:core": "npm test && npm run db:migrate && npm run smoke:postgres"
   },
   "dependencies": {
+    "@curdeeclau/shared": "workspace:*",
     "@pinecone-database/pinecone": "^7.1.0",
     "@sentry/node": "^8.55.1",
     "@supabase/supabase-js": "^2.101.1",
