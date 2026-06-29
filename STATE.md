@@ -92,9 +92,22 @@ Las siguientes restricciones están activas hasta nuevo aviso del Senado o la As
 
 ---
 
+## CORE-HARD — PACKAGE HARDENING: CLOSED
+
+| Fase | Commit | Estado |
+|------|--------|--------|
+| CORE-HARD-2A | `6b9f359` | **CLOSED** — Public package surface (index.ts, main/types/exports, @curdeeclau/shared) |
+| CORE-HARD-2B | `b5a4cf4` | **CLOSED** — Remove legacy .js artifacts, sanitize .gitignore |
+| CORE-HARD-2C-FIX | `b5953f9` | **CLOSED** — Fix typecheck blockers (tsc clean, build clean, declaration emit) |
+
+**Resultado:** `algorithmus-core-engine` compila limpio, emite dist/, es consumible como paquete.
+**algorithmus-platform:** No tocado.
+
+---
+
 ## PRÓXIMA LÍNEA RECOMENDADA
 
-1. **GOV-1 (próximo nivel de gobernanza)** — Refinar reglas, harnesses, y procedimientos operativos.
+1. **PLATFORM-HARD-3A** — Auditar algorithmus-platform, reemplazar LeadsRepository stub, public surface.
 2. **UV-LIVE Real** — Cuando exista `TELEGRAM_BOT_TOKEN`, ejecutar validación real con los 5 casos de prueba.
 
 ---
@@ -105,9 +118,9 @@ Las siguientes restricciones están activas hasta nuevo aviso del Senado o la As
 
 | Tipo | Cantidad | Estado |
 |------|----------|--------|
-| Skills de producto esperadas | 22 | 0 existen físicamente (carpeta `.claude/skills/` inexistente pre-GOV-1) |
-| Skills de batalla inmediatas | 6 | Creadas como ACTIVE_MINIMAL_READY |
-| n8n official skills | ? | PRIORITY_PENDING_NETWORK |
+| Skills de batalla inmediatas | 6 | ACTIVE_MINIMAL_READY |
+| n8n official skills | 14 | ACTIVE (sincronizadas) |
+| Skills de producto esperadas | 22 | 0 existen físicamente |
 | Comandos (.claude/commands/) | 4 | ACTIVE (arquitecto, avivar, cyberneo, simplificador) |
 
 ### MCPs
