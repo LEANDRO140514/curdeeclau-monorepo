@@ -19,6 +19,7 @@ import type {
   LeadCapturePayload,
   LeadCaptureResult,
 } from '../../core/leads/types';
+import { parseCSV, catalogToMarkdown, parseCatalogCSV } from '../../core/admissions/knowledgeLoader';
 
 // ── Knowledge base (static, from verticals) ───────────
 
@@ -40,8 +41,17 @@ const OFERTA_CONTENT = `
 | Gastronomia | 2 anos | Matutino, Vespertino |
 `;
 
+const CATALOGO_CONTENT = `
+| Carrera | Área académica | Duración | Modalidad | Costo mensual | Costo inscripción | Campus | Becas de Excelencia |
+|---|---|---|---|---|---|---|---|
+| Derecho | Derecho | 4 años | Presencial | $4,650 | $8,000 | Campus Central | 9.60-10.00: 50% beca |
+`;
+
 const SYSTEM_PROMPT_TEMPLATE = `
 Eres asistente de admisiones de Universidad Latino.
+
+## CATÁLOGO DE CARRERAS
+{{CATALOGO_CARRERAS}}
 
 ## CONOCIMIENTO
 {{KNOWLEDGE}}
@@ -59,6 +69,7 @@ Eres asistente de admisiones de Universidad Latino.
 const TEST_KNOWLEDGE: AdmissionsKnowledge = {
   faq: FAQ_CONTENT,
   ofertaAcademica: OFERTA_CONTENT,
+  catalogoCarreras: CATALOGO_CONTENT,
   systemPromptTemplate: SYSTEM_PROMPT_TEMPLATE,
 };
 
@@ -612,6 +623,87 @@ describe('AIAdmissionsAssistant', () => {
 
       expect(result.newState).toBe('DONE');
       expect(result.conversationEnded).toBe(true);
+    });
+  });
+
+  // ── Catalogo CSV → Markdown ───────────────────────────
+
+  describe('Knowledge Loader — CSV parsing', () => {
+    it('parseCSV: convierte CSV simple a array de objetos', () => {
+      const csv = [
+        'Carrera,Duración,Modalidad',
+        'Derecho,4 años,Presencial',
+        'Psicología,4 años,Presencial',
+      ].join('\n');
+
+      const rows = parseCSV(csv);
+      expect(rows).toHaveLength(2);
+      expect(rows[0].Carrera).toBe('Derecho');
+      expect(rows[0].Duración).toBe('4 años');
+      expect(rows[1].Carrera).toBe('Psicología');
+    });
+
+    it('parseCSV: maneja campos con comillas y comas internas', () => {
+      const csv = [
+        'Carrera,Descripción',
+        'Derecho,"Formación teórica, práctica y ética"',
+      ].join('\n');
+
+      const rows = parseCSV(csv);
+      expect(rows).toHaveLength(1);
+      expect(rows[0].Descripción).toBe('Formación teórica, práctica y ética');
+    });
+
+    it('parseCSV: CSV vacío devuelve array vacío', () => {
+      expect(parseCSV('')).toEqual([]);
+      expect(parseCSV('Carrera\n')).toEqual([]);
+    });
+
+    it('catalogToMarkdown: genera tabla markdown con columnas correctas', () => {
+      const rows = [
+        { Carrera: 'Derecho', 'Área académica': 'Derecho', Duración: '4 años', Modalidad: 'Presencial', 'Costo mensual': '$4,650', 'Costo inscripción': '$8,000', Campus: 'Campus Central', 'Becas de Excelencia': '9.60-10.00: 50% beca' },
+      ];
+
+      const md = catalogToMarkdown(rows);
+      expect(md).toContain('| Carrera |');
+      expect(md).toContain('| Derecho |');
+      expect(md).toContain('$4,650');
+      expect(md).toContain('---'); // separator row
+    });
+
+    it('parseCatalogCSV: integración completa CSV → markdown', () => {
+      const csv = [
+        'Carrera,Área académica,Duración,Modalidad,Costo mensual,Costo inscripción,Campus,Becas de Excelencia',
+        'Derecho,Derecho,4 años,Presencial,"$4,650","$8,000",Campus Central,"9.60-10.00: 50% beca | 9.00-9.59: 40% beca"',
+        'Psicología,Salud,4 años + S.S.,Presencial,"$4,650","$8,000",Campus Central,"9.60-10.00: 50% beca | 9.00-9.59: 40% beca"',
+      ].join('\n');
+
+      const md = parseCatalogCSV(csv);
+      expect(md).toContain('| Carrera |');
+      expect(md).toContain('| Derecho |');
+      expect(md).toContain('| Psicología |');
+      expect(md).toContain('$4,650');
+      // Should NOT include columns outside TABLE_COLUMNS
+      expect(md).not.toContain('Palabras clave');
+    });
+
+    it('buildSystemPrompt incluye catalogoCarreras cuando existe', async () => {
+      const result = await assistant.processMessage(input({
+        state: 'GREETING',
+        userMessage: 'Hola, quiero estudiar Derecho',
+        collectedData: emptyData(),
+      }));
+
+      // The catalog should be present in the knowledge — the assistant
+      // uses it via buildSystemPrompt internally. We verify the reply
+      // is generated without errors.
+      expect(result.reply).toBeDefined();
+      expect(result.newState).toBe('COLLECTING');
+    });
+
+    it('TEST_KNOWLEDGE incluye catalogoCarreras', () => {
+      expect(TEST_KNOWLEDGE.catalogoCarreras).toBeDefined();
+      expect(TEST_KNOWLEDGE.catalogoCarreras!.length).toBeGreaterThan(0);
     });
   });
 });

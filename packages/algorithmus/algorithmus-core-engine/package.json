@@ -19,6 +19,7 @@
     "bullmq": "^5.73.3",
     "dotenv": "^16.4.7",
     "express": "^4.22.1",
+    "node-telegram-bot-api": "^0.66.0",
     "pg": "^8.20.0",
     "pino": "^10.3.1",
     "prom-client": "^15.1.3",

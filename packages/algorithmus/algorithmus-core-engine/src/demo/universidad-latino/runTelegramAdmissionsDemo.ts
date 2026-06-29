@@ -28,6 +28,7 @@
 //   - Mock capture by default (simulates LeadCaptureService)
 //   - Telegram polling via node-telegram-bot-api
 
+import 'dotenv/config';
 import type { LLMProvider, LLMRequest, LLMResponse } from '@curdeeclau/shared';
 import {
   AIAdmissionsAssistant,
@@ -41,67 +42,8 @@ import type {
   AdmissionsConversationState,
 } from '../../core/admissions/types';
 import type { LeadCapturePayload, LeadCaptureResult } from '../../core/leads/types';
-
-// ── Knowledge base ───────────────────────────────────────
-
-const DEMO_FAQ = `
-## CARRERAS
-Q: Que carreras ofrecen?
-A: Ofrecemos 10 carreras: Derecho, Administracion de Empresas, Psicologia, Contaduria Publica, Ingenieria en Sistemas, Mercadotecnia, Ciencias de la Comunicacion, Pedagogia, Gastronomia y Enfermeria.
-
-Q: Tienen modalidad en linea?
-A: Si, algunas carreras estan disponibles en modalidad Online.
-
-## COSTOS
-Q: Cuanto cuesta la carrera?
-A: Los costos varian segun la carrera y modalidad. Un asesor de admisiones te proporcionara la informacion actualizada.
-
-## HORARIOS
-Q: Que horarios tienen?
-A: Ofrecemos horarios Matutino, Vespertino, Sabatino y modalidad Online.
-
-## INSCRIPCION
-Q: Que documentos necesito?
-A: Un asesor de admisiones te proporcionara la lista completa de documentos requeridos.
-`;
-
-const DEMO_OFERTA = `
-| Carrera | Duracion | Modalidades |
-|---------|----------|-------------|
-| Derecho | 4 anos | Matutino, Vespertino, Sabatino |
-| Administracion de Empresas | 4 anos | Matutino, Vespertino, Online |
-| Psicologia | 4 anos | Matutino, Vespertino |
-| Contaduria Publica | 4 anos | Matutino, Vespertino, Sabatino |
-| Ingenieria en Sistemas | 4 anos | Matutino, Online |
-| Mercadotecnia | 3 anos | Matutino, Vespertino, Online |
-| Ciencias de la Comunicacion | 4 anos | Matutino, Vespertino |
-| Pedagogia | 4 anos | Matutino, Sabatino |
-| Gastronomia | 2 anos | Matutino, Vespertino |
-| Enfermeria | 4 anos | Matutino, Vespertino |
-`;
-
-const SYSTEM_PROMPT = `
-Eres el asistente virtual de admisiones de Universidad Latino.
-Responde preguntas frecuentes, recolecta datos del prospecto y confirma antes de registrar.
-
-## CONOCIMIENTO
-{{KNOWLEDGE}}
-
-## OFERTA ACADEMICA
-{{OFERTA_ACADEMICA}}
-
-## DATOS RECOLECTADOS
-{{COLLECTED_DATA}}
-
-## PROXIMO DATO
-{{NEXT_FIELD}}
-`;
-
-const DEMO_KNOWLEDGE: AdmissionsKnowledge = {
-  faq: DEMO_FAQ,
-  ofertaAcademica: DEMO_OFERTA,
-  systemPromptTemplate: SYSTEM_PROMPT,
-};
+import { loadKnowledge } from '../../core/admissions/knowledgeLoader';
+import { getLLMProvider } from '../../core/admissions/llmFactory';
 
 // ── Mock LLM Provider ────────────────────────────────────
 
@@ -316,7 +258,7 @@ export class TelegramAdmissionsDemo {
       this.captureFn,
       {
         tenantId: 'tenant-uv-demo',
-        knowledge: DEMO_KNOWLEDGE,
+        knowledge: loadKnowledge(),
         defaultCanal: 'TELEGRAM',
       },
     );
@@ -350,7 +292,18 @@ async function main(): Promise<void> {
   console.log(`Database: ${hasDB ? 'ENABLED' : 'MOCK'}`);
   console.log('');
 
-  const demo = new TelegramAdmissionsDemo({ botToken });
+  // Try real LLM; fall back to mock (injected at CLI level, not in constructor)
+  const realLLM = getLLMProvider();
+  if (realLLM) {
+    console.log(`[uv-telegram] Using real LLM: ${realLLM.providerId}`);
+  } else {
+    console.log('[uv-telegram] No LLM API key configured — using mock');
+  }
+
+  const demo = new TelegramAdmissionsDemo({
+    botToken,
+    llmProvider: realLLM ?? undefined,
+  });
 
   if (!botToken) {
     console.log('[uv-telegram] Mock mode — simulating conversation:');

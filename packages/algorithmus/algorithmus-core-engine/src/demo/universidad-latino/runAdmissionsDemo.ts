@@ -11,6 +11,7 @@
 //   npx tsx src/demo/universidad-latino/runAdmissionsDemo.ts
 //   npx tsx src/demo/universidad-latino/runAdmissionsDemo.ts --live
 
+import 'dotenv/config';
 import type { LLMProvider, LLMRequest, LLMResponse } from '@curdeeclau/shared';
 import type {
   AdmissionsAssistantInput,
@@ -27,59 +28,8 @@ import type {
   LeadCaptureResult,
 } from '../../core/leads/types';
 import { LeadCaptureService, type LeadStore, type GHLContactSync } from '../../core/leads/LeadCaptureService';
-
-// ── Knowledge base ───────────────────────────────────────
-
-const DEMO_FAQ = `
-## CARRERAS
-Q: Que carreras ofrecen?
-A: Ofrecemos 10 carreras: Derecho, Administracion de Empresas, Psicologia, Contaduria Publica, Ingenieria en Sistemas, Mercadotecnia, Ciencias de la Comunicacion, Pedagogia, Gastronomia y Enfermeria.
-
-Q: Tienen modalidad en linea?
-A: Si, algunas carreras estan disponibles en modalidad Online: Administracion de Empresas, Ingenieria en Sistemas y Mercadotecnia.
-
-## COSTOS
-Q: Cuanto cuesta la carrera?
-A: Los costos varian segun la carrera y modalidad. Un asesor de admisiones te proporcionara la informacion actualizada.
-`;
-
-const DEMO_OFERTA = `
-| Carrera | Duracion | Modalidades |
-|---------|----------|-------------|
-| Derecho | 4 anos | Matutino, Vespertino, Sabatino |
-| Administracion de Empresas | 4 anos | Matutino, Vespertino, Online |
-| Psicologia | 4 anos | Matutino, Vespertino |
-| Contaduria Publica | 4 anos | Matutino, Vespertino, Sabatino |
-| Ingenieria en Sistemas | 4 anos | Matutino, Online |
-| Mercadotecnia | 3 anos | Matutino, Vespertino, Online |
-| Ciencias de la Comunicacion | 4 anos | Matutino, Vespertino |
-| Pedagogia | 4 anos | Matutino, Sabatino |
-| Gastronomia | 2 anos | Matutino, Vespertino |
-| Enfermeria | 4 anos | Matutino, Vespertino |
-`;
-
-const SYSTEM_PROMPT = `
-Eres el asistente virtual de admisiones de Universidad Latino.
-Responde preguntas frecuentes, recolecta datos del prospecto y confirma antes de registrar.
-
-## CONOCIMIENTO
-{{KNOWLEDGE}}
-
-## OFERTA ACADEMICA
-{{OFERTA_ACADEMICA}}
-
-## DATOS RECOLECTADOS
-{{COLLECTED_DATA}}
-
-## PROXIMO DATO
-{{NEXT_FIELD}}
-`;
-
-const DEMO_KNOWLEDGE: AdmissionsKnowledge = {
-  faq: DEMO_FAQ,
-  ofertaAcademica: DEMO_OFERTA,
-  systemPromptTemplate: SYSTEM_PROMPT,
-};
+import { loadKnowledge } from '../../core/admissions/knowledgeLoader';
+import { getLLMProvider } from '../../core/admissions/llmFactory';
 
 // ── Mock LLM Provider ────────────────────────────────────
 
@@ -183,7 +133,7 @@ export async function runSingleDemo(
     capture,
     {
       tenantId: 'tenant-uv-demo',
-      knowledge: DEMO_KNOWLEDGE,
+      knowledge: loadKnowledge(),
       defaultCanal: (profile.canal_origen as any) ?? 'WHATSAPP',
     },
   );
@@ -284,7 +234,7 @@ export async function runSingleDemo(
   };
 }
 
-export async function runAllDemos(): Promise<DemoResult[]> {
+export async function runAllDemos(llmProvider?: LLMProvider): Promise<DemoResult[]> {
   const profiles = [
     {
       nombre: 'Carlos Mendoza Rivera',
@@ -319,7 +269,7 @@ export async function runAllDemos(): Promise<DemoResult[]> {
 
   for (const profile of profiles) {
     const label = `${profile.nombre} (${profile.nivel_interes})`;
-    const result = await runSingleDemo(profile, label);
+    const result = await runSingleDemo(profile, label, llmProvider);
     results.push(result);
   }
 
@@ -335,10 +285,18 @@ async function main(): Promise<void> {
   console.log('========================================');
   console.log('Universidad Latino — Admissions Demo');
   console.log('========================================');
+
+  const realLLM = getLLMProvider();
+  const hasLLM = !!realLLM;
+  if (realLLM) {
+    console.log(`LLM: ${realLLM.providerId} (real)`);
+  } else {
+    console.log('LLM: MOCK (no API key configured)');
+  }
   console.log(`Mode: ${isLive ? 'LIVE (real APIs)' : 'MOCK (no APIs, no credentials)'}`);
   console.log('');
 
-  const results = await runAllDemos();
+  const results = await runAllDemos(realLLM ?? undefined);
 
   let passed = 0;
   let failed = 0;

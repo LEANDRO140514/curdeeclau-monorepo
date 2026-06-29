@@ -85,6 +85,8 @@ export interface AdmissionsKnowledge {
   faq: string;
   /** Contenido de la oferta academica markdown */
   ofertaAcademica: string;
+  /** Catalogo de carreras como tabla markdown (desde CSV) */
+  catalogoCarreras?: string;
   /** Sistema de prompt template */
   systemPromptTemplate: string;
 }

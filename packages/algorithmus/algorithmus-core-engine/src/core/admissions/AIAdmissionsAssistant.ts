@@ -171,9 +171,13 @@ export class AIAdmissionsAssistant {
       this.buildSystemPrompt(updatedData, missing),
       userMessage,
       `El usuario dijo: "${userMessage}". ` +
-      `Confirma amablemente el dato recibido y pregunta por el siguiente: ${FIELD_PROMPTS[missing]}. ` +
-      `Si el usuario pregunto algo del FAQ, respondelo primero brevemente y luego pide el dato faltante. ` +
-      `Se natural y conversacional. No pidas mas de un dato a la vez.`,
+      `Dato que falta: ${FIELD_PROMPTS[missing]}. ` +
+      `Reglas IMPORTANTES:\n` +
+      `1. Si el usuario pregunto algo del FAQ o catalogo, RESPONDE su pregunta primero. Esa es la prioridad.\n` +
+      `2. SOLO si ya respondiste su duda, menciona brevemente el dato faltante al final.\n` +
+      `3. Si el usuario NO quiere dar el dato (ej: telefono), NO insistas. Aceptalo y pregunta por otro dato o dile "sin problema, me ayudaria saber tu numero para que un asesor te contacte, pero si prefieres podemos continuar con otra cosa".\n` +
+      `4. NUNCA pidas el mismo dato dos veces seguidas. Si ya lo pediste y el usuario no lo dio, pasa a otro dato o responde su pregunta.\n` +
+      `5. Se natural y breve. Maximo 2-3 oraciones. No suenes a robot recolectando formularios.`,
     );
 
     return {
@@ -473,6 +477,7 @@ export class AIAdmissionsAssistant {
     let prompt = this.knowledge.systemPromptTemplate
       .replace('{{KNOWLEDGE}}', this.knowledge.faq)
       .replace('{{OFERTA_ACADEMICA}}', this.knowledge.ofertaAcademica)
+      .replace('{{CATALOGO_CARRERAS}}', this.knowledge.catalogoCarreras ?? '')
       .replace('{{COLLECTED_DATA}}', `\n${collected}\n`)
       .replace('{{NEXT_FIELD}}', next);
 
