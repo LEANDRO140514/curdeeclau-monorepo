@@ -2,6 +2,10 @@ node_modules/
 .env
 dist/
 
+# Prevent compiled JS artifacts in source tree (tsc outputs to dist/)
+src/**/*.js
+src/**/*.js.map
+
 # Pinecone + Cursor: guía local (no versionar)
 AGENTS.md
 obsidian/
