@@ -101,14 +101,30 @@ Las siguientes restricciones están activas hasta nuevo aviso del Senado o la As
 | CORE-HARD-2C-FIX | `b5953f9` | **CLOSED** — Fix typecheck blockers (tsc clean, build clean, declaration emit) |
 
 **Resultado:** `algorithmus-core-engine` compila limpio, emite dist/, es consumible como paquete.
-**algorithmus-platform:** No tocado.
+**algorithmus-platform:** No tocado en CORE-HARD.
+
+---
+
+## PLATFORM-HARD — PLATFORM REPOSITORY HARDENING
+
+| Fase | Commit | Estado |
+|------|--------|--------|
+| PLATFORM-HARD-3A | — | **REPORTED** — Read-only audit. Riesgo crítico: LeadsRepository stub |
+| PLATFORM-HARD-3B | `ae95120` | **CLOSED** — Stub reemplazado por LeadsRepository real |
+
+**Resultado:**
+- `createLeadsRepositoryStub` y `platformStubLeadRecord` eliminados.
+- `createPlatformOrchestrator` ahora usa `new LeadsRepository()` real vía PostgreSQL / `DATABASE_URL`.
+- Typecheck limpio, build limpio.
+- Core-engine, verticales, Telegram, WhatsApp, GHL live: no tocados.
+- **UV-LIVE desbloqueado.**
 
 ---
 
 ## PRÓXIMA LÍNEA RECOMENDADA
 
-1. **PLATFORM-HARD-3A** — Auditar algorithmus-platform, reemplazar LeadsRepository stub, public surface.
-2. **UV-LIVE Real** — Cuando exista `TELEGRAM_BOT_TOKEN`, ejecutar validación real con los 5 casos de prueba.
+1. **UV-LIVE Real** — Cuando exista `TELEGRAM_BOT_TOKEN` y `DATABASE_URL` real, ejecutar validación con los 5 casos de prueba.
+2. **PLATFORM-HARD-3C** — Public surface hardening (barrel exports, package.json, tests).
 
 ---
 
