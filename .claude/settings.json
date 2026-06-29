@@ -1,3 +1,46 @@
 {
-  "autoMemoryEnabled": false
+  "autoMemoryEnabled": false,
+  "permissions": {
+    "allow": [
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git stash*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git -C *)",
+      "Bash(ls *)",
+      "Bash(pwd*)",
+      "Bash(cat *)",
+      "Bash(file *)",
+      "Bash(find *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(echo *)",
+      "Bash(pnpm test*)",
+      "Bash(pnpm typecheck*)",
+      "Bash(pnpm build*)",
+      "Bash(pnpm --filter * test*)",
+      "Bash(pnpm --filter * exec tsc*)",
+      "Bash(pnpm --filter * exec jest*)",
+      "Bash(npm test*)",
+      "Bash(npm run test*)",
+      "Bash(npx tsc*)",
+      "Bash(npx jest*)",
+      "Bash(npx vitest*)",
+      "Bash(npx playwright test*)",
+      "Bash(npx tsx *)",
+      "Bash(node *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Get-Content *)",
+      "PowerShell(Select-Object *)",
+      "PowerShell(Set-Location *)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(Test-Path *)",
+      "PowerShell(New-Item -ItemType *)"
+    ]
+  }
 }
