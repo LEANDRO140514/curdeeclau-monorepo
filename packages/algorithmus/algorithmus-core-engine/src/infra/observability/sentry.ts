@@ -1,4 +1,4 @@
-import type { ErrorEvent } from "@sentry/core";
+import type { ErrorEvent } from "@sentry/node";
 import {
   captureException as sentryCaptureException,
   captureMessage as sentryCaptureMessage,

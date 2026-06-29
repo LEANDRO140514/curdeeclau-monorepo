@@ -9,11 +9,13 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "declaration": true
   },
   "include": ["src/**/*"],
   "exclude": [
     "src/app/api/**",
+    "src/demo/**",
     "src/tests/**"
   ]
 }
